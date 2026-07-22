@@ -1,12 +1,10 @@
-# Project Monolith — v4.1.4
+# Project Monolith — v4.1.5 — Sprint 5
 
-Corrections ciblées :
+Modification unique :
 
-- les runes du Monolithe utilisent désormais de vraies coordonnées sur le disque et deviennent visibles en fond ;
-- le glyphe d’Abjuration est légèrement agrandi dans la réserve ;
-- une fois déposé, le glyphe d’Abjuration est réduit et n’est plus rogné en bas ;
-- aucun autre glyphe ni panneau n’a été modifié ;
-- Firebase, le drag & drop, le journal et les actions restent inchangés.
+- ajout de runes très discrètes uniquement dans le fond du grand panneau gauche ;
+- les runes restent derrière toute l’interface de drag & drop ;
+- aucun changement au Monolithe, aux glyphes, Étincelles, panneaux, textes, actions, Firebase ou JavaScript.
 
 Publication GitHub :
 téléverser tout le contenu à la racine et commit direct sur `main`.
