@@ -51,7 +51,7 @@ const GLYPHS={"abjuration": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAV4AA
 const schools=['abjuration','divination','conjuration','enchantment','evocation','illusion','necromancy','transmutation'];
 const solution=['divination','abjuration','enchantment','necromancy','transmutation','evocation','conjuration','illusion'];
 const abyss=solution.map((_,i)=>solution[(i+4)%8]);
-const pos=[[50,13.5],[75.8,24.2],[86.5,50],[75.8,75.8],[50,86.5],[24.2,75.8],[13.5,50],[24.2,24.2]];
+const pos=[[50,14.5],[75.1,24.9],[85.5,50],[75.1,75.1],[50,85.5],[24.9,75.1],[14.5,50],[24.9,24.9]];
 
 const stationNames=['Œil','Tour','Chaîne','Crâne','Spirale','Flamme','Porte','Voile'];
 const sigils=[

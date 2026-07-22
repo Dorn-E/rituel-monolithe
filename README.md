@@ -1,14 +1,13 @@
-# Project Monolith — v4.1.0
+# Project Monolith — v4.1.1 — Sprint 2
 
-Cette version applique la première intégration complète de la maquette validée.
+Corrections du Monolithe :
 
-Modifications :
-- huit emplacements recentrés mathématiquement autour de Vathkül ;
-- fond noir avec runes obscures discrètes ;
-- Étincelles dorées entre le Monolithe et les glyphes ;
-- glyphes sur socles circulaires ;
-- colonne de droite et textes recalés ;
-- HTML, Firebase, sauvegardes et logique du rituel conservés.
+- huit emplacements placés à intervalles réguliers de 45° autour de Vathkül ;
+- même diamètre pour les huit cercles ;
+- centrage géométrique autour du visage central ;
+- glyphes centrés dans les emplacements après le drag & drop ;
+- socles de réserve et emplacements verrouillés en cercles parfaits ;
+- Firebase et logique du rituel inchangés.
 
 Publication GitHub :
 téléverser tout le contenu à la racine et commit direct sur `main`.

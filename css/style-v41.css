@@ -431,3 +431,71 @@ body::before{
     grid-template-columns:1fr;
   }
 }
+
+
+/* v4.1.1 — Sprint 2 : géométrie du Monolithe */
+.board{
+  --ritual-slot-size:17.2%;
+}
+
+.slot{
+  width:var(--ritual-slot-size) !important;
+  height:var(--ritual-slot-size) !important;
+  aspect-ratio:1 / 1 !important;
+  flex:0 0 var(--ritual-slot-size);
+  box-sizing:border-box;
+  border-radius:50% !important;
+  transform:translate(-50%,-50%);
+}
+
+.slot,
+.slot::before,
+.slot::after,
+.slot img,
+.slot img.placed{
+  border-radius:50% !important;
+}
+
+.slot img.placed{
+  display:block;
+  width:84% !important;
+  height:84% !important;
+  max-width:84% !important;
+  max-height:84% !important;
+  margin:0 !important;
+  object-fit:contain;
+  object-position:center;
+  transform:none !important;
+}
+
+.tile{
+  width:clamp(78px,7.25vw,108px);
+  height:clamp(78px,7.25vw,108px);
+  aspect-ratio:1 / 1 !important;
+  border-radius:50% !important;
+  box-sizing:border-box;
+}
+
+.tile img{
+  display:block;
+  width:84% !important;
+  height:84% !important;
+  max-width:84% !important;
+  max-height:84% !important;
+  margin:auto;
+  border-radius:50% !important;
+  object-fit:contain;
+  object-position:center;
+}
+
+/* Sur petit écran, les glyphes conservent la même proportion que les cases. */
+@media(max-width:650px){
+  .board{
+    --ritual-slot-size:18%;
+  }
+
+  .tile{
+    width:76px;
+    height:76px;
+  }
+}
