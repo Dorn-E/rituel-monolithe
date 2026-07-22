@@ -338,3 +338,214 @@ button:disabled{opacity:.35;cursor:not-allowed}
 .ritual-journal{max-height:210px;overflow:auto;padding:7px;border:1px solid #342c39;border-radius:9px;background:#070809}
 .journal-entry{padding:7px 6px;border-bottom:1px solid #29242d;color:#c8c1cc;font:11px/1.4 system-ui}
 .journal-entry time{display:block;color:#857b8b;font-size:9px}.journal-entry strong{color:#e0c985}.journal-empty{padding:10px;color:#777f83;text-align:center}
+
+
+/* ==========================================================
+   v2.5.0 — SKIN PIERRE NOIRE
+   Habillage uniquement : aucune structure ni mécanique modifiée.
+   ========================================================== */
+:root{
+  --bg:#030303;
+  --stone:#12110f;
+  --stone-2:#1a1814;
+  --stone-3:#252119;
+  --edge:#574a34;
+  --gold:#c6a15d;
+  --gold-bright:#efd58d;
+  --gold-dark:#6b4d22;
+  --good:#86c49d;
+  --void:#8f55c6;
+  --text:#e8e0ce;
+}
+body{
+  background:
+    radial-gradient(circle at 50% 32%,rgba(103,78,37,.16),transparent 31%),
+    repeating-linear-gradient(118deg,rgba(255,255,255,.012) 0 1px,transparent 1px 7px),
+    repeating-linear-gradient(28deg,rgba(0,0,0,.18) 0 2px,transparent 2px 11px),
+    linear-gradient(135deg,#080806 0,#020303 46%,#070603 100%);
+  background-attachment:fixed;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background:
+    radial-gradient(ellipse at top,transparent 0 48%,rgba(0,0,0,.52) 100%),
+    linear-gradient(90deg,rgba(0,0,0,.45),transparent 18%,transparent 82%,rgba(0,0,0,.45));
+}
+.wrap{max-width:1300px;padding:20px}
+h1{
+  color:var(--gold-bright);
+  text-shadow:0 2px 0 #2d210e,0 0 22px rgba(201,157,75,.2);
+  font-weight:600;
+}
+.sub{color:#a99b7b;opacity:.9}
+.pill,.participant-chip,.sync-chip{
+  border-color:#665536;
+  border-radius:4px;
+  background:
+    linear-gradient(rgba(255,255,255,.025),rgba(0,0,0,.18)),
+    linear-gradient(145deg,#1a1814,#0a0a09);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035),inset 0 0 16px #000,0 3px 8px #0008;
+}
+.phase{
+  border:1px solid #745d34;border-radius:4px;
+  background:
+    linear-gradient(90deg,rgba(120,83,31,.22),transparent 40%),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.012) 0 1px,transparent 1px 4px),
+    #11100d;
+  box-shadow:inset 0 0 22px #000,0 5px 15px #0007;
+  color:#e5cf94;
+}
+.panel{
+  border:1px solid #554934;border-radius:7px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.025),transparent 22%),
+    repeating-linear-gradient(115deg,rgba(255,255,255,.012) 0 1px,transparent 1px 8px),
+    linear-gradient(145deg,#181713,#090909 66%);
+  box-shadow:
+    0 18px 48px #000d,
+    inset 0 0 48px #000b,
+    inset 0 1px 0 rgba(224,192,124,.09);
+}
+.board::before{
+  content:"";position:absolute;inset:1.2%;border:1px solid #76603966;border-radius:5px;pointer-events:none;z-index:0;
+  box-shadow:inset 0 0 20px #000;
+}
+.ring{
+  inset:6.2%;
+  border:3px double #705b36;
+  background:
+    radial-gradient(circle at 50% 44%,rgba(255,255,255,.018),transparent 47%),
+    repeating-radial-gradient(circle,transparent 0 13px,rgba(196,158,87,.028) 14px 15px),
+    repeating-linear-gradient(37deg,rgba(255,255,255,.012) 0 1px,transparent 1px 9px),
+    #11100e;
+  box-shadow:
+    0 0 0 11px #090908,
+    0 0 0 13px #4d402c,
+    0 0 0 22px #0a0a09,
+    inset 0 0 100px #000,
+    0 16px 35px #000b;
+}
+.ring::before,.ring::after{
+  content:"";position:absolute;border-radius:50%;pointer-events:none
+}
+.ring::before{inset:5%;border:1px solid #94764055}
+.ring::after{inset:12%;border:1px dashed #735a3066}
+.core{
+  border:3px double #b28b45;
+  background:
+    radial-gradient(circle at 45% 38%,#d8bd7a 0 2%,#8d5c2c 3%,#342319 10%,#11100f 38%,#060707 75%),
+    #090909;
+  box-shadow:0 0 40px rgba(188,126,50,.28),inset 0 0 36px #000,0 10px 20px #000a;
+}
+.core b{color:#ead398;text-shadow:0 0 10px #c58d3a55}
+.core small{color:#aa9873}
+.slot{
+  border-radius:12%;
+  border:3px double #68583e;
+  background:
+    radial-gradient(circle at 47% 40%,#24231f 0,#11110f 48%,#050606 77%);
+  box-shadow:
+    inset 0 0 30px #000,
+    inset 0 1px 2px rgba(255,255,255,.08),
+    0 0 0 5px #090909,
+    0 0 0 6px #413723,
+    0 9px 20px #000c;
+}
+.slot::after{
+  content:"";position:absolute;inset:4px;border:1px solid rgba(200,160,88,.13);border-radius:10%;pointer-events:none
+}
+.slot.dragover,.slot.selected{
+  border-color:#d1aa62;
+  box-shadow:inset 0 0 30px #000,0 0 0 5px #090909,0 0 0 7px #a98445,0 0 28px rgba(221,177,91,.38);
+}
+.station-sigil{filter:sepia(.7) saturate(.8) drop-shadow(0 0 5px #c79a5066)}
+.placed{filter:sepia(.12) brightness(.96) contrast(1.08) drop-shadow(0 6px 7px #000) drop-shadow(0 0 8px #b9ffff44)}
+.tray{padding:16px}
+.tray h2,.memory-panel h3,.purify-panel h3,.vathkul-voice h3,.gm h3{
+  color:var(--gold-bright);
+  font-weight:600;letter-spacing:.055em;text-transform:uppercase;
+  text-shadow:0 1px #000;
+}
+.tiles{gap:10px}
+.tile{
+  min-height:150px;padding:7px;border:2px ridge #5f5038;border-radius:4px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.03),transparent 25%),
+    repeating-linear-gradient(125deg,rgba(255,255,255,.012) 0 1px,transparent 1px 7px),
+    linear-gradient(145deg,#1d1b17,#090909 72%);
+  box-shadow:inset 0 0 18px #000,0 8px 14px #0009;
+}
+.tile img{filter:sepia(.12) brightness(.98) contrast(1.08) drop-shadow(0 0 5px rgba(224,194,130,.15))}
+.tile:not(.used):hover{
+  border-color:#987a43;box-shadow:inset 0 0 18px #000,0 10px 20px #000b,0 0 17px rgba(193,150,72,.22)
+}
+.controls{gap:9px}
+button{
+  position:relative;border:1px solid #6b593b;border-radius:3px;
+  background:
+    linear-gradient(rgba(255,255,255,.035),rgba(0,0,0,.18)),
+    linear-gradient(180deg,#242019,#11100e);
+  color:#dfcfaa;font-family:Georgia,serif;font-weight:600;letter-spacing:.025em;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.045),inset 0 0 14px #000,0 4px 9px #0008;
+  text-shadow:0 1px #000;
+}
+button:hover{background:linear-gradient(180deg,#30291e,#15130f);border-color:#a18147;color:#f0dba7}
+button:active{transform:translateY(1px);box-shadow:inset 0 2px 9px #000,0 1px 3px #000}
+button.primary{background:linear-gradient(180deg,#4a351e,#24170e);border-color:#a4773e;color:#f0d99f}
+button.danger{background:linear-gradient(180deg,#411c20,#211013);border-color:#8e4449;color:#dfb7ad}
+.feedback,.memory-panel,.purify-panel,.vathkul-voice,.gm{
+  border-color:#5a4a32;border-radius:4px;
+  background:
+    repeating-linear-gradient(115deg,rgba(255,255,255,.01) 0 1px,transparent 1px 8px),
+    linear-gradient(145deg,#171510,#090909);
+  box-shadow:inset 0 0 20px #000,0 6px 13px #0007;
+}
+.feedback,.memory-text,.vathkul-voice-text,.purify-result,.snapshot-status,.ritual-journal{
+  border-color:#463b29;border-radius:2px;
+  background:linear-gradient(145deg,#0d0d0b,#060707);
+  color:#d8cfbb;
+}
+.memory-panel{border-color:#594b39}
+.memory-panel h3{color:#d9c594}
+.memory-text{color:#d9d0bc}
+.purify-panel{border-color:#654d31}
+.purify-panel h3{color:#e0c48c}
+.vathkul-voice{border-color:#745f36}
+.vathkul-voice-text{font-size:15px;color:#e5d9bf;min-height:76px}
+.gm{border-color:#5d4939}
+.gm.show{animation:stonePanelOpen .25s ease-out}
+.gm-section{border-top-color:#493a2b}
+.gm-section h4{color:#cbb381}
+#snapshotSelect{
+  border-color:#5b4b34;border-radius:2px;background:#0b0b09;color:#d9cfba;font-family:Georgia,serif
+}
+.journal-entry{border-bottom-color:#30291e;color:#cfc4ad}
+.journal-entry strong{color:#e0c47e}
+.mural-card,.memory-card,.purify-card,.card{
+  border:2px ridge #766039;border-radius:5px;
+  background:
+    repeating-linear-gradient(125deg,rgba(255,255,255,.012) 0 1px,transparent 1px 8px),
+    radial-gradient(circle at 50% 15%,#211e17,#090909 67%);
+  box-shadow:0 0 120px #000,inset 0 0 55px #000;
+}
+.mural-card img{border-radius:2px;border:1px solid #4f422f;box-shadow:0 10px 30px #000}
+.mural-caption{color:#cfc4ac}
+.entry-gate{
+  background:
+    radial-gradient(circle at 50% 38%,rgba(92,68,31,.18),transparent 30%),
+    repeating-linear-gradient(125deg,rgba(255,255,255,.012) 0 1px,transparent 1px 8px),
+    #030303;
+}
+.entry-stone{
+  border:2px ridge #755d34;border-radius:5px;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.025),transparent 25%),
+    repeating-linear-gradient(120deg,rgba(255,255,255,.012) 0 1px,transparent 1px 7px),
+    radial-gradient(circle at 50% 15%,#211f18,#090909 70%);
+}
+.entry-stone:before{border-color:#9b7b3d44;border-radius:2px}
+.entry-stone input{border-color:#5e513b;border-radius:2px;background:#090908;color:#eee4cf}
+.entry-submit{border-radius:2px}
+.spark-message{border-radius:3px;background:#0b0a08f2;border-color:#a9894d;color:#f0d998}
+@keyframes stonePanelOpen{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+@media(max-width:1000px){.wrap{padding:12px}.game{gap:12px}}
