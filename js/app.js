@@ -102,6 +102,28 @@ function invalidateEvaluation(){
 
 function build(){
   const board=document.getElementById('board');
+
+  if(!board.querySelector('.rune-layer')){
+    const runeLayer=document.createElement('div');
+    runeLayer.className='rune-layer';
+    const runeAlphabet=['ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛊ','ᛏ','ᛒ','ᛖ','ᛗ','ᛚ','ᛜ','ᛞ','ᛟ'];
+
+    [38.5,46].forEach((radius,ringIndex)=>{
+      const count=ringIndex===0?24:32;
+      for(let i=0;i<count;i++){
+        const rune=document.createElement('span');
+        const angle=(360/count)*i+(ringIndex?5:0);
+        rune.className=`board-rune rune-ring-${ringIndex+1}`;
+        rune.textContent=runeAlphabet[(i+ringIndex*7)%runeAlphabet.length];
+        rune.style.setProperty('--rune-angle',`${angle}deg`);
+        rune.style.setProperty('--rune-radius',`${radius}%`);
+        runeLayer.appendChild(rune);
+      }
+    });
+
+    board.prepend(runeLayer);
+  }
+
   for(let i=0;i<8;i++){
     const slot=document.createElement('div');
     slot.className='slot';

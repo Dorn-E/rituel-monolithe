@@ -1,11 +1,10 @@
-# Project Monolith — v4.1.2 — Sprint 3 visuel
+# Project Monolith — v4.1.3 — Sprint 4
 
-Corrections ciblées :
+Modification unique :
 
-- ajout de runes discrètes sur les anneaux du Monolithe ;
-- réduction du glyphe d'Abjuration afin que le bouclier soit visible en entier ;
-- remplacement des petites flammes par de petites Étincelles dorées en forme d'étoile ;
-- aucun changement sur Firebase, le drag & drop, le journal ou les actions.
+- ajout de deux anneaux de runes discrètes derrière les emplacements du Monolithe ;
+- runes intégrées en HTML/CSS, sans image supplémentaire ;
+- aucune modification des glyphes, Étincelles, panneaux, textes, actions, Firebase ou drag & drop.
 
 Publication GitHub :
 téléverser tout le contenu à la racine et commit direct sur `main`.
