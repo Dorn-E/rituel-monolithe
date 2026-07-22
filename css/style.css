@@ -549,3 +549,140 @@ button.danger{background:linear-gradient(180deg,#411c20,#211013);border-color:#8
 .spark-message{border-radius:3px;background:#0b0a08f2;border-color:#a9894d;color:#f0d998}
 @keyframes stonePanelOpen{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
 @media(max-width:1000px){.wrap{padding:12px}.game{gap:12px}}
+
+
+/* =========================================================
+   PROJECT MONOLITH v3.0.0 — ARTEFACT INTERACTIF
+   Layout based on the approved stone interface mock-up.
+   Existing IDs, mechanics, Firebase and drag/drop are retained.
+   ========================================================= */
+:root{
+  --artifact-gold:#b99459;
+  --artifact-gold-bright:#dfc083;
+  --artifact-stone:#0b0c0c;
+}
+html{background:#020303}
+body{min-width:320px;background:#030404;color:#d8cfbb;overflow-x:hidden}
+body::before{display:none}
+.wrap{
+  width:min(100vw,1536px);max-width:none;margin:0 auto;padding:0;
+  position:relative;background:#050606;
+  border:1px solid #2f2b23;box-shadow:0 0 80px #000;
+}
+.top{
+  position:absolute;z-index:20;left:1.6%;top:1.2%;right:40%;
+  align-items:start;pointer-events:none;
+}
+.top h1{display:none}.sub{display:none}.identity-row,.presence-line{pointer-events:auto}
+.hud{position:absolute;left:1.2%;top:66.5%;width:58%;display:block;pointer-events:none}
+.hud .pill:not(.sparks-pill){position:fixed;right:16px;top:12px;z-index:100;pointer-events:auto}
+.sparks-pill{
+  display:block;width:100%;height:auto;padding:0;border:0;background:none;box-shadow:none;
+}
+.sparks-label{display:none}.sparks-count{display:none}
+.sparks{
+  display:grid;grid-template-columns:repeat(15,1fr);gap:.28%;width:96%;max-width:none;margin:0 2%;
+  align-items:end;height:7vw;max-height:105px;
+}
+.spark{width:100%;height:100%;filter:none}
+.spark::before{
+  left:50%;bottom:13%;width:28%;height:34%;
+  background:radial-gradient(circle at 46% 66%,#fff8c8 0 13%,#ffd365 25%,#f0a42f 52%,#7b3509 78%,transparent 80%);
+  box-shadow:0 0 8px #ffc04a,0 0 18px #b85e18aa;
+}
+.spark::after{left:50%;bottom:17%;width:12%;height:18%}
+.spark.spent{opacity:.14}
+.phase{
+  position:absolute;z-index:14;left:61.5%;right:1.8%;top:2.4%;height:4%;
+  margin:0;padding:0 3%;display:flex;align-items:center;justify-content:center;
+  border:0;background:none;box-shadow:none;color:#c8b78f;text-align:center;font-size:clamp(9px,1vw,13px);
+}
+.game{
+  display:grid;grid-template-columns:60.5% 39.5%;grid-template-rows:auto;
+  gap:0;position:relative;aspect-ratio:3/2;min-height:720px;
+  background:
+    linear-gradient(#0000 83%,#060707 83%),
+    url('../assets/ui/stone-texture.webp') center/cover;
+}
+.tray{display:contents}
+.board{
+  grid-column:1;grid-row:1;position:absolute;left:0;top:0;width:60.5%;height:62.5%;
+  min-height:0;aspect-ratio:auto;border:0;border-radius:0;box-shadow:none;overflow:visible;
+  background:url('../assets/ui/monolith.webp') center/100% 100% no-repeat;
+}
+.board::before,.ring{display:none}
+.core{
+  left:50%;top:48%;width:25%;height:36%;transform:translate(-50%,-50%);
+  border:0;background:transparent;box-shadow:none;border-radius:50%;opacity:.01;
+}
+.core div{display:none}
+.core.ready{opacity:.18;box-shadow:0 0 80px #e5b04c;animation:ready 1s ease-in-out infinite alternate}
+.slot{
+  width:15.1%;height:21.8%;transform:translate(-50%,-50%);
+  border:0;background:transparent;box-shadow:none;border-radius:2%;
+}
+.slot::after{display:none}
+.slot img{width:88%;height:88%;object-fit:contain;filter:brightness(.9) contrast(1.08) drop-shadow(0 4px 4px #000)}
+.slot.dragover,.slot.selected{border:1px solid #d8b26c;box-shadow:0 0 22px #d8aa56aa,inset 0 0 18px #000}
+.station-sigil{opacity:.3}
+.link-layer{z-index:4}.link{stroke:#d9b365;stroke-width:.65;filter:drop-shadow(0 0 4px #d9a54d)}
+.vathkul-voice{
+  grid-column:2;position:absolute;left:61.4%;right:1.2%;top:1.2%;height:39%;
+  margin:0;padding:6.2% 4.5% 3%;border:0;border-radius:0;box-shadow:none;
+  background:url('../assets/ui/vathkul-panel.webp') center/100% 100% no-repeat;
+}
+.vathkul-voice h3{display:none}
+.vathkul-voice-text{
+  height:100%;min-height:0;overflow:auto;border:0;background:transparent;padding:0;
+  font:italic clamp(13px,1.35vw,20px)/1.6 Georgia,serif;color:#ded2bb;
+}
+.public-journal{
+  grid-column:2;position:absolute;left:61.4%;right:1.2%;top:39.5%;height:23.8%;
+  padding:5.4% 4.3% 2%;background:url('../assets/ui/journal-panel.webp') center/100% 100% no-repeat;
+}
+.public-journal h3{display:none}
+.ritual-journal{height:100%;max-height:none;border:0;background:transparent;padding:0;overflow:auto}
+.journal-entry{padding:5px 2px;border-bottom:1px solid #4a3d2a88;color:#cfc4ac;font:clamp(9px,.9vw,13px)/1.35 Georgia,serif}
+.journal-entry time{font-size:.78em}.journal-entry strong{color:#d9bc7d}
+.controls{
+  grid-column:2;position:absolute;left:61.4%;right:1.2%;top:62.8%;height:20.8%;
+  margin:0;padding:5.2% 4.2% 2.5%;display:grid;grid-template-columns:1fr 1fr;gap:6%;
+  background:url('../assets/ui/actions-panel.webp') center/100% 100% no-repeat;
+}
+.controls button{font-size:clamp(9px,.85vw,13px);padding:0 5%;border-color:#564a38;background:#151514cc}
+.controls .secondary-action{position:absolute;bottom:-26%;width:42%;height:18%;opacity:.64;font-size:9px}
+#clear{left:6%}#shuffle{right:6%}
+.tiles{
+  grid-column:1;position:absolute;left:5.5%;width:52%;top:81.3%;height:17.2%;
+  display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr);gap:2.4% 3.2%;
+  padding:0;background:none;
+}
+.tile{
+  min-height:0;height:100%;padding:3%;border:2px solid #594d39;border-radius:2%;
+  background:linear-gradient(145deg,#1b1b19,#090a0a);box-shadow:inset 0 0 18px #000,0 5px 10px #000c;
+}
+.tile img{width:100%;height:100%;object-fit:contain}.tile small{display:none}
+.tray>h2{display:none}
+.memory-panel,.purify-panel,.feedback{display:none}
+.gm{
+  grid-column:1/3;position:absolute;left:1.3%;right:1.3%;bottom:.9%;max-height:38%;overflow:auto;
+  z-index:40;margin:0;padding:3.2% 2% 1.2%;border:0;border-radius:0;
+  background:linear-gradient(#11110ff5,#080909f8),url('../assets/ui/stone-texture.webp') center/cover;
+  box-shadow:inset 0 0 28px #000,0 -10px 30px #000;
+}
+.gm::before{content:'INTERFACE MAÎTRE DU JEU';position:absolute;left:2.5%;top:.7%;color:#cdb687;font:clamp(10px,1vw,15px) Georgia,serif;letter-spacing:.08em}
+.gm>h3{display:none}.gm-section{margin-top:1.2%;padding-top:1%}
+.entry-stone,.memory-card,.purify-card,.mural-card{background-image:url('../assets/ui/stone-texture.webp')}
+@media(max-width:900px){
+  .game{aspect-ratio:auto;min-height:1180px;display:block;background:#050606}
+  .board{position:relative;width:100%;height:auto;aspect-ratio:1.45;background-size:cover}
+  .vathkul-voice,.public-journal,.controls,.tiles,.hud{position:relative;left:auto;right:auto;top:auto;width:auto;height:auto;margin:10px}
+  .vathkul-voice,.public-journal{padding:70px 35px 30px;min-height:280px}
+  .controls{padding:70px 35px 30px;min-height:250px}
+  .tiles{grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,130px);height:auto}
+  .hud{margin:10px}.sparks{height:76px}
+  .gm{position:relative;left:auto;right:auto;bottom:auto;margin:10px;padding:38px 18px 15px}
+}
+/* PROJECT MONOLITH v3.0.1 — END */
+
+html::after{content:"build 3.0.1";position:fixed;right:6px;bottom:4px;z-index:9999;color:#6d6047;font:8px monospace;opacity:.35;pointer-events:none}

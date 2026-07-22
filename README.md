@@ -1,20 +1,11 @@
-# Project Monolith — v2.5.0 pierre noire
+# Project Monolith — v3.0.1 corrigée
 
-Cette version conserve strictement l’interface et les mécaniques de la v2.4.0.
-Seul l’habillage CSS a été modifié :
-
-- pierre noire et basalte ;
-- cadres d’or terni ;
-- relief plus marqué pour les emplacements ;
-- glyphes inchangés ;
-- boutons transformés en plaques gravées ;
-- panneaux et fenêtres harmonisés ;
-- aucune modification de Firebase, des règles ou du JavaScript.
+Version complète basée sur la v3.0.0, avec cache-busting explicite pour GitHub Pages.
 
 ## Publication
+Téléverser le contenu de ce dossier à la racine du dépôt, puis faire un commit direct sur `main`.
 
-Vous pouvez téléverser tout le contenu du dossier sur GitHub et faire un commit :
+## Vérification
+La page doit afficher `v3.0.1 — l’artefact`. Le coin inférieur droit montre discrètement `build 3.0.1`.
 
-`Project Monolith v2.5.0 — skin pierre noire`
-
-Aucune modification n’est nécessaire dans Firebase.
+Aucun changement Firebase nécessaire.

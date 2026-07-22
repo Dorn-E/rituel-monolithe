@@ -1,14 +1,17 @@
 <!doctype html>
-<!-- Project Monolith v2.2.0 — collaboration Firebase -->
+<!-- Project Monolith v3.0.1 — artefact corrigé -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Le Rituel du Monolithe — v2.5.0 pierre noire</title>
-<link rel="stylesheet" href="css/style.css">
+<title>Le Rituel du Monolithe — v3.0.1</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="stylesheet" href="css/style.css?v=3.0.1">
 
 </head>
-<body>
+<body data-build="3.0.1">
 <div class="entry-gate" id="entryGate" aria-modal="true" role="dialog">
   <div class="entry-stone">
     <div class="entry-runes" aria-hidden="true">ᚦ ᚨ ᚱ ᛗ · ᚹ ᚨ ᚦ ᚲ ᚢ ᛚ</div>
@@ -27,7 +30,7 @@
 </div>
 <div class="wrap">
   <div class="top">
-    <div><h1>Le Rituel du Monolithe</h1><div class="sub">v2.5.0 — pierre noire et or ancien</div><div class="identity-row">
+    <div><h1>Le Rituel du Monolithe</h1><div class="sub">v3.0.1 — l’artefact</div><div class="identity-row">
       <div class="participant-chip" id="participantChip" title="Changer de personnage">Non identifié</div>
       <div class="sync-chip" id="syncStatus" aria-live="polite">Hors ligne</div>
     </div>
@@ -59,8 +62,9 @@
         <button class="primary" id="test">Éprouver la configuration</button>
         <button class="mural-button" id="openMural">Examiner les gravures intérieures</button>
         <button id="memory">Éveiller un souvenir</button>
-        <button id="clear">Retirer tous les glyphes</button>
-        <button id="shuffle">Mélanger les glyphes</button>
+        <button id="beginPurify">Purifier une gravure</button>
+        <button class="secondary-action" id="clear">Retirer tous les glyphes</button>
+        <button class="secondary-action" id="shuffle">Mélanger les glyphes</button>
       </div>
 
       <div class="memory-panel">
@@ -75,9 +79,13 @@
         <div class="vathkul-voice-text" id="vathkulVoice">« Les Étincelles que Torm m’a confiées soutiennent encore mon serment. Employez-les avec discernement. »</div>
       </div>
 
+      <div class="public-journal">
+        <h3>Journal du rituel</h3>
+        <div class="ritual-journal" id="ritualJournal"><div class="journal-empty">Aucun événement.</div></div>
+      </div>
+
       <div class="purify-panel">
         <h3>Purifier une gravure</h3>
-        <button id="beginPurify">Tenter la purification de la gravure sélectionnée</button>
         <div class="purify-note">
           Coût immédiat : <b>−1 Étincelle de Torm</b>. Puis test d’Intelligence (Arcanes) ou de Sagesse (Religion), <b>DD 20</b>.
           Vathkül peut dépenser <b>1 Étincelle supplémentaire</b> pour réduire le DD à <b>15</b>.
@@ -109,10 +117,6 @@
             <button class="danger" id="resetRitual">Réinitialiser le rituel</button>
           </div>
           <div class="snapshot-status" id="snapshotStatus">L’état courant est conservé automatiquement.</div>
-        </div>
-        <div class="gm-section">
-          <h4>Journal du rituel</h4>
-          <div class="ritual-journal" id="ritualJournal"><div class="journal-empty">Aucun événement.</div></div>
         </div>
         <div class="small">Ouverture/fermeture : Ctrl + Maj + M.</div>
       </div>
@@ -173,8 +177,8 @@
   </div>
 </div>
 
-<script src="js/app.js" defer></script>
-<script type="module" src="js/sync.js"></script>
+<script src="js/app.js?v=3.0.1" defer></script>
+<script type="module" src="js/sync.js?v=3.0.1"></script>
 
 </body>
 </html>
