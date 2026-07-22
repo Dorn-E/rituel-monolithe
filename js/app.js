@@ -1,6 +1,8 @@
 
 const RITUAL_KEY='Vathkül';
 let participantName='';
+let stateChangeHandler=()=>{};
+let isApplyingRemoteState=false;
 
 function normalizeRitualKey(value){
   return value.trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
@@ -20,6 +22,9 @@ function enterRitual(name){
   const gate=document.getElementById('entryGate');
   gate.classList.add('opening');
   setTimeout(()=>gate.style.display='none',560);
+  window.dispatchEvent(new CustomEvent('project-monolith:entered',{
+    detail:{participantName,ritualKey:RITUAL_KEY}
+  }));
 }
 function initializeEntryGate(){
   const form=document.getElementById('entryForm');
@@ -277,6 +282,7 @@ function update(){
   const purifyButton=document.getElementById('beginPurify');
   if(memoryButton)memoryButton.disabled=life===0;
   if(purifyButton)purifyButton.disabled=life===0;
+  if(!isApplyingRemoteState)stateChangeHandler();
 }
 
 function testConfiguration(){
@@ -427,6 +433,134 @@ function gmRestore(){
 }
 function say(t){document.getElementById('feedback').textContent=t;}
 
+
+function exportSharedState(){
+  return {
+    schemaVersion:1,
+    placements:[...placements],
+    order:[...order],
+    life,
+    memoryLevel:[...memoryLevel],
+    veiled:[...veiled],
+    corrupted:[...corrupted],
+    lastGM:lastGM ? {...lastGM} : null,
+    evaluationVisible,
+    ritualCompleted,
+    pendingPurification,
+    purificationBoosted,
+    phaseHTML:document.getElementById('phase').innerHTML,
+    feedbackText:document.getElementById('feedback').textContent,
+    memoryText:document.getElementById('memoryText').textContent,
+    voiceText:document.getElementById('vathkulVoice').textContent,
+    memoryStage:document.getElementById('memoryStage').textContent,
+    memoryOverlayOpen:document.getElementById('memoryOverlay').classList.contains('show'),
+    purifyOverlayOpen:document.getElementById('purifyOverlay').classList.contains('show'),
+    purifyPrompt:document.getElementById('purifyPrompt').textContent,
+    purifyResult:document.getElementById('purifyResult').textContent,
+    purifyChoiceVisible:document.getElementById('purifyChoiceRow').style.display!=='none',
+    purifyOutcomeVisible:document.getElementById('purifyOutcomeRow').style.display!=='none',
+    boardDissolving:document.getElementById('board').classList.contains('dissolving'),
+    victoryOpen:document.getElementById('victory').classList.contains('show')
+  };
+}
+
+function applySharedState(sharedState){
+  if(!sharedState || sharedState.schemaVersion!==1)return;
+
+  isApplyingRemoteState=true;
+  try{
+    if(Array.isArray(sharedState.placements))placements=[...sharedState.placements];
+    if(Array.isArray(sharedState.order))order=[...sharedState.order];
+    if(Number.isFinite(sharedState.life))life=sharedState.life;
+    if(Array.isArray(sharedState.memoryLevel))memoryLevel=[...sharedState.memoryLevel];
+
+    veiled=new Set(Array.isArray(sharedState.veiled)?sharedState.veiled:[]);
+    corrupted=new Set(Array.isArray(sharedState.corrupted)?sharedState.corrupted:[]);
+    lastGM=sharedState.lastGM ? {...sharedState.lastGM} : null;
+    evaluationVisible=Boolean(sharedState.evaluationVisible);
+    ritualCompleted=Boolean(sharedState.ritualCompleted);
+    pendingPurification=Number.isInteger(sharedState.pendingPurification)
+      ? sharedState.pendingPurification
+      : null;
+    purificationBoosted=Boolean(sharedState.purificationBoosted);
+
+    if(typeof sharedState.phaseHTML==='string'){
+      document.getElementById('phase').innerHTML=sharedState.phaseHTML;
+    }
+    if(typeof sharedState.feedbackText==='string'){
+      document.getElementById('feedback').textContent=sharedState.feedbackText;
+    }
+    if(typeof sharedState.memoryText==='string'){
+      document.getElementById('memoryText').textContent=sharedState.memoryText;
+    }
+    if(typeof sharedState.voiceText==='string'){
+      document.getElementById('vathkulVoice').textContent=sharedState.voiceText;
+    }
+    if(typeof sharedState.memoryStage==='string'){
+      document.getElementById('memoryStage').textContent=sharedState.memoryStage;
+    }
+    if(typeof sharedState.purifyPrompt==='string'){
+      document.getElementById('purifyPrompt').textContent=sharedState.purifyPrompt;
+    }
+    if(typeof sharedState.purifyResult==='string'){
+      document.getElementById('purifyResult').textContent=sharedState.purifyResult;
+    }
+
+    document.getElementById('memoryOverlay').classList.toggle(
+      'show',Boolean(sharedState.memoryOverlayOpen)
+    );
+    document.getElementById('purifyOverlay').classList.toggle(
+      'show',Boolean(sharedState.purifyOverlayOpen)
+    );
+    document.getElementById('purifyChoiceRow').style.display=
+      sharedState.purifyChoiceVisible ? 'grid' : 'none';
+    document.getElementById('purifyOutcomeRow').style.display=
+      sharedState.purifyOutcomeVisible ? 'grid' : 'none';
+    document.getElementById('board').classList.toggle(
+      'dissolving',Boolean(sharedState.boardDissolving)
+    );
+    document.getElementById('victory').classList.toggle(
+      'show',Boolean(sharedState.victoryOpen)
+    );
+
+    previousLife=life;
+    render();
+
+    const board=document.getElementById('board');
+    board.classList.remove('remote-pulse');
+    void board.offsetWidth;
+    board.classList.add('remote-pulse');
+  }finally{
+    isApplyingRemoteState=false;
+  }
+}
+
+window.ProjectMonolith={
+  getParticipantName:()=>participantName,
+  getSharedState:exportSharedState,
+  applySharedState,
+  onStateChange(handler){
+    stateChangeHandler=typeof handler==='function' ? handler : ()=>{};
+  },
+  setSyncStatus(text,statusClass=''){
+    const status=document.getElementById('syncStatus');
+    if(!status)return;
+    status.textContent=text;
+    status.className='sync-chip'+(statusClass?' '+statusClass:'');
+  },
+  setPresence(names){
+    const line=document.getElementById('presenceLine');
+    if(!line)return;
+    const unique=[...new Set((names||[]).filter(Boolean))];
+    if(unique.length===0){
+      line.textContent='Aucun autre esprit n’est encore lié au rituel.';
+      return;
+    }
+    line.textContent='Volontés liées : '+unique.join(' · ');
+  }
+};
+
+
 document.getElementById('test').onclick=testConfiguration;
 document.getElementById('memory').onclick=awakenMemory;
 document.getElementById('beginPurify').onclick=beginPurification;
@@ -436,7 +570,10 @@ document.getElementById('purifySuccess').onclick=()=>resolvePurification(true);
 document.getElementById('purifyFailure').onclick=()=>resolvePurification(false);
 document.getElementById('clear').onclick=()=>{placements.fill(null);invalidateEvaluation();render();say('Les huit glyphes retournent au bord du cercle.')};
 document.getElementById('shuffle').onclick=()=>{order.sort(()=>Math.random()-.5);render()};
-document.getElementById('memoryClose').onclick=()=>document.getElementById('memoryOverlay').classList.remove('show');
+document.getElementById('memoryClose').onclick=()=>{
+  document.getElementById('memoryOverlay').classList.remove('show');
+  stateChangeHandler();
+};
 document.getElementById('openMural').onclick=()=>document.getElementById('muralOverlay').classList.add('show');
 document.getElementById('closeMural').onclick=()=>document.getElementById('muralOverlay').classList.remove('show');
 document.getElementById('muralOverlay').onclick=e=>{if(e.target.id==='muralOverlay')document.getElementById('muralOverlay').classList.remove('show');};

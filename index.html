@@ -1,10 +1,10 @@
 <!doctype html>
-<!-- Project Monolith v2.1.0 — porte du rituel -->
+<!-- Project Monolith v2.2.0 — collaboration Firebase -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Le Rituel du Monolithe — v2.1.0</title>
+<title>Le Rituel du Monolithe — v2.2.0 collaborative</title>
 <link rel="stylesheet" href="css/style.css">
 
 </head>
@@ -22,12 +22,16 @@
       <div class="entry-error" id="entryError" role="alert"></div>
       <button class="entry-submit" type="submit">Entrer dans le rituel</button>
     </form>
-    <div class="entry-note">Cette étape prépare la future salle partagée. Dans cette version, chaque navigateur conserve encore son propre état.</div>
+    <div class="entry-note">Tous ceux qui emploient la clé Vathkül partagent désormais le même rituel en temps réel.</div>
   </div>
 </div>
 <div class="wrap">
   <div class="top">
-    <div><h1>Le Rituel du Monolithe</h1><div class="sub">v2.1.0 — la porte du rituel</div><div class="participant-chip" id="participantChip" title="Changer de personnage">Non identifié</div></div>
+    <div><h1>Le Rituel du Monolithe</h1><div class="sub">v2.2.0 — volontés unies</div><div class="identity-row">
+      <div class="participant-chip" id="participantChip" title="Changer de personnage">Non identifié</div>
+      <div class="sync-chip" id="syncStatus" aria-live="polite">Hors ligne</div>
+    </div>
+    <div class="presence-line" id="presenceLine">Aucun autre esprit n’est encore lié au rituel.</div></div>
     <div class="hud">
       <span class="pill sparks-pill">
         <span class="sparks-label">Étincelles de Torm</span>
@@ -150,6 +154,7 @@
 </div>
 
 <script src="js/app.js" defer></script>
+<script type="module" src="js/sync.js"></script>
 
 </body>
 </html>

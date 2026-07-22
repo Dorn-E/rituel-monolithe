@@ -205,3 +205,57 @@ button:disabled{opacity:.35;cursor:not-allowed}
 .participant-chip{display:inline-flex;margin-top:7px;padding:5px 9px;border:1px solid #4f5a5e;border-radius:999px;background:#080b0c;color:#c7d0d2;font:700 11px system-ui;cursor:pointer}
 .participant-chip:hover{border-color:#9b8150;color:#efd99a}
 @media(max-width:600px){.entry-stone{padding:28px 22px 23px}.entry-runes{letter-spacing:.22em}}
+
+
+/* Collaborative ritual */
+.identity-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:5px;
+}
+.sync-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:5px 9px;
+  border:1px solid #49545a;
+  border-radius:999px;
+  background:#090d0f;
+  color:#a8b3b7;
+  font:700 10px system-ui;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  transition:.25s ease;
+}
+.sync-chip::before{
+  content:"";
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#677278;
+  box-shadow:0 0 7px #67727866;
+}
+.sync-chip.connecting{color:#d8bf79;border-color:#71613f}
+.sync-chip.connecting::before{background:#d8b553;box-shadow:0 0 9px #d8b553}
+.sync-chip.online{color:#9edbb5;border-color:#416c52}
+.sync-chip.online::before{background:#76d29a;box-shadow:0 0 9px #76d29a}
+.sync-chip.saving{color:#e6d09a;border-color:#786940}
+.sync-chip.saving::before{background:#e4bd56;box-shadow:0 0 9px #e4bd56}
+.sync-chip.error{color:#e5a2a2;border-color:#7a4141}
+.sync-chip.error::before{background:#dc6767;box-shadow:0 0 9px #dc6767}
+.presence-line{
+  margin-top:5px;
+  max-width:590px;
+  color:#89969b;
+  font:11px/1.35 system-ui;
+}
+.remote-pulse{
+  animation:remotePulse .65s ease;
+}
+@keyframes remotePulse{
+  0%{box-shadow:0 0 0 #d7b86b00}
+  45%{box-shadow:0 0 45px #d7b86b55}
+  100%{box-shadow:0 0 0 #d7b86b00}
+}
