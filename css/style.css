@@ -550,4 +550,182 @@ button.danger{background:linear-gradient(180deg,#411c20,#211013);border-color:#8
 @keyframes stonePanelOpen{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
 @media(max-width:1000px){.wrap{padding:12px}.game{gap:12px}}
 
-/* PROJECT MONOLITH v2.5.0 — FIN DU SKIN PIERRE NOIRE */
+
+/* ==========================================================
+   PROJECT MONOLITH v2.5.1 — PIERRE NOIRE SCULPTÉE
+   Overrides visuels forts. Aucune mécanique modifiée.
+   ========================================================== */
+:root{
+  --pm-black:#050504;
+  --pm-stone:#15130f;
+  --pm-stone-hi:#2b261d;
+  --pm-stone-low:#080807;
+  --pm-bronze:#7e6236;
+  --pm-gold:#d1ae65;
+  --pm-gold-hi:#f2d892;
+  --pm-ash:#b9ae97;
+}
+html{background:#020202}
+body{
+  color:#e8dfcb;
+  background:
+    radial-gradient(ellipse at 50% -10%,rgba(190,143,61,.22),transparent 34%),
+    radial-gradient(circle at 18% 30%,rgba(102,69,25,.10),transparent 27%),
+    radial-gradient(circle at 82% 70%,rgba(92,56,18,.08),transparent 30%),
+    repeating-linear-gradient(117deg,rgba(255,255,255,.018) 0 1px,transparent 1px 6px),
+    repeating-linear-gradient(23deg,rgba(0,0,0,.28) 0 2px,transparent 2px 13px),
+    #040403 !important;
+}
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;
+  box-shadow:inset 0 0 170px 45px #000;
+  opacity:.72;
+}
+.wrap{max-width:1320px}
+.top{padding:8px 12px 12px;border-bottom:1px solid #5e4b2d;background:linear-gradient(90deg,transparent,rgba(126,93,43,.08),transparent)}
+h1{color:var(--pm-gold-hi)!important;font-size:clamp(27px,3.2vw,42px)!important;letter-spacing:.16em!important;text-shadow:0 2px #21160a,0 0 24px rgba(218,172,84,.32)!important}
+.sub{color:#aa9875!important;letter-spacing:.08em}
+.phase{
+  border:2px ridge #806536!important;
+  border-radius:2px!important;
+  background:
+    linear-gradient(90deg,rgba(158,113,42,.24),rgba(20,18,14,.90) 36%,rgba(9,9,8,.96)),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 5px)!important;
+  box-shadow:inset 0 0 25px #000,0 8px 22px #000b!important;
+  color:#ead39a!important;
+  letter-spacing:.02em;
+}
+.panel{
+  border:3px ridge #655034!important;
+  border-radius:3px!important;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.045),transparent 16%),
+    repeating-linear-gradient(123deg,rgba(255,255,255,.014) 0 1px,transparent 1px 7px),
+    linear-gradient(145deg,#1d1a14 0,#0b0b09 68%,#050505 100%)!important;
+  box-shadow:0 24px 65px #000f,inset 0 0 65px #000d,inset 0 1px 0 rgba(255,223,151,.11)!important;
+}
+.board{
+  background:
+    radial-gradient(circle at 50% 47%,rgba(186,137,57,.07),transparent 40%),
+    repeating-linear-gradient(132deg,rgba(255,255,255,.012) 0 1px,transparent 1px 9px),
+    #0a0907;
+}
+.board::before{
+  inset:1%!important;border:2px solid #80653d!important;border-radius:2px!important;
+  box-shadow:inset 0 0 35px #000,0 0 0 5px #070706!important;
+}
+.board::after{
+  content:"";position:absolute;inset:3.2%;pointer-events:none;z-index:0;
+  border:1px solid rgba(202,164,93,.22);
+  background:
+    linear-gradient(45deg,transparent 49.6%,rgba(180,142,72,.11) 49.8% 50.2%,transparent 50.4%),
+    linear-gradient(-45deg,transparent 49.6%,rgba(180,142,72,.08) 49.8% 50.2%,transparent 50.4%);
+  opacity:.55;
+}
+.ring{
+  inset:5.7%!important;
+  border:5px double #8a6b39!important;
+  background:
+    radial-gradient(circle at 50% 50%,transparent 0 17%,rgba(209,174,101,.035) 17.4% 18%,transparent 18.5% 30%,rgba(209,174,101,.025) 30.5% 31%,transparent 31.5%),
+    repeating-radial-gradient(circle at 50% 50%,transparent 0 22px,rgba(209,174,101,.028) 23px 24px),
+    repeating-linear-gradient(117deg,rgba(255,255,255,.016) 0 1px,transparent 1px 7px),
+    radial-gradient(circle at 47% 43%,#242019,#12100d 52%,#070706 100%)!important;
+  box-shadow:
+    0 0 0 9px #080807,
+    0 0 0 12px #56442b,
+    0 0 0 20px #090908,
+    0 0 0 22px rgba(168,130,64,.36),
+    inset 0 0 125px #000,
+    0 22px 40px #000e!important;
+}
+.ring::before{inset:4%!important;border:2px solid rgba(210,170,91,.28)!important}
+.ring::after{inset:11%!important;border:2px dashed rgba(190,144,69,.27)!important}
+.core{
+  border:5px double #c09550!important;
+  background:
+    radial-gradient(circle at 46% 37%,#f0d48d 0 1.5%,#b27932 2.5%,#51321b 7%,#211710 16%,#0d0d0c 48%,#030404 100%)!important;
+  box-shadow:0 0 60px rgba(203,143,54,.40),inset 0 0 48px #000,0 14px 28px #000d!important;
+}
+.core::before{
+  content:"";position:absolute;inset:9%;border:1px solid rgba(231,197,122,.28);border-radius:50%;box-shadow:inset 0 0 20px #000;pointer-events:none
+}
+.core b{color:#f0d89e!important;text-shadow:0 0 15px rgba(222,166,75,.45)!important}
+.slot{
+  border:5px double #79613d!important;
+  border-radius:9%!important;
+  background:
+    radial-gradient(circle at 46% 38%,#26231d 0,#11100d 47%,#050505 78%,#010202 100%)!important;
+  box-shadow:
+    inset 0 0 42px #000,
+    inset 0 2px 2px rgba(255,255,255,.08),
+    0 0 0 6px #070706,
+    0 0 0 8px #473923,
+    0 13px 25px #000e!important;
+}
+.slot::before{
+  content:"";position:absolute;inset:8px;border:1px solid rgba(218,177,99,.18);border-radius:7%;pointer-events:none;box-shadow:inset 0 0 18px #000
+}
+.slot.selected,.slot.dragover{
+  border-color:#e0b866!important;
+  outline:none!important;
+  box-shadow:inset 0 0 38px #000,0 0 0 6px #080807,0 0 0 9px #a98245,0 0 36px rgba(225,178,87,.55)!important;
+}
+.slot.corrupted{
+  border-color:#8341a8!important;
+  background:radial-gradient(circle at 48% 42%,#2c1636,#100b13 55%,#030304 100%)!important;
+  box-shadow:inset 0 0 40px #190625,0 0 0 6px #070706,0 0 0 8px #4e285e,0 0 32px rgba(133,67,171,.55)!important;
+}
+.station-sigil{top:8px!important;width:34px!important;height:34px!important;filter:sepia(.85) saturate(.72) brightness(1.2) drop-shadow(0 0 7px rgba(218,174,94,.45))!important}
+.placed{left:6%!important;right:6%!important;width:88%!important;filter:brightness(.97) contrast(1.12) drop-shadow(0 9px 9px #000) drop-shadow(0 0 9px rgba(169,219,224,.28))!important}
+.tray{background:linear-gradient(145deg,rgba(255,255,255,.018),transparent 22%)}
+.tray h2,.memory-panel h3,.purify-panel h3,.vathkul-voice h3,.gm h3{
+  color:#ead298!important;letter-spacing:.10em!important;text-transform:uppercase!important;border-bottom:1px solid rgba(153,119,61,.35);padding-bottom:7px
+}
+.tile{
+  border:4px ridge #675239!important;border-radius:2px!important;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.04),transparent 18%),
+    repeating-linear-gradient(126deg,rgba(255,255,255,.014) 0 1px,transparent 1px 7px),
+    linear-gradient(145deg,#242019,#0a0a08 73%)!important;
+  box-shadow:inset 0 0 28px #000,0 10px 18px #000b!important;
+}
+.tile:not(.used):hover{transform:translateY(-2px);border-color:#a8844b!important;box-shadow:inset 0 0 28px #000,0 14px 24px #000d,0 0 20px rgba(210,165,82,.30)!important}
+.tile img{filter:brightness(1.02) contrast(1.11) drop-shadow(0 0 7px rgba(213,181,110,.18))!important}
+button{
+  min-height:42px!important;
+  border:3px ridge #665038!important;border-radius:2px!important;
+  background:
+    linear-gradient(rgba(255,255,255,.045),rgba(0,0,0,.20)),
+    linear-gradient(180deg,#2b251b,#11100d)!important;
+  color:#dfcc9d!important;font-family:Georgia,serif!important;letter-spacing:.045em!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.055),inset 0 0 18px #000,0 5px 11px #000a!important;
+}
+button:hover{border-color:#a58045!important;background:linear-gradient(180deg,#3b3020,#17140f)!important;color:#f2dca6!important}
+button.primary{border-color:#a77b3e!important;background:linear-gradient(180deg,#5b4021,#24160b)!important;color:#f4dda3!important}
+button.danger{border-color:#82404a!important;background:linear-gradient(180deg,#481c24,#1d0e12)!important;color:#e0b4ad!important}
+.feedback,.memory-panel,.purify-panel,.vathkul-voice,.gm{
+  border:3px ridge #5e4b32!important;border-radius:2px!important;
+  background:
+    repeating-linear-gradient(120deg,rgba(255,255,255,.012) 0 1px,transparent 1px 8px),
+    linear-gradient(145deg,#1b1812,#090908)!important;
+  box-shadow:inset 0 0 30px #000,0 8px 17px #0009!important;
+}
+.feedback,.memory-text,.vathkul-voice-text,.purify-result,.snapshot-status,.ritual-journal{
+  border:2px inset #403522!important;border-radius:1px!important;
+  background:linear-gradient(145deg,#0e0d0a,#050606)!important;
+}
+.vathkul-voice-text{min-height:86px!important;color:#e7dbc0!important;font-size:15px!important}
+.spark{width:15px!important;height:22px!important;filter:drop-shadow(0 0 8px #f1b54f)!important}
+.spark::before{width:13px!important;height:18px!important;background:radial-gradient(circle at 34% 65%,#fffbd3 0 14%,#ffe47a 25%,#eea22e 58%,#7e3e0e 88%)!important;box-shadow:0 0 10px #ffd263,0 0 20px rgba(232,151,47,.65)!important}
+.spark.spent{opacity:.16!important}
+.mural-card,.memory-card,.purify-card,.card,.entry-stone{
+  border:4px ridge #725a35!important;border-radius:3px!important;
+  background:
+    repeating-linear-gradient(123deg,rgba(255,255,255,.014) 0 1px,transparent 1px 8px),
+    radial-gradient(circle at 50% 12%,#29241a,#0a0a08 70%)!important;
+  box-shadow:0 0 130px #000,inset 0 0 70px #000!important;
+}
+.entry-gate{background:radial-gradient(circle at 50% 38%,rgba(145,101,36,.18),transparent 32%),#020202!important}
+.entry-stone input{border:3px inset #59492f!important;border-radius:1px!important;background:#080806!important;color:#eee3c9!important}
+@media(max-width:1000px){.game{grid-template-columns:1fr!important}.board{min-height:min(94vw,760px)!important}}
+/* PROJECT MONOLITH v2.5.1 — FIN DU SKIN PIERRE NOIRE SCULPTÉE */
