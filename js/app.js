@@ -113,10 +113,15 @@ function build(){
       for(let i=0;i<count;i++){
         const rune=document.createElement('span');
         const angle=(360/count)*i+(ringIndex?5:0);
+        const radians=(angle-90)*Math.PI/180;
+        const x=50+Math.cos(radians)*radius;
+        const y=50+Math.sin(radians)*radius;
+
         rune.className=`board-rune rune-ring-${ringIndex+1}`;
         rune.textContent=runeAlphabet[(i+ringIndex*7)%runeAlphabet.length];
-        rune.style.setProperty('--rune-angle',`${angle}deg`);
-        rune.style.setProperty('--rune-radius',`${radius}%`);
+        rune.style.left=`${x}%`;
+        rune.style.top=`${y}%`;
+        rune.style.setProperty('--rune-rotation',`${angle}deg`);
         runeLayer.appendChild(rune);
       }
     });
@@ -174,6 +179,7 @@ function render(){
     if(placements[i]){
       const img=document.createElement('img');
       img.className='placed';
+      img.dataset.school=placements[i];
       img.src=GLYPHS[placements[i]];
       img.draggable=true;
       img.ondragstart=e=>{

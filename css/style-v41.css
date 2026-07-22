@@ -666,3 +666,35 @@ body::before{
 .link-layer{
   z-index:5;
 }
+
+
+/* v4.1.4 — correction ciblée des runes et de l'Abjuration */
+
+/* Les runes reçoivent désormais de vraies coordonnées sur le disque. */
+.board-rune{
+  transform:
+    translate(-50%,-50%)
+    rotate(var(--rune-rotation))
+    rotate(90deg) !important;
+}
+
+/* Abjuration dans la réserve : légèrement plus grande, sans rognage circulaire. */
+.tile[data-school="abjuration"] img{
+  width:79% !important;
+  height:88% !important;
+  max-width:79% !important;
+  max-height:88% !important;
+  border-radius:0 !important;
+  object-fit:contain !important;
+}
+
+/* Abjuration déposée : plus petite que les autres glyphes et jamais coupée. */
+.slot img.placed[data-school="abjuration"]{
+  width:68% !important;
+  height:80% !important;
+  max-width:68% !important;
+  max-height:80% !important;
+  border-radius:0 !important;
+  object-fit:contain !important;
+  object-position:center !important;
+}
