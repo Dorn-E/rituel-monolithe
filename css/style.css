@@ -184,3 +184,24 @@ button:disabled{opacity:.35;cursor:not-allowed}
 
 @media(max-width:1000px){.game{grid-template-columns:1fr}.tiles{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:720px){.board{min-height:94vw}.slot{width:24%;height:24%}.tiles{grid-template-columns:repeat(2,1fr)}}
+
+
+/* v2.1.0 — Porte du rituel */
+.entry-gate{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 50% 42%,rgba(28,32,34,.92),rgba(2,3,3,.99) 72%);display:flex;align-items:center;justify-content:center;padding:20px;transition:opacity .55s ease,visibility .55s ease}
+.entry-gate.opening{opacity:0;visibility:hidden}
+.entry-stone{width:min(92vw,560px);padding:36px 38px 30px;border:1px solid #715f3d;border-radius:24px;background:radial-gradient(circle at 50% 10%,#25231d 0,#121414 42%,#070808 100%);box-shadow:0 0 110px #b88e3f33,inset 0 0 70px #000;position:relative;overflow:hidden}
+.entry-stone:before{content:"";position:absolute;inset:11px;border:1px solid #8a744133;border-radius:17px;pointer-events:none}
+.entry-runes{text-align:center;color:#9e8956;letter-spacing:.42em;font-size:13px;margin-bottom:16px;opacity:.85}
+.entry-stone h1{text-align:center;color:#efd58d;font-size:clamp(25px,5vw,37px);margin:0 0 12px}
+.entry-lore{text-align:center;color:#d4cab6;font:italic 16px/1.55 Georgia,serif;margin:0 auto 25px;max-width:440px}
+.entry-stone form{display:grid;gap:8px;position:relative;z-index:2}
+.entry-stone label{font:700 12px system-ui;text-transform:uppercase;letter-spacing:.08em;color:#d2be87;margin-top:7px}
+.entry-stone input{width:100%;padding:12px 13px;border:1px solid #4c5456;border-radius:9px;background:#070909;color:#f0eee8;font:700 15px system-ui;outline:none}
+.entry-stone input:focus{border-color:#b89752;box-shadow:0 0 0 3px #b8975222}
+.entry-submit{margin-top:10px;background:linear-gradient(#503b21,#2e2114);border-color:#a27b42;color:#f2dfaa;font-size:14px;padding:12px}
+.entry-submit:hover{background:linear-gradient(#644b29,#392919)}
+.entry-error{min-height:18px;color:#e69090;font:12px system-ui;text-align:center}
+.entry-note{margin-top:17px;color:#7f898c;font:11px/1.45 system-ui;text-align:center}
+.participant-chip{display:inline-flex;margin-top:7px;padding:5px 9px;border:1px solid #4f5a5e;border-radius:999px;background:#080b0c;color:#c7d0d2;font:700 11px system-ui;cursor:pointer}
+.participant-chip:hover{border-color:#9b8150;color:#efd99a}
+@media(max-width:600px){.entry-stone{padding:28px 22px 23px}.entry-runes{letter-spacing:.22em}}

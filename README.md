@@ -1,40 +1,28 @@
-# Project Monolith — v2.0.0
+# Project Monolith — v2.1.0
 
-Première fondation propre du **Rituel du Monolithe**.
+Cette version ajoute **la Porte du rituel** avant l’accès au plateau.
 
-## Contenu
+## Nouveautés
 
-- `index.html` : structure de la page ;
-- `css/style.css` : toute la présentation ;
-- `js/app.js` : logique actuelle du puzzle et du rituel.
+- saisie du nom du personnage ;
+- clé du rituel réglée sur **Vathkül** ;
+- message immersif en cas de mauvaise clé ;
+- mémorisation locale du nom du personnage ;
+- possibilité de changer de personnage en cliquant sur son nom sous le titre.
 
-Cette version conserve les fonctions de la v1.8 :
+## Important
 
-- huit glyphes manipulables ;
-- fresque intérieure ;
-- Étincelles de Torm ;
-- souvenirs de Vathkül ;
-- épreuves et résonances ;
-- purification DD 20 / DD 15 avec soutien supplémentaire ;
-- interface MJ cachée avec `Ctrl + Maj + M` ;
-- corruption, voile et échange de glyphes ;
-- séquence finale de dissolution.
+Cette version prépare la collaboration, mais ne synchronise pas encore plusieurs ordinateurs. Chaque navigateur possède toujours sa propre copie du rituel.
 
-## Tester localement
+## Publication sur GitHub
 
-Double-cliquez sur `index.html`.
+Remplacez dans le dépôt les fichiers suivants :
 
-Le jeu doit fonctionner sans installation et sans connexion Internet.
+- `index.html`
+- `css/style.css`
+- `js/app.js`
+- `README.md`
 
-## Mettre cette version sur GitHub
+Puis effectuez un commit direct sur `main` avec le message :
 
-1. Ouvrir le dépôt `Dorn-E/rituel-monolithe`.
-2. Cliquer sur **Add file** puis **Upload files**.
-3. Déposer le contenu de ce dossier, pas le fichier ZIP.
-4. Écrire un message comme `Project Monolith v2.0.0`.
-5. Cliquer sur **Commit changes**.
-
-## Étape suivante
-
-La v2.1 ajoutera une synchronisation collaborative séparée du moteur principal.
-La version locale restera le plan de secours stable.
+`Project Monolith v2.1.0 — porte du rituel`

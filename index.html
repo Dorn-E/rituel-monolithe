@@ -1,17 +1,33 @@
 <!doctype html>
-<!-- Project Monolith v2.0.0 — base stable hors ligne -->
+<!-- Project Monolith v2.1.0 — porte du rituel -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Le Rituel du Monolithe — v2.0.0</title>
+<title>Le Rituel du Monolithe — v2.1.0</title>
 <link rel="stylesheet" href="css/style.css">
 
 </head>
 <body>
+<div class="entry-gate" id="entryGate" aria-modal="true" role="dialog">
+  <div class="entry-stone">
+    <div class="entry-runes" aria-hidden="true">ᚦ ᚨ ᚱ ᛗ · ᚹ ᚨ ᚦ ᚲ ᚢ ᛚ</div>
+    <h1>Le Rituel du Monolithe</h1>
+    <p class="entry-lore">« Le Monolithe ne répond qu’à ceux qui partagent la même clé et unissent leur volonté. »</p>
+    <form id="entryForm" autocomplete="off">
+      <label for="characterName">Nom du personnage</label>
+      <input id="characterName" maxlength="40" placeholder="Ex. Isyrion" required>
+      <label for="ritualKey">Clé du rituel</label>
+      <input id="ritualKey" maxlength="30" value="Vathkül" required>
+      <div class="entry-error" id="entryError" role="alert"></div>
+      <button class="entry-submit" type="submit">Entrer dans le rituel</button>
+    </form>
+    <div class="entry-note">Cette étape prépare la future salle partagée. Dans cette version, chaque navigateur conserve encore son propre état.</div>
+  </div>
+</div>
 <div class="wrap">
   <div class="top">
-    <div><h1>Le Rituel du Monolithe</h1><div class="sub">v2.0.0 — fondation stable</div></div>
+    <div><h1>Le Rituel du Monolithe</h1><div class="sub">v2.1.0 — la porte du rituel</div><div class="participant-chip" id="participantChip" title="Changer de personnage">Non identifié</div></div>
     <div class="hud">
       <span class="pill sparks-pill">
         <span class="sparks-label">Étincelles de Torm</span>
