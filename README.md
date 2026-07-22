@@ -1,59 +1,27 @@
-# Project Monolith — v2.2.0 collaborative
+# Project Monolith — v2.3.0
 
-Cette version relie tous les navigateurs utilisant la clé **Vathkül**
-au même état Firestore.
+Version collaborative stable avec une première passe d’ergonomie et de mouvement.
 
-## Fonctionnalités synchronisées
+## Nouveautés
 
-- placements des huit glyphes ;
-- ordre de la réserve ;
-- Étincelles de Torm ;
-- souvenirs révélés ;
-- épreuves et résonances ;
-- voile et corruption ;
-- purification ;
-- paroles de Vathkül ;
-- dissolution finale.
+- les glyphes apparaissent avec une transition de pierre qui se met en place ;
+- la gravure réagit lorsqu’un glyphe est déplacé localement ou à distance ;
+- les liaisons de résonance se dessinent après l’épreuve ;
+- les glyphes et la réserve réagissent au survol et au glisser-déposer ;
+- les transitions respectent le réglage système « réduire les animations » ;
+- aucune règle de jeu ni donnée Firebase n’a été modifiée.
 
-La fresque reste volontairement locale : chaque joueur peut l’ouvrir
-et la fermer sans gêner les autres.
+## Publication
 
-## Étape Firebase obligatoire
-
-Avant de publier les fichiers, ouvrez :
-
-`Firebase > Firestore > Règles`
-
-Remplacez les règles existantes par le contenu de `firestore.rules`,
-puis cliquez sur **Publier**.
-
-## Publication GitHub
-
-Remplacez dans le dépôt les éléments suivants :
+Remplacez dans GitHub :
 
 - `index.html`
 - `css/style.css`
 - `js/app.js`
-- ajoutez `js/firebase-config.js`
-- ajoutez `js/sync.js`
-- ajoutez `firestore.rules`
-- remplacez `README.md`
+- `README.md`
 
-Faites un commit direct sur `main` :
+Conservez `js/firebase-config.js`, `js/sync.js` et `firestore.rules` tels quels.
 
-`Project Monolith v2.2.0 — collaboration Firebase`
+Message de commit conseillé :
 
-## Test conseillé
-
-1. Ouvrez le site dans un navigateur normal.
-2. Ouvrez-le aussi dans une fenêtre privée.
-3. Entrez deux noms de personnages différents avec la clé `Vathkül`.
-4. Déplacez un glyphe dans une fenêtre.
-5. Il doit apparaître dans l’autre en moins d’une seconde.
-
-## Modèle de concurrence
-
-Cette première version utilise « dernière modification gagnante ».
-Elle convient à un groupe discipliné. Deux actions strictement
-simultanées peuvent encore se remplacer ; ce point sera renforcé
-dans une version ultérieure.
+`Project Monolith v2.3.0 — transitions rituelles`

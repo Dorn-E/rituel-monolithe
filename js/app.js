@@ -88,6 +88,8 @@ let pendingPurification=null;
 let purificationBoosted=false;
 let evaluationVisible=false;
 let ritualCompleted=false;
+let lastRenderedPlacements=Array(8).fill(null);
+let hasCompletedInitialRender=false;
 
 function invalidateEvaluation(){
   evaluationVisible=false;
@@ -135,27 +137,59 @@ function drop(e,i){
 }
 
 function render(){
+  const changedSlots=[];
+  placements.forEach((school,index)=>{
+    if(hasCompletedInitialRender && school!==lastRenderedPlacements[index])changedSlots.push(index);
+  });
+
   document.querySelectorAll('.slot').forEach((slot,i)=>{
     slot.classList.toggle('veiled',veiled.has(i));
     slot.classList.toggle('corrupted',corrupted.has(i));
+    slot.classList.toggle('glyph-changing',changedSlots.includes(i));
     slot.querySelectorAll('img').forEach(x=>x.remove());
+
     if(placements[i]){
       const img=document.createElement('img');
-      img.className='placed';img.src=GLYPHS[placements[i]];img.draggable=true;
-      img.ondragstart=e=>e.dataTransfer.setData('school',placements[i]);
-      img.ondblclick=()=>{placements[i]=null;invalidateEvaluation();render()};
+      img.className='placed';
+      img.src=GLYPHS[placements[i]];
+      img.draggable=true;
+      img.ondragstart=e=>{
+        e.dataTransfer.effectAllowed='move';
+        e.dataTransfer.setData('school',placements[i]);
+        requestAnimationFrame(()=>img.classList.add('dragging'));
+      };
+      img.ondragend=()=>img.classList.remove('dragging');
+      img.ondblclick=()=>{
+        placements[i]=null;
+        invalidateEvaluation();
+        render();
+      };
       slot.appendChild(img);
     }
+
+    if(changedSlots.includes(i)){
+      setTimeout(()=>slot.classList.remove('glyph-changing'),520);
+    }
   });
-  const tray=document.getElementById('tiles');tray.innerHTML='';
+
+  const tray=document.getElementById('tiles');
+  tray.innerHTML='';
   order.forEach(sc=>{
     const tile=document.createElement('div');
     tile.className='tile'+(placements.includes(sc)?' used':'');
     tile.draggable=!placements.includes(sc);
     tile.innerHTML=`<img src="${GLYPHS[sc]}" alt="glyphe">`;
-    tile.ondragstart=e=>e.dataTransfer.setData('school',sc);
+    tile.ondragstart=e=>{
+      e.dataTransfer.effectAllowed='move';
+      e.dataTransfer.setData('school',sc);
+      requestAnimationFrame(()=>tile.classList.add('dragging'));
+    };
+    tile.ondragend=()=>tile.classList.remove('dragging');
     tray.appendChild(tile);
   });
+
+  lastRenderedPlacements=[...placements];
+  hasCompletedInitialRender=true;
   update();
 }
 
@@ -267,6 +301,7 @@ function update(){
       const path=document.createElementNS('http://www.w3.org/2000/svg','path');
       path.setAttribute('d',`M ${pos[i][0]} ${pos[i][1]} L ${pos[j][0]} ${pos[j][1]}`);
       path.setAttribute('class','link'+(dark?' abyss':''));
+      path.setAttribute('pathLength','1');
       document.getElementById('links').appendChild(path);
     }
   }

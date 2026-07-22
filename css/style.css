@@ -259,3 +259,72 @@ button:disabled{opacity:.35;cursor:not-allowed}
   45%{box-shadow:0 0 45px #d7b86b55}
   100%{box-shadow:0 0 0 #d7b86b00}
 }
+
+
+/* v2.3.0 — ritual motion */
+.slot{
+  will-change:transform,box-shadow,border-color;
+}
+.slot.glyph-changing{
+  animation:slotAnswer .48s cubic-bezier(.2,.8,.2,1);
+}
+.placed{
+  transform-origin:50% 54%;
+  animation:glyphSettle .48s cubic-bezier(.18,.9,.28,1.15);
+  transition:filter .22s ease,opacity .22s ease,transform .22s ease;
+  will-change:transform,opacity,filter;
+}
+.placed:hover{
+  transform:translateY(-2px) scale(1.025);
+  filter:drop-shadow(0 0 15px #d9ffff99);
+}
+.placed.dragging,.tile.dragging{
+  opacity:.32;
+  transform:scale(.92);
+}
+.tile{
+  transition:transform .22s ease,opacity .25s ease,border-color .22s ease,box-shadow .22s ease;
+}
+.tile:not(.used):hover{
+  transform:translateY(-3px);
+  border-color:#718086;
+  box-shadow:0 8px 18px #0008,0 0 15px #a9d9e322;
+}
+.slot.dragover{
+  animation:dropInvitation .75s ease-in-out infinite alternate;
+}
+.link{
+  stroke-dasharray:1;
+  stroke-dashoffset:1;
+  animation:drawResonance .72s ease-out forwards,flow 1.3s linear .72s infinite;
+}
+.link.abyss{
+  animation:drawResonance .72s ease-out forwards,flow .75s linear .72s infinite;
+}
+.feedback,.phase,.vathkul-voice-text,.memory-text{
+  transition:background-color .3s ease,border-color .3s ease,color .3s ease;
+}
+@keyframes glyphSettle{
+  0%{opacity:0;transform:scale(.68) rotate(-4deg);filter:brightness(1.8) drop-shadow(0 0 22px #e7ffff)}
+  60%{opacity:1;transform:scale(1.07) rotate(1deg)}
+  100%{opacity:1;transform:scale(1) rotate(0)}
+}
+@keyframes slotAnswer{
+  0%{transform:translate(-50%,-50%) scale(1)}
+  48%{transform:translate(-50%,-50%) scale(1.055);box-shadow:0 0 32px #d7b86b55,inset 0 0 28px #000}
+  100%{transform:translate(-50%,-50%) scale(1)}
+}
+@keyframes dropInvitation{
+  from{transform:translate(-50%,-50%) scale(1)}
+  to{transform:translate(-50%,-50%) scale(1.025)}
+}
+@keyframes drawResonance{
+  from{stroke-dashoffset:1;opacity:.1}
+  to{stroke-dashoffset:0;opacity:1}
+}
+@media (prefers-reduced-motion:reduce){
+  .placed,.slot.glyph-changing,.slot.dragover,.link,.link.abyss,.remote-pulse,.spark::before{
+    animation:none!important;
+    transition:none!important;
+  }
+}
