@@ -1,9 +1,5 @@
-# Project Monolith — v3.0.2
+# Project Monolith v3.1.0 — interface validée
 
-Corrections d’intégration :
-- Étincelles abaissées et réduites ;
-- zones de dépôt recalées sur les huit alvéoles peintes ;
-- glyphes centrés exactement dans les cadres ;
-- textes et boutons des panneaux de droite réalignés.
+Intégration HTML/CSS de la maquette validée. Le moteur, Firebase, la synchronisation, le drag and drop, les sauvegardes et l’interface MJ sont conservés.
 
 Aucun changement Firebase requis.

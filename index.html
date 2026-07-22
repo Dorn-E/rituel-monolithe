@@ -1,17 +1,17 @@
 <!doctype html>
-<!-- Project Monolith v3.0.2 — alignements corrigés -->
+<!-- Project Monolith v3.1.0 — interface validée -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Le Rituel du Monolithe — v3.0.2</title>
+<title>Le Rituel du Monolithe — v3.1.0</title>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<link rel="stylesheet" href="css/style.css?v=3.0.2">
+<link rel="stylesheet" href="css/style.css?v=3.1.0">
 
 </head>
-<body data-build="3.0.2">
+<body data-build="3.1.0">
 <div class="entry-gate" id="entryGate" aria-modal="true" role="dialog">
   <div class="entry-stone">
     <div class="entry-runes" aria-hidden="true">ᚦ ᚨ ᚱ ᛗ · ᚹ ᚨ ᚦ ᚲ ᚢ ᛚ</div>
@@ -28,71 +28,70 @@
     <div class="entry-note">Tous ceux qui emploient la clé Vathkül partagent désormais le même rituel en temps réel.</div>
   </div>
 </div>
-<div class="wrap">
-  <div class="top">
-    <div><h1>Le Rituel du Monolithe</h1><div class="sub">v3.0.2 — alignements corrigés</div><div class="identity-row">
+<div class="wrap ritual-shell">
+  <header class="ritual-header">
+    <h1>Le Rituel du Monolithe</h1>
+    <div class="identity-row ritual-identity">
       <div class="participant-chip" id="participantChip" title="Changer de personnage">Non identifié</div>
       <div class="sync-chip" id="syncStatus" aria-live="polite">Hors ligne</div>
+      <div class="presence-line" id="presenceLine">Aucun autre esprit n’est encore lié au rituel.</div>
     </div>
-    <div class="presence-line" id="presenceLine">Aucun autre esprit n’est encore lié au rituel.</div></div>
-    <div class="hud">
-      <span class="pill sparks-pill">
-        <span class="sparks-label">Étincelles de Torm</span>
-        <span class="sparks" id="sparks"></span>
-        <b class="sparks-count"><span id="life">15</span>/15</b>
-      </span>
-      <span class="pill">Résonances : <b id="score">?</b>/8</span>
+    <div class="ritual-hidden-status" aria-hidden="true">
+      <span id="life">15</span><span id="score">?</span>
     </div>
-  </div>
+  </header>
 
   <div class="phase" id="phase"><b>Exploration :</b> placez librement les huit glyphes. Vathkül n’intervient pas tant que vous ne l’interrogez pas.</div>
 
-  <div class="game">
-    <section class="panel board" id="board">
-      <div class="ring"></div>
-      <svg class="link-layer" id="links" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
-      <div class="core" id="core"><div><b>Vathkül</b><br><small>Neuvième ancrage</small></div></div>
+  <main class="ritual-layout">
+    <section class="ritual-left">
+      <section class="panel board" id="board">
+        <div class="ring"></div>
+        <svg class="link-layer" id="links" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+        <div class="core" id="core" aria-label="Vathkül"></div>
+      </section>
+
+      <section class="sparks-band" aria-label="Étincelles de Torm">
+        <span class="sparks" id="sparks"></span>
+      </section>
+
+      <section class="glyph-tray panel">
+        <div class="tiles" id="tiles"></div>
+      </section>
     </section>
 
-    <aside class="panel tray">
-      <h2>Glyphes du calcul</h2>
-      <div class="tiles" id="tiles"></div>
+    <aside class="ritual-right">
+      <section class="vathkul-voice panel">
+        <h2>Vathkül</h2>
+        <div class="vathkul-dialogue">
+          <img class="vathkul-portrait" src="assets/ui/vathkul-face.png" alt="Visage de Vathkül">
+          <div class="vathkul-voice-text" id="vathkulVoice">« Les Étincelles que Torm m’a confiées soutiennent encore mon serment. Employez-les avec discernement. »</div>
+        </div>
+      </section>
 
-      <div class="controls">
-        <button class="primary" id="test">Éprouver la configuration</button>
-        <button class="mural-button" id="openMural">Examiner les gravures intérieures</button>
-        <button id="memory">Éveiller un souvenir</button>
-        <button id="beginPurify">Purifier une gravure</button>
-        <button class="secondary-action" id="clear">Retirer tous les glyphes</button>
-        <button class="secondary-action" id="shuffle">Mélanger les glyphes</button>
-      </div>
+      <section class="public-journal panel">
+        <h2>Journal du rituel</h2>
+        <div class="ritual-journal" id="ritualJournal"><div class="journal-empty">Aucun événement.</div></div>
+      </section>
 
-      <div class="memory-panel">
+      <section class="actions-panel panel">
+        <h2>Actions du rituel</h2>
+        <div class="controls">
+          <button class="primary" id="test">Éprouver la configuration</button>
+          <button class="mural-button" id="openMural">Examiner les gravures intérieures</button>
+          <button id="memory">Éveiller un souvenir</button>
+          <button id="beginPurify">Purifier une gravure</button>
+          <button class="secondary-action utility-hidden" id="clear">Retirer tous les glyphes</button>
+          <button class="secondary-action utility-hidden" id="shuffle">Mélanger les glyphes</button>
+        </div>
+      </section>
+
+      <div class="memory-panel utility-hidden">
         <h3>Dernier souvenir révélé</h3>
         <div class="memory-text" id="memoryText">Sélectionnez une gravure du cercle, puis demandez à Vathkül d’éveiller un souvenir.</div>
-        <div class="small">Chaque gravure possède deux souvenirs. Le premier donne un ancien nom de sort ; le second en décrit la fonction. Chaque souvenir consume immédiatement 1 Étincelle de Torm.</div>
       </div>
-
-
-      <div class="vathkul-voice">
-        <h3>Paroles de Vathkül</h3>
-        <div class="vathkul-voice-text" id="vathkulVoice">« Les Étincelles que Torm m’a confiées soutiennent encore mon serment. Employez-les avec discernement. »</div>
-      </div>
-
-      <div class="public-journal">
-        <h3>Journal du rituel</h3>
-        <div class="ritual-journal" id="ritualJournal"><div class="journal-empty">Aucun événement.</div></div>
-      </div>
-
-      <div class="purify-panel">
-        <h3>Purifier une gravure</h3>
-        <div class="purify-note">
-          Coût immédiat : <b>−1 Étincelle de Torm</b>. Puis test d’Intelligence (Arcanes) ou de Sagesse (Religion), <b>DD 20</b>.
-          Vathkül peut dépenser <b>1 Étincelle supplémentaire</b> pour réduire le DD à <b>15</b>.
-        </div>
-      </div>
-
-      <div class="feedback" id="feedback">Chaque épreuve, chaque souvenir et chaque tentative de purification consume au moins 1 Étincelle de Torm.</div>
+      <div class="purify-panel utility-hidden"><h3>Purifier une gravure</h3><div class="purify-note"></div></div>
+      <div class="feedback utility-hidden" id="feedback">Chaque épreuve, chaque souvenir et chaque tentative de purification consume au moins 1 Étincelle de Torm.</div>
 
       <div class="gm" id="gmPanel">
         <h3>Interface MJ</h3>
@@ -121,9 +120,8 @@
         <div class="small">Ouverture/fermeture : Ctrl + Maj + M.</div>
       </div>
     </aside>
-  </div>
+  </main>
 </div>
-
 
 
 <div class="purify-overlay" id="purifyOverlay">

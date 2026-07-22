@@ -19,7 +19,7 @@ function openEntryGate(){
 function enterRitual(name){
   participantName=name.trim();
   localStorage.setItem('projectMonolithCharacter',participantName);
-  document.getElementById('participantChip').textContent='✦ '+participantName;
+  document.getElementById('participantChip').textContent=participantName;
   const gate=document.getElementById('entryGate');
   gate.classList.add('opening');
   setTimeout(()=>gate.style.display='none',560);
