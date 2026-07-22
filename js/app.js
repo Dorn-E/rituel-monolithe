@@ -238,7 +238,7 @@ function animateReturningSpark(){
 
   const notice=document.createElement('div');
   notice.className='spark-message';
-  notice.textContent='✦ Une Étincelle de Torm retourne à son créateur…';
+  notice.textContent='Une Étincelle de Torm retourne à son créateur…';
   document.body.appendChild(notice);
   setTimeout(()=>notice.remove(),1900);
 }

@@ -1,5 +1,13 @@
-# Project Monolith v3.1.0 — interface validée
+# Project Monolith — v4.0.0
 
-Intégration HTML/CSS de la maquette validée. Le moteur, Firebase, la synchronisation, le drag and drop, les sauvegardes et l’interface MJ sont conservés.
+Reconstruction complète de l’interface, sans superposition avec l’ancienne mise en page.
 
-Aucun changement Firebase requis.
+- Monolithe circulaire avec huit emplacements circulaires.
+- Visage de Vathkül au centre et dans son panneau de dialogue.
+- Quinze petites flammes dorées entre le Monolithe et les glyphes.
+- Huit glyphes existants sur des socles circulaires de même taille que les emplacements.
+- Journal textuel sans pictogrammes.
+- Quatre actions joueurs : éprouver, examiner, éveiller, purifier.
+- Firebase, synchronisation, sauvegardes, drag & drop et interface MJ conservés.
+
+Aucune modification Firebase n’est nécessaire.
