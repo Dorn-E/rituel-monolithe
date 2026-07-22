@@ -1,0 +1,39 @@
+/* Base v4.1 - première étape */
+:root{
+ --panel-bg:#14110f;
+ --gold:#b99652;
+ --stone:#2b2724;
+}
+body{background:#090909;}
+.left-column{display:flex;flex-direction:column;gap:16px;}
+.monolith-board{
+ position:relative;
+ border:2px solid var(--gold);
+ border-radius:18px;
+ background:#111;
+}
+.sparks-band{
+ display:flex;
+ justify-content:center;
+ gap:10px;
+ padding:10px 0;
+}
+.glyph-tray{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:14px;
+}
+.glyph-slot{
+ aspect-ratio:1/1;
+ border-radius:50%;
+ border:2px solid var(--gold);
+ background:radial-gradient(circle,#3a3530,#201d1a);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+}
+.panel{
+ border:2px solid var(--gold);
+ border-radius:14px;
+ background:rgba(20,17,15,.92);
+}
