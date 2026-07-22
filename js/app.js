@@ -3,6 +3,7 @@ const RITUAL_KEY='Vathkül';
 let participantName='';
 let stateChangeHandler=()=>{};
 let isApplyingRemoteState=false;
+let ritualJournal=[];
 
 function normalizeRitualKey(value){
   return value.trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
@@ -439,6 +440,48 @@ function resolvePurification(success){
   render();
 }
 
+
+function escapeHTML(value){
+  return String(value).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+}
+function renderRitualJournal(){
+  const container=document.getElementById('ritualJournal');
+  if(!container)return;
+  if(!ritualJournal.length){container.innerHTML='<div class="journal-empty">Aucun événement.</div>';return;}
+  container.innerHTML=ritualJournal.slice().reverse().map(entry=>`
+    <div class="journal-entry"><time>${new Date(entry.timestamp).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}</time>
+    <strong>${escapeHTML(entry.actor||'Le Monolithe')}</strong> — ${escapeHTML(entry.text)}</div>`).join('');
+}
+function addJournalEntry(text,actor=participantName||'Le Monolithe'){
+  if(!text)return;
+  ritualJournal.push({id:`${Date.now()}-${Math.random()}`,timestamp:Date.now(),actor,text});
+  ritualJournal=ritualJournal.slice(-60);
+  renderRitualJournal();
+}
+function initialSharedState(){
+  return {
+    schemaVersion:1,placements:Array(8).fill(null),order:[...schools],life:15,memoryLevel:Array(8).fill(0),
+    veiled:[],corrupted:[],lastGM:null,evaluationVisible:false,ritualCompleted:false,
+    pendingPurification:null,purificationBoosted:false,
+    phaseHTML:'<b>Exploration :</b> placez librement les huit glyphes. Vathkül n’intervient pas tant que vous ne l’interrogez pas.',
+    feedbackText:'Chaque épreuve, chaque souvenir et chaque tentative de purification consume au moins 1 Étincelle de Torm.',
+    memoryText:'Sélectionnez une gravure du cercle, puis demandez à Vathkül d’éveiller un souvenir.',
+    voiceText:'« Les Étincelles que Torm m’a confiées soutiennent encore mon serment. Employez-les avec discernement. »',
+    memoryStage:'',memoryOverlayOpen:false,purifyOverlayOpen:false,
+    purifyPrompt:'Vathkül engage une Étincelle de Torm pour retenir la corruption.',
+    purifyResult:'Choisissez d’abord si Vathkül renforce votre tentative.',
+    purifyChoiceVisible:true,purifyOutcomeVisible:false,boardDissolving:false,victoryOpen:false,
+    ritualJournal:[{id:`reset-${Date.now()}`,timestamp:Date.now(),actor:'Le Monolithe',text:'Le rituel retrouve son état originel.'}]
+  };
+}
+function resetRitualState(){
+  spokenThresholds.clear();selected=null;previousLife=15;
+  applySharedState(initialSharedState());
+  document.getElementById('muralOverlay').classList.remove('show');
+  document.getElementById('end').classList.remove('show');
+  stateChangeHandler();
+}
+
 function gmSwap(){
   const filled=[...Array(8).keys()].filter(i=>placements[i]);
   if(filled.length<2)return;
@@ -466,7 +509,11 @@ function gmRestore(){
   if(lastGM.type==='corrupt')corrupted.delete(lastGM.i);
   lastGM=null;invalidateEvaluation();say('La dernière perturbation est annulée.');render();
 }
-function say(t){document.getElementById('feedback').textContent=t;}
+function say(t){
+  document.getElementById('feedback').textContent=t;
+  const last=ritualJournal.at(-1);
+  if(!last||last.text!==t)addJournalEntry(t);
+}
 
 
 function exportSharedState(){
@@ -495,7 +542,8 @@ function exportSharedState(){
     purifyChoiceVisible:document.getElementById('purifyChoiceRow').style.display!=='none',
     purifyOutcomeVisible:document.getElementById('purifyOutcomeRow').style.display!=='none',
     boardDissolving:document.getElementById('board').classList.contains('dissolving'),
-    victoryOpen:document.getElementById('victory').classList.contains('show')
+    victoryOpen:document.getElementById('victory').classList.contains('show'),
+    ritualJournal:ritualJournal.map(entry=>({...entry}))
   };
 }
 
@@ -518,6 +566,7 @@ function applySharedState(sharedState){
       ? sharedState.pendingPurification
       : null;
     purificationBoosted=Boolean(sharedState.purificationBoosted);
+    ritualJournal=Array.isArray(sharedState.ritualJournal)?sharedState.ritualJournal.map(e=>({...e})).slice(-60):[];
 
     if(typeof sharedState.phaseHTML==='string'){
       document.getElementById('phase').innerHTML=sharedState.phaseHTML;
@@ -560,6 +609,7 @@ function applySharedState(sharedState){
 
     previousLife=life;
     render();
+    renderRitualJournal();
 
     const board=document.getElementById('board');
     board.classList.remove('remote-pulse');
@@ -592,7 +642,16 @@ window.ProjectMonolith={
       return;
     }
     line.textContent='Volontés liées : '+unique.join(' · ');
-  }
+  },
+  resetRitual:resetRitualState,
+  setSnapshotOptions(items){
+    const select=document.getElementById('snapshotSelect'); if(!select)return;
+    const current=select.value; select.innerHTML='';
+    if(!items?.length){select.innerHTML='<option value="">Aucune sauvegarde disponible</option>';return;}
+    items.forEach(item=>{const option=document.createElement('option');option.value=item.id;option.textContent=item.label;select.appendChild(option);});
+    if([...select.options].some(o=>o.value===current))select.value=current;
+  },
+  setSnapshotStatus(text){const el=document.getElementById('snapshotStatus');if(el)el.textContent=text;}
 };
 
 
@@ -618,6 +677,28 @@ document.getElementById('swap').onclick=gmSwap;
 document.getElementById('veil').onclick=gmVeil;
 document.getElementById('corrupt').onclick=gmCorrupt;
 document.getElementById('restore').onclick=gmRestore;
+
+document.getElementById('resetRitual').onclick=()=>{
+  if(confirm('Réinitialiser le rituel pour tous les participants ?')){
+    window.ProjectMonolith.resetRitual();
+    window.ProjectMonolith.setSnapshotStatus('Rituel réinitialisé.');
+  }
+};
+document.getElementById('saveSnapshot').onclick=async()=>{
+  const name=prompt('Nom de la sauvegarde :',`Sauvegarde ${new Date().toLocaleString('fr-FR')}`);
+  if(name?.trim())await window.ProjectMonolithSync?.saveSnapshot(name.trim());
+};
+document.getElementById('loadSnapshot').onclick=async()=>{
+  const id=document.getElementById('snapshotSelect').value;
+  if(!id)return window.ProjectMonolith.setSnapshotStatus('Sélectionnez une sauvegarde.');
+  if(confirm('Charger cette sauvegarde pour tous ?'))await window.ProjectMonolithSync?.loadSnapshot(id);
+};
+document.getElementById('deleteSnapshot').onclick=async()=>{
+  const id=document.getElementById('snapshotSelect').value;
+  if(!id)return window.ProjectMonolith.setSnapshotStatus('Sélectionnez une sauvegarde.');
+  if(confirm('Supprimer cette sauvegarde ?'))await window.ProjectMonolithSync?.deleteSnapshot(id);
+};
+
 document.addEventListener('keydown',e=>{
   if(e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==='m'){
     e.preventDefault();document.getElementById('gmPanel').classList.toggle('show');
@@ -626,4 +707,5 @@ document.addEventListener('keydown',e=>{
 build();
 buildSparks();
 renderSparks();
+renderRitualJournal();
 initializeEntryGate();

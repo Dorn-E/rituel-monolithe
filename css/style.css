@@ -328,3 +328,13 @@ button:disabled{opacity:.35;cursor:not-allowed}
     transition:none!important;
   }
 }
+
+.gm-section{margin-top:11px;padding-top:10px;border-top:1px solid #403348}
+.gm-section:first-of-type{margin-top:0;padding-top:0;border-top:0}
+.gm-section h4{margin:0 0 8px;color:#d9bf83;font:700 12px system-ui;letter-spacing:.06em;text-transform:uppercase}
+.gm-actions-secondary{margin-top:7px}
+#snapshotSelect{width:100%;margin-top:7px;padding:9px 10px;border:1px solid #4d4652;border-radius:8px;background:#090b0d;color:#dfe5e7}
+.snapshot-status{margin-top:7px;padding:8px;border:1px solid #322b37;border-radius:8px;background:#08090a;color:#9ea8ac;font:11px/1.4 system-ui}
+.ritual-journal{max-height:210px;overflow:auto;padding:7px;border:1px solid #342c39;border-radius:9px;background:#070809}
+.journal-entry{padding:7px 6px;border-bottom:1px solid #29242d;color:#c8c1cc;font:11px/1.4 system-ui}
+.journal-entry time{display:block;color:#857b8b;font-size:9px}.journal-entry strong{color:#e0c985}.journal-empty{padding:10px;color:#777f83;text-align:center}

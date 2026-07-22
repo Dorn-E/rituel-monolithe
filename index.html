@@ -1,10 +1,10 @@
 <!doctype html>
-<!-- Project Monolith v2.3.0 — transitions rituelles -->
+<!-- Project Monolith v2.2.0 — collaboration Firebase -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Le Rituel du Monolithe — v2.3.0</title>
+<title>Le Rituel du Monolithe — v2.4.0 gestion</title>
 <link rel="stylesheet" href="css/style.css">
 
 </head>
@@ -27,7 +27,7 @@
 </div>
 <div class="wrap">
   <div class="top">
-    <div><h1>Le Rituel du Monolithe</h1><div class="sub">v2.3.0 — mouvements du Monolithe</div><div class="identity-row">
+    <div><h1>Le Rituel du Monolithe</h1><div class="sub">v2.4.0 — mémoire du Monolithe</div><div class="identity-row">
       <div class="participant-chip" id="participantChip" title="Changer de personnage">Non identifié</div>
       <div class="sync-chip" id="syncStatus" aria-live="polite">Hors ligne</div>
     </div>
@@ -88,13 +88,33 @@
 
       <div class="gm" id="gmPanel">
         <h3>Interface MJ</h3>
-        <div class="gm-actions">
-          <button class="danger" id="swap">Inverser deux glyphes</button>
-          <button class="danger" id="veil">Voiler une gravure</button>
-          <button class="danger" id="corrupt">Corrompre une gravure</button>
-          <button id="restore">Annuler la dernière intervention</button>
+        <div class="gm-section">
+          <h4>Contre-rituel</h4>
+          <div class="gm-actions">
+            <button class="danger" id="swap">Inverser deux glyphes</button>
+            <button class="danger" id="veil">Voiler une gravure</button>
+            <button class="danger" id="corrupt">Corrompre une gravure</button>
+            <button id="restore">Annuler la dernière intervention</button>
+          </div>
         </div>
-        <div class="small">Ouverture/fermeture : Ctrl + Maj + M. Aucune intervention n’est automatique.</div>
+        <div class="gm-section">
+          <h4>Mémoire du Monolithe</h4>
+          <div class="gm-actions">
+            <button id="saveSnapshot">Créer une sauvegarde</button>
+            <button id="loadSnapshot">Charger la sauvegarde</button>
+          </div>
+          <select id="snapshotSelect"><option value="">Aucune sauvegarde disponible</option></select>
+          <div class="gm-actions gm-actions-secondary">
+            <button id="deleteSnapshot">Supprimer la sauvegarde</button>
+            <button class="danger" id="resetRitual">Réinitialiser le rituel</button>
+          </div>
+          <div class="snapshot-status" id="snapshotStatus">L’état courant est conservé automatiquement.</div>
+        </div>
+        <div class="gm-section">
+          <h4>Journal du rituel</h4>
+          <div class="ritual-journal" id="ritualJournal"><div class="journal-empty">Aucun événement.</div></div>
+        </div>
+        <div class="small">Ouverture/fermeture : Ctrl + Maj + M.</div>
       </div>
     </aside>
   </div>

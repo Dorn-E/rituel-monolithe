@@ -5,6 +5,7 @@ import {
   signInAnonymously
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 import {
+  addDoc,
   collection,
   deleteDoc,
   doc,
@@ -24,6 +25,7 @@ let roomReference=null;
 let participantReference=null;
 let unsubscribeRoom=null;
 let unsubscribeParticipants=null;
+let unsubscribeSnapshots=null;
 let writeTimer=null;
 let heartbeatTimer=null;
 let connected=false;
@@ -83,6 +85,34 @@ async function leavePresence(){
     // The browser may close before the request completes.
   }
 }
+
+
+function snapshotsCollection(){
+  if(!roomReference)throw new Error("Room not connected");
+  return collection(roomReference,"snapshots");
+}
+async function saveSnapshot(name){
+  if(!connected)return;
+  window.ProjectMonolith.setSnapshotStatus("Création…");
+  try{
+    await addDoc(snapshotsCollection(),{name,state:window.ProjectMonolith.getSharedState(),createdAt:serverTimestamp(),createdByName:window.ProjectMonolith.getParticipantName()});
+    window.ProjectMonolith.setSnapshotStatus(`Sauvegarde « ${name} » créée.`);
+  }catch(error){console.error(error);window.ProjectMonolith.setSnapshotStatus("Échec de la sauvegarde.");}
+}
+async function loadSnapshot(id){
+  try{
+    const snap=await getDoc(doc(snapshotsCollection(),id));
+    if(!snap.exists())return;
+    window.ProjectMonolith.applySharedState(snap.data().state);
+    await setDoc(roomReference,{state:window.ProjectMonolith.getSharedState(),updatedAt:serverTimestamp(),updatedBy:currentUser.uid,updatedByName:window.ProjectMonolith.getParticipantName()},{merge:true});
+    window.ProjectMonolith.setSnapshotStatus(`Sauvegarde « ${snap.data().name||'sans nom'} » chargée.`);
+  }catch(error){console.error(error);window.ProjectMonolith.setSnapshotStatus("Échec du chargement.");}
+}
+async function deleteSnapshotById(id){
+  try{await deleteDoc(doc(snapshotsCollection(),id));window.ProjectMonolith.setSnapshotStatus("Sauvegarde supprimée.");}
+  catch(error){console.error(error);window.ProjectMonolith.setSnapshotStatus("Échec de la suppression.");}
+}
+window.ProjectMonolithSync={saveSnapshot,loadSnapshot,deleteSnapshot:deleteSnapshotById};
 
 async function connectToRitual({participantName,ritualKey}){
   if(connected)return;
@@ -145,6 +175,19 @@ async function connectToRitual({participantName,ritualKey}){
       error=>console.error("Presence listener failed:",error)
     );
 
+    unsubscribeSnapshots=onSnapshot(
+      snapshotsCollection(),
+      snapshot=>{
+        const items=snapshot.docs.map(d=>{
+          const data=d.data();
+          const date=data.createdAt?.toDate?.();
+          return {id:d.id,label:`${data.name||'Sauvegarde'} — ${date?date.toLocaleString('fr-FR'):'enregistrement récent'}`};
+        }).sort((a,b)=>b.label.localeCompare(a.label));
+        window.ProjectMonolith.setSnapshotOptions(items);
+      },
+      error=>{console.error(error);window.ProjectMonolith.setSnapshotStatus("Impossible de lire les sauvegardes.");}
+    );
+
     window.ProjectMonolith.onStateChange(scheduleStateWrite);
     connected=true;
     setStatus("Rituel partagé","online");
@@ -168,5 +211,6 @@ window.addEventListener("pagehide",()=>{
   clearInterval(heartbeatTimer);
   unsubscribeRoom?.();
   unsubscribeParticipants?.();
+  unsubscribeSnapshots?.();
   leavePresence();
 });
