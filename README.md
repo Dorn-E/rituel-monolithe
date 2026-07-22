@@ -1,13 +1,11 @@
-# Project Monolith — v4.1.1 — Sprint 2
+# Project Monolith — v4.1.2 — Sprint 3 visuel
 
-Corrections du Monolithe :
+Corrections ciblées :
 
-- huit emplacements placés à intervalles réguliers de 45° autour de Vathkül ;
-- même diamètre pour les huit cercles ;
-- centrage géométrique autour du visage central ;
-- glyphes centrés dans les emplacements après le drag & drop ;
-- socles de réserve et emplacements verrouillés en cercles parfaits ;
-- Firebase et logique du rituel inchangés.
+- ajout de runes discrètes sur les anneaux du Monolithe ;
+- réduction du glyphe d'Abjuration afin que le bouclier soit visible en entier ;
+- remplacement des petites flammes par de petites Étincelles dorées en forme d'étoile ;
+- aucun changement sur Firebase, le drag & drop, le journal ou les actions.
 
 Publication GitHub :
 téléverser tout le contenu à la racine et commit direct sur `main`.

@@ -499,3 +499,112 @@ body::before{
     height:76px;
   }
 }
+
+
+/* v4.1.2 — Sprint 3 : détails visuels ciblés */
+
+/* Runes discrètes sur le disque, sans surcharger le plateau. */
+.board::before,
+.board::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  pointer-events:none;
+}
+
+.board::before{
+  inset:2.7%;
+  opacity:.28;
+  background:
+    repeating-conic-gradient(
+      from -1deg,
+      transparent 0deg 7.4deg,
+      rgba(210,164,76,.44) 7.65deg 7.92deg,
+      transparent 8.15deg 14.8deg
+    );
+  -webkit-mask:
+    radial-gradient(circle,transparent 0 78%,#000 78.4% 84.1%,transparent 84.5%);
+          mask:
+    radial-gradient(circle,transparent 0 78%,#000 78.4% 84.1%,transparent 84.5%);
+}
+
+.board::after{
+  inset:7.2%;
+  opacity:.18;
+  background:
+    repeating-conic-gradient(
+      from 5deg,
+      transparent 0deg 12deg,
+      rgba(205,156,67,.54) 12.3deg 12.7deg,
+      transparent 13deg 24deg
+    );
+  -webkit-mask:
+    radial-gradient(circle,transparent 0 65%,#000 65.4% 68.2%,transparent 68.6%);
+          mask:
+    radial-gradient(circle,transparent 0 65%,#000 65.4% 68.2%,transparent 68.6%);
+}
+
+/* Le bouclier d'Abjuration reste entièrement visible dans son socle. */
+.tile[data-school="abjuration"] img{
+  width:70% !important;
+  height:70% !important;
+  max-width:70% !important;
+  max-height:70% !important;
+}
+
+/* Étincelles : petite étoile dorée, et non plus une flamme. */
+.spark{
+  height:36px;
+}
+
+.spark::before{
+  width:13px !important;
+  height:13px !important;
+  bottom:11px !important;
+  border-radius:0 !important;
+  background:
+    radial-gradient(circle,#fffbd2 0 13%,#ffe27a 23%,#d99b25 47%,rgba(211,145,24,.2) 67%,transparent 70%) !important;
+  clip-path:polygon(
+    50% 0%,
+    59% 38%,
+    100% 50%,
+    59% 62%,
+    50% 100%,
+    41% 62%,
+    0% 50%,
+    41% 38%
+  ) !important;
+  filter:drop-shadow(0 0 3px rgba(235,183,68,.9)) !important;
+  animation:spark-twinkle 1.65s ease-in-out infinite alternate !important;
+}
+
+.spark:nth-child(3n)::before{animation-delay:-.55s !important}
+.spark:nth-child(3n+1)::before{animation-delay:-1.1s !important}
+
+.spark.spent::before{
+  opacity:.06 !important;
+  filter:none !important;
+}
+
+.spark.extinguishing::before{
+  animation:extinguish-star .55s forwards !important;
+}
+
+@keyframes spark-twinkle{
+  from{
+    transform:translateX(-50%) scale(.72) rotate(0deg);
+    opacity:.72;
+  }
+  to{
+    transform:translateX(-50%) scale(1.08) rotate(12deg);
+    opacity:1;
+  }
+}
+
+@keyframes extinguish-star{
+  to{
+    opacity:0;
+    transform:translateX(-50%) scale(.15) rotate(45deg);
+  }
+}

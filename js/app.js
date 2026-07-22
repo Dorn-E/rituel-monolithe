@@ -178,6 +178,7 @@ function render(){
   order.forEach(sc=>{
     const tile=document.createElement('div');
     tile.className='tile'+(placements.includes(sc)?' used':'');
+    tile.dataset.school=sc;
     tile.draggable=!placements.includes(sc);
     tile.innerHTML=`<img src="${GLYPHS[sc]}" alt="glyphe">`;
     tile.ondragstart=e=>{
