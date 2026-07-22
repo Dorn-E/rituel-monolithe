@@ -549,3 +549,5 @@ button.danger{background:linear-gradient(180deg,#411c20,#211013);border-color:#8
 .spark-message{border-radius:3px;background:#0b0a08f2;border-color:#a9894d;color:#f0d998}
 @keyframes stonePanelOpen{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
 @media(max-width:1000px){.wrap{padding:12px}.game{gap:12px}}
+
+/* PROJECT MONOLITH v2.5.0 — FIN DU SKIN PIERRE NOIRE */
