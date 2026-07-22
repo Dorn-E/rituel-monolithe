@@ -1,11 +1,9 @@
-# Project Monolith — v3.0.1 corrigée
+# Project Monolith — v3.0.2
 
-Version complète basée sur la v3.0.0, avec cache-busting explicite pour GitHub Pages.
+Corrections d’intégration :
+- Étincelles abaissées et réduites ;
+- zones de dépôt recalées sur les huit alvéoles peintes ;
+- glyphes centrés exactement dans les cadres ;
+- textes et boutons des panneaux de droite réalignés.
 
-## Publication
-Téléverser le contenu de ce dossier à la racine du dépôt, puis faire un commit direct sur `main`.
-
-## Vérification
-La page doit afficher `v3.0.1 — l’artefact`. Le coin inférieur droit montre discrètement `build 3.0.1`.
-
-Aucun changement Firebase nécessaire.
+Aucun changement Firebase requis.
