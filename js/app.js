@@ -4,6 +4,9 @@ let participantName='';
 let stateChangeHandler=()=>{};
 let isApplyingRemoteState=false;
 let ritualJournal=[];
+let purificationMode=false;
+let purificationTargetIndex=null;
+let purificationDC=20;
 
 function normalizeRitualKey(value){
   return value.trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
@@ -318,7 +321,17 @@ function renderSparks(){
 function update(){
   const {good,aby}=score();
   document.getElementById('life').textContent=life;
-  renderSparks();
+  
+document.getElementById('closePurificationFlow')?.addEventListener('click',closePurificationFlow);
+document.getElementById('purificationAidYes')?.addEventListener('click',()=>chooseVathkulAid(true));
+document.getElementById('purificationAidNo')?.addEventListener('click',()=>chooseVathkulAid(false));
+document.getElementById('purificationSuccess')?.addEventListener('click',()=>resolvePurification(true));
+document.getElementById('purificationFailure')?.addEventListener('click',()=>resolvePurification(false));
+document.getElementById('purificationFlowOverlay')?.addEventListener('click',event=>{
+  if(event.target.id==='purificationFlowOverlay')closePurificationFlow();
+});
+
+renderSparks();
   document.getElementById('score').textContent=evaluationVisible?good:'?';
   document.getElementById('links').innerHTML='';
 
@@ -617,6 +630,108 @@ function resetRitualState(){
   stateChangeHandler();
 }
 
+
+function setPurificationStep(step){
+  const selectStep=document.getElementById('purificationSelectStep');
+  const aidStep=document.getElementById('purificationAidStep');
+  const rollStep=document.getElementById('purificationRollStep');
+
+  selectStep?.classList.toggle('hidden',step!=='select');
+  aidStep?.classList.toggle('hidden',step!=='aid');
+  rollStep?.classList.toggle('hidden',step!=='roll');
+}
+
+function openPurificationFlow(){
+  if(life<=0){
+    speakVathkul('Aucune Étincelle ne demeure.');
+    update();
+    return;
+  }
+
+  purificationMode=true;
+  purificationTargetIndex=null;
+  purificationDC=20;
+
+  document.querySelectorAll('.slot').forEach(slot=>{
+    slot.classList.add('purification-selectable');
+    slot.classList.remove('purification-target');
+  });
+
+  setPurificationStep('select');
+  document.getElementById('purificationFlowOverlay')?.classList.add('show');
+  document.getElementById('purificationFlowOverlay')?.setAttribute('aria-hidden','false');
+  addJournalEntry('Sélectionnez un glyphe à purifier.','Le Monolithe');
+}
+
+function closePurificationFlow(){
+  purificationMode=false;
+  purificationTargetIndex=null;
+
+  document.querySelectorAll('.slot').forEach(slot=>{
+    slot.classList.remove('purification-selectable','purification-target');
+  });
+
+  document.getElementById('purificationFlowOverlay')?.classList.remove('show');
+  document.getElementById('purificationFlowOverlay')?.setAttribute('aria-hidden','true');
+}
+
+function choosePurificationTarget(index){
+  if(!purificationMode)return;
+  if(!placements[index]){
+    speakVathkul('Aucun glyphe ne repose à cet emplacement.');
+    update();
+    return;
+  }
+
+  purificationTargetIndex=index;
+
+  document.querySelectorAll('.slot').forEach((slot,slotIndex)=>{
+    slot.classList.toggle('purification-target',slotIndex===index);
+  });
+
+  speakVathkul('Désires-tu solliciter mon assistance ?');
+  setPurificationStep('aid');
+  update();
+}
+
+function chooseVathkulAid(useAid){
+  if(purificationTargetIndex===null)return;
+  purificationDC=useAid?15:20;
+
+  document.getElementById('purificationDcText').textContent=`DD ${purificationDC}`;
+  document.getElementById('purificationRollInstruction').textContent=
+    'Effectuez un jet d’Intelligence (Arcanes) ou de Sagesse (Religion).';
+
+  addJournalEntry(
+    useAid
+      ? 'Vathkül prête son assistance à la purification. DD 15.'
+      : 'La purification est tentée sans l’assistance de Vathkül. DD 20.'
+  );
+
+  setPurificationStep('roll');
+}
+
+function resolvePurification(success){
+  if(purificationTargetIndex===null || life<=0)return;
+
+  life=Math.max(0,life-1);
+
+  if(success){
+    corrupted.delete(purificationTargetIndex);
+    veiled.delete(purificationTargetIndex);
+    speakVathkul('Le glyphe retrouve sa pureté.');
+    addJournalEntry('Le glyphe ciblé a été purifié.');
+  }else{
+    speakVathkul('La souillure demeure.');
+    addJournalEntry('La tentative de purification a échoué.');
+  }
+
+  previousLife=life;
+  closePurificationFlow();
+  update();
+  stateChangeHandler();
+}
+
 function gmSwap(){
   const filled=[...Array(8).keys()].filter(i=>placements[i]);
   if(filled.length<2)return;
@@ -812,6 +927,7 @@ document.getElementById('swap').onclick=gmSwap;
 document.getElementById('veil').onclick=gmVeil;
 document.getElementById('corrupt').onclick=gmCorrupt;
 document.getElementById('restore').onclick=gmRestore;
+document.getElementById('purify').onclick=openPurificationFlow;
 
 document.getElementById('resetRitual').onclick=()=>{
   if(confirm('Réinitialiser le rituel pour tous les participants ?')){

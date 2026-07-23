@@ -1,27 +1,36 @@
-# Project Monolith — v4.1.8 — Analyse avancée de Vathkül
+# Project Monolith — v4.1.9 — Sprint 8 Purification
 
-Le bouton **Examiner les gravures intérieures** analyse désormais réellement le plateau.
+## Fonctionnement
 
-Ordre de priorité des indices :
+1. Cliquer sur **Purifier un glyphe**.
+2. Cliquer directement sur un glyphe du Monolithe.
+3. Vathkül demande :  
+   « Désires-tu solliciter mon assistance ? »
+4. Choisir :
+   - Oui : DD 15
+   - Non : DD 20
+5. Effectuer un jet d’Intelligence (Arcanes) ou de Sagesse (Religion).
+6. Cliquer sur **Réussite** ou **Échec**.
 
-1. inversion détectée entre deux glyphes ;
-2. position précise lorsqu’un seul glyphe est incorrect ;
-3. bilan global selon le nombre de glyphes corrects.
+## Résolution
 
-Positions reconnues :
+Dans tous les cas :
 
-- Nord : Divination
-- Nord-Est : Abjuration
-- Est : Enchantement
-- Sud-Est : Nécromancie
-- Sud : Transmutation
-- Sud-Ouest : Évocation
-- Ouest : Invocation
-- Nord-Ouest : Illusion
+- une Étincelle est consommée ;
+- le journal est mis à jour ;
+- l’état est synchronisé via Firebase.
 
-Le vocabulaire utilise désormais **glyphe**, jamais **gravure**, pour parler des écoles de magie.
+En cas de réussite :
 
-Les souvenirs, Firebase, le drag & drop, la purification et l’interface ne sont pas modifiés.
+- la corruption du glyphe est retirée ;
+- Vathkül dit : « Le glyphe retrouve sa pureté. »
+
+En cas d’échec :
+
+- la corruption demeure ;
+- Vathkül dit : « La souillure demeure. »
+
+Les souvenirs ne sont pas modifiés.
 
 ## GitHub
 
@@ -29,6 +38,6 @@ Téléverser tout le contenu à la racine du dépôt, puis commit direct sur `ma
 
 Commit conseillé :
 
-`Project Monolith v4.1.8 — Analyse avancée de Vathkül`
+`Project Monolith v4.1.9 — Sprint 8 Purification`
 
 Aucun changement Firebase.
