@@ -1,29 +1,36 @@
-# Project Monolith — v4.2.0 — Liaisons refaites
+# Project Monolith — v4.2.1 — Liaisons et stabilité
 
-Le système de liaisons a été entièrement remplacé.
+## Liaisons
 
-## Fonctionnement
+La cause de leur absence était un ancien moteur SVG encore présent dans `update()` :
 
-- aucune liaison avant une épreuve ;
-- après **Éprouver la configuration**, une liaison apparaît entre chaque paire de glyphes adjacents correctement placés et non corrompus ;
-- dès qu’un glyphe est déplacé, corrompu, purifié, échangé ou que le rituel est réinitialisé, toutes les liaisons disparaissent ;
-- une nouvelle épreuve est nécessaire pour les révéler à nouveau.
+- il effaçait immédiatement les nouveaux filaments HTML ;
+- il tentait ensuite de dessiner des chemins SVG dans une couche HTML.
 
-## Technique
+Ce moteur est supprimé. Un seul système de liaisons subsiste désormais.
 
-- suppression de l’ancienne couche SVG ;
-- utilisation d’une couche HTML unique ;
-- coordonnées fixes des huit emplacements ;
-- aucun calcul dépendant de la taille du navigateur.
+Les liaisons :
 
-## Visuel
+- apparaissent après **Éprouver la configuration** ;
+- relient les glyphes adjacents correctement placés et non corrompus ;
+- disparaissent après toute modification du plateau.
 
-- filament doré ;
-- halo lumineux ;
-- apparition progressive ;
-- pulsation douce ;
-- Étincelle circulant le long de chaque liaison.
+## Stabilité Firebase
+
+Les rendus purement visuels ne déclenchent plus systématiquement une synchronisation.
+
+De plus, un état distant est temporairement ignoré :
+
+- pendant une écriture locale ;
+- juste après une modification locale ;
+- juste après la confirmation d’une écriture.
+
+Cela empêche un ancien état Firebase de revenir écraser un déplacement récent ou de donner l’impression que le rituel se réinitialise.
+
+## Autre correctif
+
+Le générateur d’Étincelles vérifie désormais correctement la présence de **12** éléments et non plus 15.
 
 Commit conseillé :
 
-`Project Monolith v4.2.0 — Liaisons refaites`
+`Project Monolith v4.2.1 — Liaisons et stabilité`

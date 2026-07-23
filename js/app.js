@@ -3,6 +3,7 @@ const RITUAL_KEY='Vathkül';
 let participantName='';
 let stateChangeHandler=()=>{};
 let isApplyingRemoteState=false;
+let lastLocalMutationAt=0;
 let ritualJournal=[];
 let purificationMode=false;
 let purificationTargetIndex=null;
@@ -14,6 +15,12 @@ let adjacencyLinksRevealed=false;
 let finalSequenceRunning=false;
 let lokaugSwapMode=false;
 let lokaugFirstSwapIndex=null;
+
+
+function markLocalMutation(){
+  if(isApplyingRemoteState)return;
+  lastLocalMutationAt=Date.now();
+}
 
 function normalizeRitualKey(value){
   return value.trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
@@ -102,6 +109,7 @@ let lastRenderedPlacements=Array(8).fill(null);
 let hasCompletedInitialRender=false;
 
 function invalidateEvaluation(){
+  markLocalMutation();
   clearRevealedLinks();
   evaluationVisible=false;
   finalReady=false;
@@ -346,7 +354,7 @@ const thresholdLines={
 
 function buildSparks(){
   const container=document.getElementById('sparks');
-  if(!container || container.children.length===15)return;
+  if(!container || container.children.length===12)return;
   container.innerHTML='';
   for(let i=0;i<12;i++){
     const flame=document.createElement('span');
@@ -441,21 +449,7 @@ function update(){
   renderSparks();
   updateAbyssPortalStage();
   document.getElementById('score').textContent=evaluationVisible?good:'?';
-  document.getElementById('links').innerHTML='';
-
-  if(evaluationVisible){
-    for(let i=0;i<8;i++){
-      const j=(i+1)%8;
-      const stable=placements[i]===solution[i]&&placements[j]===solution[j]&&!corrupted.has(i)&&!corrupted.has(j);
-      const dark=placements[i]===abyss[i]&&placements[j]===abyss[j];
-      if(!stable&&!dark)continue;
-      const path=document.createElementNS('http://www.w3.org/2000/svg','path');
-      path.setAttribute('d',`M ${pos[i][0]} ${pos[i][1]} L ${pos[j][0]} ${pos[j][1]}`);
-      path.setAttribute('class','link'+(dark?' abyss':''));
-      path.setAttribute('pathLength','1');
-      document.getElementById('links').appendChild(path);
-    }
-  }
+  renderAdjacentCorrectLinks();
 
   finalReady=evaluationVisible&&good===8;
   const core=document.getElementById('core');
@@ -468,7 +462,10 @@ function update(){
   const purifyButton=document.getElementById('beginPurify');
   if(memoryButton)memoryButton.disabled=life===0;
   if(purifyButton)purifyButton.disabled=life===0;
-  if(!isApplyingRemoteState)stateChangeHandler();
+  if(!isApplyingRemoteState && lastLocalMutationAt>0){
+    stateChangeHandler();
+    lastLocalMutationAt=0;
+  }
 }
 
 function speakVathkul(line){
@@ -555,6 +552,7 @@ function cancelLokaugSwap(){
 }
 
 function chooseLokaugSwapTarget(index){
+  markLocalMutation();
   if(lokaugSwapMode && lokaugFirstSwapIndex!==null)clearRevealedLinks();
   if(!lokaugSwapMode)return false;
 
@@ -789,6 +787,7 @@ function correctGlyphCountSentence(count){
 }
 
 function testConfiguration(){
+  markLocalMutation();
   if(ritualDestroyed || finalSequenceRunning)return;
 
   if(!spendSparks(1)){
@@ -857,6 +856,7 @@ function testConfiguration(){
 }
 
 function awakenMemory(){
+  markLocalMutation();
   if(selected===null){say('Sélectionnez d’abord une gravure.');return;}
   if(memoryLevel[selected]>=2){say('Vathkül ne possède plus aucun autre souvenir concernant cette gravure.');return;}
   if(!spendSparks(1)){say('Aucune Étincelle ne subsiste pour raviver un nouveau souvenir.');return;}
@@ -931,6 +931,7 @@ function choosePurification(boosted){
 }
 
 function resolvePurification(success){
+  markLocalMutation();
   clearRevealedLinks();
   if(pendingPurification===null)return;
   const i=pendingPurification;
@@ -1174,6 +1175,7 @@ function gmSwap(){
 }
 
 function gmCorrupt(){
+  markLocalMutation();
   clearRevealedLinks();
   cancelActiveInteractionMode();
   const filled=[...Array(8).keys()].filter(i=>placements[i]);
@@ -1315,6 +1317,8 @@ function applySharedState(sharedState){
 window.ProjectMonolith={
   getParticipantName:()=>participantName,
   getSharedState:exportSharedState,
+  getLastLocalMutationAt:()=>lastLocalMutationAt,
+  isApplyingRemoteState:()=>isApplyingRemoteState,
   applySharedState,
   onStateChange(handler){
     stateChangeHandler=typeof handler==='function' ? handler : ()=>{};

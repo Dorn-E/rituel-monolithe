@@ -30,6 +30,8 @@ let writeTimer=null;
 let heartbeatTimer=null;
 let connected=false;
 let applyingInitialState=false;
+let localWriteInFlight=false;
+let lastSuccessfulWriteAt=0;
 
 function normalizeRoomId(value){
   return value
@@ -54,6 +56,8 @@ function scheduleStateWrite(){
   setStatus("Synchronisation…","saving");
 
   writeTimer=setTimeout(async()=>{
+    writeTimer=null;
+    localWriteInFlight=true;
     try{
       await setDoc(roomReference,{
         state:window.ProjectMonolith.getSharedState(),
@@ -61,10 +65,13 @@ function scheduleStateWrite(){
         updatedBy:currentUser.uid,
         updatedByName:window.ProjectMonolith.getParticipantName()
       },{merge:true});
+      lastSuccessfulWriteAt=Date.now();
       setStatus("Rituel partagé","online");
     }catch(error){
       console.error("Unable to synchronize ritual state:",error);
       setStatus("Erreur de liaison","error");
+    }finally{
+      localWriteInFlight=false;
     }
   },WRITE_DELAY_MS);
 }
@@ -154,6 +161,15 @@ async function connectToRitual({participantName,ritualKey}){
     unsubscribeRoom=onSnapshot(roomReference,snapshot=>{
       const data=snapshot.data();
       if(!data?.state || data.updatedBy===currentUser.uid)return;
+
+      const localEditAt=window.ProjectMonolith.getLastLocalMutationAt?.()||0;
+      const recentlyEdited=Date.now()-localEditAt<900;
+      const recentlyWritten=Date.now()-lastSuccessfulWriteAt<650;
+
+      if(localWriteInFlight || writeTimer || recentlyEdited || recentlyWritten){
+        return;
+      }
+
       window.ProjectMonolith.applySharedState(data.state);
       setStatus("Rituel partagé","online");
     },error=>{
