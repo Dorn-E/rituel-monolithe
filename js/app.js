@@ -724,6 +724,15 @@ function correctGlyphCountSentence(count){
 function testConfiguration(){
   if(ritualDestroyed || finalSequenceRunning)return;
 
+  if(!spendSparks(1)){
+    speakVathkul('Le rituel ne peut plus être éprouvé. Les Étincelles se sont éteintes.');
+    addJournalEntry('La configuration ne peut pas être éprouvée : aucune Étincelle ne demeure.','Le Monolithe');
+    update();
+    return;
+  }
+
+  addJournalEntry('Une Étincelle est consacrée à l’épreuve de la configuration.','Le Monolithe');
+
   const {good}=score();
   const placedCount=placements.filter(Boolean).length;
   const countSentence=correctGlyphCountSentence(good);

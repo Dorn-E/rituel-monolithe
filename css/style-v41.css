@@ -1371,3 +1371,87 @@ body::before{
   cursor:not-allowed;
   filter:grayscale(.8);
 }
+
+
+/* v4.1.23 — Épreuve payante et mur runique intégral */
+
+.board-wrap{
+  background:
+    radial-gradient(circle at 46% 42%,rgba(116,90,48,.13),transparent 40%),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.014) 0 1px,transparent 1px 44px),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.011) 0 1px,transparent 1px 57px),
+    linear-gradient(135deg,#1a1714 0,#0d0c0a 48%,#050505 100%) !important;
+  box-shadow:
+    inset 0 0 0 2px #050505,
+    inset 0 0 0 3px #2f2210,
+    inset 0 0 105px rgba(0,0,0,.84),
+    0 8px 26px rgba(0,0,0,.34) !important;
+}
+
+.board-wrap::before{
+  content:none !important;
+  display:none !important;
+}
+
+.rune-wall-layer{
+  position:absolute !important;
+  inset:0 !important;
+  z-index:0 !important;
+  overflow:hidden;
+  pointer-events:none;
+  background:
+    repeating-linear-gradient(23deg,transparent 0 31px,rgba(182,139,66,.095) 32px 33px,transparent 34px 66px),
+    repeating-linear-gradient(-29deg,transparent 0 43px,rgba(182,139,66,.07) 44px 45px,transparent 46px 87px),
+    linear-gradient(180deg,rgba(103,78,39,.07),rgba(0,0,0,.20));
+  opacity:.98;
+}
+
+.rune-wall-layer::before{
+  content:
+    "ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛊ ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛞ ᛟ\A"
+    "ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛞ ᛟ ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛊ\A"
+    "ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛊ ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛞ ᛟ ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ\A"
+    "ᛇ ᛈ ᛉ ᛊ ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛞ ᛟ ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ\A"
+    "ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛊ ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛞ ᛟ ᚠ ᚢ ᚦ ᚨ\A"
+    "ᛚ ᛜ ᛞ ᛟ ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛊ ᛏ ᛒ ᛖ ᛗ";
+  white-space:pre;
+  position:absolute;
+  inset:2.5% 1.5%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:rgba(222,177,89,.30);
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(21px,2.25vw,40px);
+  line-height:2.02;
+  letter-spacing:.15em;
+  text-align:center;
+  text-shadow:
+    0 1px 0 rgba(0,0,0,.96),
+    0 -1px 0 rgba(255,230,165,.045),
+    0 0 6px rgba(222,177,89,.18);
+  transform:rotate(-1deg) scale(1.025);
+  animation:rune-wall-breathe 9s ease-in-out infinite;
+}
+
+.rune-wall-layer::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 18% 28%,rgba(255,255,255,.025),transparent 22%),
+    radial-gradient(circle at 76% 66%,rgba(255,255,255,.018),transparent 27%),
+    repeating-radial-gradient(circle at 31% 39%,rgba(255,255,255,.008) 0 1px,transparent 1px 4px);
+  mix-blend-mode:screen;
+  opacity:.58;
+}
+
+.board-wrap > *:not(.rune-wall-layer){
+  position:relative;
+  z-index:1;
+}
+
+@keyframes rune-wall-breathe{
+  0%,100%{opacity:.83;filter:brightness(.96)}
+  50%{opacity:1;filter:brightness(1.20)}
+}

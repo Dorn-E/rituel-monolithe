@@ -1,38 +1,23 @@
-# Project Monolith — v4.1.22 — Livraison B
+# Project Monolith — v4.1.23
 
-## Coût exact de la purification
+## Éprouver la configuration
 
-Une purification consomme :
+Chaque tentative consomme désormais **1 Étincelle**, quel que soit le résultat.
 
-- **1 Étincelle** dès qu’un glyphe corrompu est choisi comme cible ;
-- **+1 Étincelle** si l’aide de Vathkül est demandée.
+Sans Étincelle restante, l’épreuve ne peut pas être lancée.
 
-Donc :
+## Mur runique
 
-- sans aide : coût total **1 Étincelle**, DD 20 ;
-- avec aide : coût total **2 Étincelles**, DD 15.
+La grande zone de drag & drop possède désormais un fond de pierre runique continu :
 
-Le coût est identique en cas de réussite ou d’échec.
-
-Si aucune Étincelle supplémentaire ne demeure après le lancement de la tentative, le bouton d’aide de Vathkül est désactivé.
-
-## Runes
-
-Les runes du fond de la grande zone de drag & drop sont plus visibles et plus lumineuses.
-
-## Portail abyssal
-
-À mesure que les Étincelles sont consommées :
-
-- 2 consommées : une ombre apparaît autour du centre ;
-- 4 consommées : le centre commence à absorber la lumière ;
-- 6 consommées : des volutes sombres apparaissent ;
-- 7 consommées : une faille abyssale devient nettement perceptible.
-
-Lors de la réussite finale, la faille se referme avant l’éblouissement et la destruction du Monolithe.
+- texture de pierre sombre sur toute la surface ;
+- runes gravées partout ;
+- légère pulsation lumineuse ;
+- rendu inspiré du cercle central de « Examiner les gravures intérieures » ;
+- Monolithe et glyphes conservés au premier plan.
 
 Commit conseillé :
 
-`Project Monolith v4.1.22 — Livraison B`
+`Project Monolith v4.1.23 — Épreuve et mur runique`
 
-Aucun changement dans les règles Firebase.
+Aucun changement Firebase.
