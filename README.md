@@ -1,13 +1,28 @@
-# Project Monolith — v4.1.12 — Correctif clic purification
+# Project Monolith — v4.1.15 — Lokaug
 
-Correction ciblée :
+La mécanique de glyphe voilé est supprimée.
 
-- lorsqu’un joueur active **Purifier un glyphe**, le clic sur un emplacement du Monolithe sélectionne désormais correctement le glyphe à purifier ;
-- hors mode purification, le clic conserve son comportement habituel de sélection ;
-- la fenêtre de choix de l’aide de Vathkül s’ouvre après le clic sur le glyphe.
+Les glyphes peuvent désormais être :
 
-Aucune modification de Firebase, des règles du rituel ou de l’interface.
+- normaux ;
+- corrompus.
+
+Lokaug peut :
+
+1. corrompre un glyphe ;
+2. échanger deux glyphes.
+
+Pour échanger deux glyphes :
+
+- ouvrir l’interface MJ ;
+- cliquer sur **Échanger deux glyphes** ;
+- cliquer sur le premier glyphe ;
+- cliquer sur le second glyphe.
+
+Les positions sont échangées et l’état est synchronisé via Firebase.
 
 Commit conseillé :
 
-`Project Monolith v4.1.12 — Correctif clic purification`
+`Project Monolith v4.1.15 — Lokaug corruption et échange`
+
+Aucun changement dans les règles Firebase.

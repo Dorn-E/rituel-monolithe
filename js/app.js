@@ -7,6 +7,8 @@ let ritualJournal=[];
 let purificationMode=false;
 let purificationTargetIndex=null;
 let purificationDC=20;
+let lokaugSwapMode=false;
+let lokaugFirstSwapIndex=null;
 
 function normalizeRitualKey(value){
   return value.trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
@@ -84,7 +86,6 @@ let order=[...schools];
 let selected=null;
 let life=15;
 let memoryLevel=Array(8).fill(0);
-let veiled=new Set();
 let corrupted=new Set();
 let lastGM=null;
 let finalReady=false;
@@ -141,6 +142,10 @@ function build(){
     slot.ondragleave=()=>slot.classList.remove('dragover');
     slot.ondrop=e=>drop(e,i);
     slot.onclick=()=>{
+      if(lokaugSwapMode){
+        chooseLokaugSwapTarget(i);
+        return;
+      }
       if(purificationMode){
         choosePurificationTarget(i);
         return;
@@ -180,8 +185,8 @@ function render(){
   });
 
   document.querySelectorAll('.slot').forEach((slot,i)=>{
-    slot.classList.toggle('veiled',veiled.has(i));
-    slot.classList.toggle('corrupted',corrupted.has(i));
+    slot
+slot.classList.toggle('corrupted',corrupted.has(i));
     slot.classList.toggle('glyph-changing',changedSlots.includes(i));
     slot.querySelectorAll('img').forEach(x=>x.remove());
 
@@ -197,6 +202,18 @@ function render(){
         requestAnimationFrame(()=>img.classList.add('dragging'));
       };
       img.ondragend=()=>img.classList.remove('dragging');
+      img.onclick=event=>{
+        if(lokaugSwapMode){
+          event.preventDefault();
+          event.stopPropagation();
+          chooseLokaugSwapTarget(i);
+          return;
+        }
+        if(!purificationMode)return;
+        event.preventDefault();
+        event.stopPropagation();
+        choosePurificationTarget(i);
+      };
       img.ondblclick=()=>{
         placements[i]=null;
         invalidateEvaluation();
@@ -373,6 +390,70 @@ function chooseVathkulLine(lines){
   return lines[Math.floor(Math.random()*lines.length)];
 }
 
+
+function startLokaugSwap(){
+  lokaugSwapMode=true;
+  lokaugFirstSwapIndex=null;
+
+  document.querySelectorAll('.slot').forEach(slot=>{
+    slot.classList.add('lokaug-swap-selectable');
+    slot.classList.remove('lokaug-swap-first');
+  });
+
+  addJournalEntry('Lokaug prépare l’échange de deux glyphes.','Lokaug');
+  speakVathkul('Choisissez le premier glyphe.');
+  update();
+}
+
+function cancelLokaugSwap(){
+  lokaugSwapMode=false;
+  lokaugFirstSwapIndex=null;
+
+  document.querySelectorAll('.slot').forEach(slot=>{
+    slot.classList.remove('lokaug-swap-selectable','lokaug-swap-first');
+  });
+}
+
+function chooseLokaugSwapTarget(index){
+  if(!lokaugSwapMode)return false;
+
+  if(!placements[index]){
+    speakVathkul('Aucun glyphe ne repose à cet emplacement.');
+    update();
+    return true;
+  }
+
+  if(lokaugFirstSwapIndex===null){
+    lokaugFirstSwapIndex=index;
+
+    document.querySelectorAll('.slot').forEach((slot,slotIndex)=>{
+      slot.classList.toggle('lokaug-swap-first',slotIndex===index);
+    });
+
+    addJournalEntry('Premier glyphe sélectionné pour l’échange.','Lokaug');
+    speakVathkul('Choisissez le second glyphe.');
+    update();
+    return true;
+  }
+
+  if(index===lokaugFirstSwapIndex){
+    speakVathkul('Choisissez un autre glyphe.');
+    update();
+    return true;
+  }
+
+  const firstIndex=lokaugFirstSwapIndex;
+  [placements[firstIndex],placements[index]]=[placements[index],placements[firstIndex]];
+
+  addJournalEntry('Lokaug échange deux glyphes.','Lokaug');
+  speakVathkul('Deux glyphes ont échangé leur place.');
+
+  cancelLokaugSwap();
+  update();
+  stateChangeHandler();
+  return true;
+}
+
 function analyzeGlyphConfiguration(){
   const positionKeys=[
     'nord',
@@ -472,8 +553,7 @@ function testConfiguration(){
   }
 
   const {good}=score();
-  veiled.clear();
-  evaluationVisible=true;
+evaluationVisible=true;
 
   if(good===8){
     speakVathkul('Les huit principes retrouvent leur équilibre.');
@@ -521,7 +601,7 @@ function beginPurification(){
     say('Sélectionnez d’abord une gravure parasitée.');
     return;
   }
-  if(!corrupted.has(selected) && !veiled.has(selected)){
+  if(!corrupted.has(selected)){
     speakVathkul('Cette gravure est déjà pure.');
     return;
   }
@@ -569,8 +649,7 @@ function resolvePurification(success){
 
   if(success){
     corrupted.delete(i);
-    veiled.delete(i);
-    lastGM=null;
+lastGM=null;
     invalidateEvaluation();
     speakVathkul('La gravure retrouve sa pureté.');
   }else{
@@ -605,7 +684,7 @@ function addJournalEntry(text,actor=participantName||'Le Monolithe'){
 function initialSharedState(){
   return {
     schemaVersion:1,placements:Array(8).fill(null),order:[...schools],life:15,memoryLevel:Array(8).fill(0),
-    veiled:[],corrupted:[],lastGM:null,evaluationVisible:false,ritualCompleted:false,
+    corrupted:[],lastGM:null,evaluationVisible:false,ritualCompleted:false,
     pendingPurification:null,purificationBoosted:false,
     phaseHTML:'<b>Exploration :</b> placez librement les huit glyphes. Vathkül n’intervient pas tant que vous ne l’interrogez pas.',
     feedbackText:'Chaque épreuve, chaque souvenir et chaque tentative de purification consume au moins 1 Étincelle de Torm.',
@@ -721,10 +800,16 @@ function resolvePurification(success){
   life=Math.max(0,life-1);
 
   if(success){
-    corrupted.delete(purificationTargetIndex);
-    veiled.delete(purificationTargetIndex);
-    speakVathkul('Le glyphe retrouve sa pureté.');
+    const purifiedIndex=purificationTargetIndex;
+
+    corrupted.delete(purifiedIndex);
+speakVathkul('Le glyphe retrouve sa pureté.');
     addJournalEntry('Le glyphe ciblé a été purifié.');
+
+    closePurificationFlow();
+    update();
+    stateChangeHandler();
+    return;
   }else{
     speakVathkul('La souillure demeure.');
     addJournalEntry('La tentative de purification a échoué.');
@@ -744,12 +829,7 @@ function gmSwap(){
   [placements[a],placements[b]]=[placements[b],placements[a]];
   lastGM={type:'swap',a,b};invalidateEvaluation();say(`Deux gravures échangent brusquement leur fonction.`);render();
 }
-function gmVeil(){
-  const filled=[...Array(8).keys()].filter(i=>placements[i]);
-  if(!filled.length)return;
-  const i=filled[Math.floor(Math.random()*filled.length)];
-  veiled.add(i);lastGM={type:'veil',i};invalidateEvaluation();say(`La gravure « ${stationNames[i]} » disparaît derrière un voile noir.`);render();
-}
+
 function gmCorrupt(){
   const filled=[...Array(8).keys()].filter(i=>placements[i]);
   if(!filled.length)return;
@@ -759,8 +839,8 @@ function gmCorrupt(){
 function gmRestore(){
   if(!lastGM)return;
   if(lastGM.type==='swap')[placements[lastGM.a],placements[lastGM.b]]=[placements[lastGM.b],placements[lastGM.a]];
-  if(lastGM.type==='veil')veiled.delete(lastGM.i);
-  if(lastGM.type==='corrupt')corrupted.delete(lastGM.i);
+  if(lastGM.type==='veil')
+if(lastGM.type==='corrupt')corrupted.delete(lastGM.i);
   lastGM=null;invalidateEvaluation();say('La dernière perturbation est annulée.');render();
 }
 function say(t){
@@ -777,7 +857,6 @@ function exportSharedState(){
     order:[...order],
     life,
     memoryLevel:[...memoryLevel],
-    veiled:[...veiled],
     corrupted:[...corrupted],
     lastGM:lastGM ? {...lastGM} : null,
     evaluationVisible,
@@ -811,7 +890,6 @@ function applySharedState(sharedState){
     if(Number.isFinite(sharedState.life))life=sharedState.life;
     if(Array.isArray(sharedState.memoryLevel))memoryLevel=[...sharedState.memoryLevel];
 
-    veiled=new Set(Array.isArray(sharedState.veiled)?sharedState.veiled:[]);
     corrupted=new Set(Array.isArray(sharedState.corrupted)?sharedState.corrupted:[]);
     lastGM=sharedState.lastGM ? {...sharedState.lastGM} : null;
     evaluationVisible=Boolean(sharedState.evaluationVisible);
@@ -918,6 +996,7 @@ document.getElementById('purificationFlowOverlay')?.addEventListener('click',eve
   if(event.target.id==='purificationFlowOverlay')closePurificationFlow();
 });
 
+document.getElementById('lokaugSwap')?.addEventListener('click',startLokaugSwap);
 document.getElementById('test').onclick=testConfiguration;
 document.getElementById('memory').onclick=awakenMemory;
 document.getElementById('beginPurify').onclick=openPurificationFlow;
@@ -937,7 +1016,6 @@ document.getElementById('muralOverlay').onclick=e=>{if(e.target.id==='muralOverl
 
 document.getElementById('core').onclick=release;
 document.getElementById('swap').onclick=gmSwap;
-document.getElementById('veil').onclick=gmVeil;
 document.getElementById('corrupt').onclick=gmCorrupt;
 document.getElementById('restore').onclick=gmRestore;
 
