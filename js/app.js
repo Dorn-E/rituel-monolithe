@@ -140,7 +140,13 @@ function build(){
     slot.ondragover=e=>{e.preventDefault();slot.classList.add('dragover')};
     slot.ondragleave=()=>slot.classList.remove('dragover');
     slot.ondrop=e=>drop(e,i);
-    slot.onclick=()=>selectSlot(i);
+    slot.onclick=()=>{
+      if(purificationMode){
+        choosePurificationTarget(i);
+        return;
+      }
+      selectSlot(i);
+    };
     board.appendChild(slot);
   }
   render();

@@ -1,24 +1,13 @@
-# Project Monolith — v4.1.11 — Purification fluide
+# Project Monolith — v4.1.12 — Correctif clic purification
 
-Correctif du déroulement de purification :
+Correction ciblée :
 
-1. Cliquer sur **Purifier un glyphe**.
-2. Aucune fenêtre ne s’ouvre.
-3. Les glyphes du Monolithe deviennent sélectionnables.
-4. Cliquer directement sur le glyphe à purifier.
-5. La fenêtre de Vathkül s’ouvre seulement à ce moment-là.
-6. Choisir l’aide de Vathkül, puis résoudre le jet.
+- lorsqu’un joueur active **Purifier un glyphe**, le clic sur un emplacement du Monolithe sélectionne désormais correctement le glyphe à purifier ;
+- hors mode purification, le clic conserve son comportement habituel de sélection ;
+- la fenêtre de choix de l’aide de Vathkül s’ouvre après le clic sur le glyphe.
 
-Les règles restent inchangées :
-
-- aide de Vathkül : DD 15 ;
-- sans aide : DD 20 ;
-- jet d’Arcanes ou de Religion ;
-- une Étincelle consommée dans tous les cas ;
-- journal et Firebase synchronisés.
+Aucune modification de Firebase, des règles du rituel ou de l’interface.
 
 Commit conseillé :
 
-`Project Monolith v4.1.11 — Purification fluide`
-
-Aucun changement Firebase.
+`Project Monolith v4.1.12 — Correctif clic purification`
