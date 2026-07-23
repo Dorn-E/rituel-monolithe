@@ -554,7 +554,7 @@ function setRitualLocked(locked){
 
 function isPerfectConfiguration(){
   const everyPlaced=placements.every(Boolean);
-  const everyCorrect=placements.every((school,index)=>school===schools[index]);
+  const everyCorrect=placements.every((school,index)=>school===solution[index]);
   const noCorruption=corrupted.size===0;
 
   return everyPlaced && everyCorrect && noCorruption;

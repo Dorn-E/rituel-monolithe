@@ -1,38 +1,24 @@
-# Project Monolith — v4.1.18 — Séquence finale
+# Project Monolith — v4.1.19
 
-## Conditions de réussite
+Correctif de la solution finale :
 
-La configuration n’est parfaite que si :
+- la configuration parfaite est désormais comparée à la vraie solution du rituel ;
+- auparavant, elle était comparée par erreur à l’ordre de la réserve des glyphes ;
+- la séquence finale se déclenche donc maintenant avec :
 
-- les huit glyphes sont placés ;
-- les huit glyphes sont à la bonne position ;
-- aucun glyphe n’est corrompu.
+1. Divination
+2. Abjuration
+3. Enchantement
+4. Nécromancie
+5. Transmutation
+6. Évocation
+7. Invocation
+8. Illusion
 
-Un glyphe corrompu ne compte donc jamais comme valide.
+dans le sens horaire à partir du Nord.
 
-## Séquence finale
-
-Lorsque la configuration parfaite est éprouvée :
-
-1. l’interface se verrouille ;
-2. la fresque et le Monolithe s’illuminent ;
-3. un éclat blanc éblouit l’écran ;
-4. le Monolithe se fissure ;
-5. le Monolithe est détruit ;
-6. Vathkül disparaît sans prononcer de dernière parole ;
-7. le journal affiche :  
-   « La présence de Vathkül s’est éteinte. »
-
-L’état final est synchronisé via Firebase.
-
-## Réactions intermédiaires
-
-- configuration proche : légère pulsation ;
-- configuration erronée : vibration sobre ;
-- huit glyphes bien placés mais corruption présente : effet rouge discret et blocage de la réussite.
+Aucun changement Firebase.
 
 Commit conseillé :
 
-`Project Monolith v4.1.18 — Séquence finale`
-
-Aucun changement dans les règles Firebase.
+`Project Monolith v4.1.19 — Correctif solution finale`
