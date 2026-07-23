@@ -1600,34 +1600,129 @@ body::before{
 }
 
 
-/* v4.1.25 — correction des liaisons entre glyphes */
-#links.link-layer{
+/* Douze Étincelles : la bande reste centrée et respirante. */
+.sparks{
+  grid-template-columns:repeat(12,minmax(13px,1fr)) !important;
+  max-width:690px;
+}
+
+
+/* v4.2.0 — système unique de liaisons de résonance */
+
+.resonance-link-layer{
   position:absolute;
   inset:0;
-  width:100%;
-  height:100%;
-  z-index:4 !important;
+  z-index:4;
   pointer-events:none;
   overflow:visible;
 }
 
-#links .adjacency-link{
-  fill:none;
-  stroke:#f0c766 !important;
-  stroke-width:1.15 !important;
-  stroke-linecap:round;
-  opacity:1 !important;
-  filter:
-    drop-shadow(0 0 2px rgba(255,224,139,1))
-    drop-shadow(0 0 5px rgba(210,157,49,.8));
-  stroke-dasharray:100;
-  stroke-dashoffset:100;
-  animation:adjacency-link-draw .55s ease-out forwards;
+.resonance-link{
+  position:absolute;
+  height:18px;
+  transform-origin:0 50%;
+  opacity:0;
+  animation:resonance-link-reveal .52s ease-out forwards;
+  animation-delay:var(--link-delay,0ms);
 }
 
-@keyframes adjacency-link-draw{
-  to{
-    stroke-dashoffset:0;
+.resonance-link-glow,
+.resonance-link-filament{
+  position:absolute;
+  left:0;
+  top:50%;
+  width:100%;
+  transform:translateY(-50%);
+  border-radius:999px;
+}
+
+.resonance-link-glow{
+  height:10px;
+  background:linear-gradient(
+    90deg,
+    rgba(255,224,126,.1),
+    rgba(235,176,55,.62) 18%,
+    rgba(255,228,137,.75) 50%,
+    rgba(235,176,55,.62) 82%,
+    rgba(255,224,126,.1)
+  );
+  filter:blur(4px);
+  opacity:.82;
+  animation:resonance-glow-pulse 2.6s ease-in-out infinite;
+}
+
+.resonance-link-filament{
+  height:2px;
+  background:linear-gradient(
+    90deg,
+    rgba(255,242,191,.25),
+    #e8b94f 12%,
+    #fff1ad 50%,
+    #e8b94f 88%,
+    rgba(255,242,191,.25)
+  );
+  box-shadow:
+    0 0 2px rgba(255,248,211,1),
+    0 0 7px rgba(229,172,54,.92),
+    0 0 14px rgba(184,118,22,.56);
+  transform:translateY(-50%) scaleX(0);
+  transform-origin:left center;
+  animation:resonance-filament-draw .68s ease-out forwards;
+  animation-delay:var(--link-delay,0ms);
+}
+
+.resonance-link-spark{
+  position:absolute;
+  left:0;
+  top:50%;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#fff5c7;
+  box-shadow:
+    0 0 3px #fff,
+    0 0 8px #efbd4d,
+    0 0 15px rgba(222,151,31,.9);
+  transform:translate(-50%,-50%);
+  opacity:0;
+  animation:resonance-spark-travel 2.7s linear infinite;
+  animation-delay:calc(var(--link-delay,0ms) + .72s);
+}
+
+@keyframes resonance-link-reveal{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+@keyframes resonance-filament-draw{
+  from{transform:translateY(-50%) scaleX(0)}
+  to{transform:translateY(-50%) scaleX(1)}
+}
+
+@keyframes resonance-glow-pulse{
+  0%,100%{opacity:.54;filter:blur(4px)}
+  50%{opacity:1;filter:blur(5px)}
+}
+
+@keyframes resonance-spark-travel{
+  0%{
+    left:0;
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.45);
+  }
+  10%{
+    opacity:1;
+  }
+  50%{
+    transform:translate(-50%,-50%) scale(1);
+  }
+  90%{
+    opacity:1;
+  }
+  100%{
+    left:100%;
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.45);
   }
 }
 
@@ -1637,74 +1732,4 @@ body::before{
 
 .slot{
   z-index:6 !important;
-}
-
-
-/* v4.1.26 — Liaisons révélées uniquement après une épreuve */
-
-#links.link-layer{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  z-index:4 !important;
-  pointer-events:none;
-  overflow:visible;
-}
-
-.adjacency-link-group{
-  opacity:0;
-  animation:adjacency-group-reveal .45s ease-out forwards;
-  animation-delay:var(--link-delay,0ms);
-}
-
-.adjacency-link-glow{
-  stroke:rgba(228,178,67,.34);
-  stroke-width:4.6;
-  stroke-linecap:round;
-  filter:blur(2.2px);
-}
-
-.adjacency-link{
-  fill:none;
-  stroke:#ffd978 !important;
-  stroke-width:1.15 !important;
-  stroke-linecap:round;
-  opacity:1;
-  filter:
-    drop-shadow(0 0 1.6px rgba(255,239,184,1))
-    drop-shadow(0 0 5px rgba(215,159,42,.95));
-  stroke-dasharray:100;
-  stroke-dashoffset:100;
-  animation:
-    adjacency-link-draw .7s ease-out forwards,
-    adjacency-link-pulse 2.6s ease-in-out infinite 1s;
-  animation-delay:var(--link-delay,0ms),calc(var(--link-delay,0ms) + 800ms);
-}
-
-.adjacency-link-spark{
-  fill:#fff3b7;
-  filter:
-    drop-shadow(0 0 2px #fff)
-    drop-shadow(0 0 6px #e8af3f);
-  opacity:.95;
-}
-
-@keyframes adjacency-group-reveal{
-  to{opacity:1}
-}
-
-@keyframes adjacency-link-draw{
-  to{stroke-dashoffset:0}
-}
-
-@keyframes adjacency-link-pulse{
-  0%,100%{opacity:.78;stroke-width:1.05}
-  50%{opacity:1;stroke-width:1.38}
-}
-
-/* Douze Étincelles : la bande reste centrée et respirante. */
-.sparks{
-  grid-template-columns:repeat(12,minmax(13px,1fr)) !important;
-  max-width:690px;
 }

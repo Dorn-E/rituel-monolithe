@@ -196,7 +196,7 @@ function renderAdjacentCorrectLinks(){
   const layer=document.getElementById('links');
   if(!layer)return;
 
-  layer.innerHTML='';
+  layer.replaceChildren();
 
   if(!adjacencyLinksRevealed)return;
 
@@ -217,42 +217,30 @@ function renderAdjacentCorrectLinks(){
 
     const [x1,y1]=pos[i];
     const [x2,y2]=pos[j];
+    const deltaX=x2-x1;
+    const deltaY=y2-y1;
+    const length=Math.hypot(deltaX,deltaY);
+    const angle=Math.atan2(deltaY,deltaX)*180/Math.PI;
 
-    const group=document.createElementNS('http://www.w3.org/2000/svg','g');
-    group.setAttribute('class','adjacency-link-group');
-    group.style.setProperty('--link-delay',`${revealedIndex*95}ms`);
+    const link=document.createElement('div');
+    link.className='resonance-link';
+    link.style.left=`${x1}%`;
+    link.style.top=`${y1}%`;
+    link.style.width=`${length}%`;
+    link.style.transform=`translateY(-50%) rotate(${angle}deg)`;
+    link.style.setProperty('--link-delay',`${revealedIndex*110}ms`);
 
-    const glow=document.createElementNS('http://www.w3.org/2000/svg','line');
-    glow.setAttribute('x1',String(x1));
-    glow.setAttribute('y1',String(y1));
-    glow.setAttribute('x2',String(x2));
-    glow.setAttribute('y2',String(y2));
-    glow.setAttribute('class','adjacency-link-glow');
-    glow.setAttribute('vector-effect','non-scaling-stroke');
+    const glow=document.createElement('span');
+    glow.className='resonance-link-glow';
 
-    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
-    line.setAttribute('x1',String(x1));
-    line.setAttribute('y1',String(y1));
-    line.setAttribute('x2',String(x2));
-    line.setAttribute('y2',String(y2));
-    line.setAttribute('class','adjacency-link');
-    line.setAttribute('vector-effect','non-scaling-stroke');
+    const filament=document.createElement('span');
+    filament.className='resonance-link-filament';
 
-    const spark=document.createElementNS('http://www.w3.org/2000/svg','circle');
-    spark.setAttribute('r','0.8');
-    spark.setAttribute('class','adjacency-link-spark');
+    const spark=document.createElement('span');
+    spark.className='resonance-link-spark';
 
-    const motion=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
-    motion.setAttribute('dur','2.8s');
-    motion.setAttribute('repeatCount','indefinite');
-    motion.setAttribute('begin',`${revealedIndex*0.18}s`);
-    motion.setAttribute('path',`M ${x1} ${y1} L ${x2} ${y2}`);
-    spark.appendChild(motion);
-
-    group.appendChild(glow);
-    group.appendChild(line);
-    group.appendChild(spark);
-    layer.appendChild(group);
+    link.append(glow,filament,spark);
+    layer.appendChild(link);
 
     revealedIndex++;
   }
