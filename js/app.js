@@ -3,8 +3,10 @@ const RITUAL_KEY='Vathkül';
 let participantName='';
 let stateChangeHandler=()=>{};
 let isApplyingRemoteState=false;
-let lastLocalMutationAt=0;
 let ritualJournal=[];
+let stateRevision=0;
+let localMutationPending=false;
+let commitMicrotaskScheduled=false;
 let purificationMode=false;
 let purificationTargetIndex=null;
 let purificationDC=20;
@@ -19,7 +21,20 @@ let lokaugFirstSwapIndex=null;
 
 function markLocalMutation(){
   if(isApplyingRemoteState)return;
-  lastLocalMutationAt=Date.now();
+
+  stateRevision=Math.max(Date.now(),stateRevision+1);
+  localMutationPending=true;
+
+  if(commitMicrotaskScheduled)return;
+  commitMicrotaskScheduled=true;
+
+  queueMicrotask(()=>{
+    commitMicrotaskScheduled=false;
+    if(!localMutationPending || isApplyingRemoteState)return;
+
+    localMutationPending=false;
+    stateChangeHandler();
+  });
 }
 
 function normalizeRitualKey(value){
@@ -423,7 +438,7 @@ function renderSparks(){
 
 
 function updateAbyssPortalStage(){
-  const consumed=Math.max(0,15-life);
+  const consumed=Math.max(0,12-life);
   const boardWrap=document.querySelector('.board-wrap');
   const core=document.getElementById('core');
 
@@ -462,10 +477,6 @@ function update(){
   const purifyButton=document.getElementById('beginPurify');
   if(memoryButton)memoryButton.disabled=life===0;
   if(purifyButton)purifyButton.disabled=life===0;
-  if(!isApplyingRemoteState && lastLocalMutationAt>0){
-    stateChangeHandler();
-    lastLocalMutationAt=0;
-  }
 }
 
 function speakVathkul(line){
@@ -972,7 +983,7 @@ function addJournalEntry(text,actor=participantName||'Le Monolithe'){
 }
 function initialSharedState(){
   return {
-    schemaVersion:1,placements:Array(8).fill(null),order:[...schools],life:15,memoryLevel:Array(8).fill(0),
+    schemaVersion:2,stateRevision:0,placements:Array(8).fill(null),order:[...schools],life:12,memoryLevel:Array(8).fill(0),
     corrupted:[],lastGM:null,evaluationVisible:false,ritualCompleted:false,
     pendingPurification:null,purificationBoosted:false,
     phaseHTML:'<b>Exploration :</b> placez librement les huit glyphes. Vathkül n’intervient pas tant que vous ne l’interrogez pas.',
@@ -987,11 +998,19 @@ function initialSharedState(){
   };
 }
 function resetRitualState(){
-  spokenThresholds.clear();selected=null;previousLife=12;
-  applySharedState(initialSharedState());
+  spokenThresholds.clear();
+  selected=null;
+  previousLife=12;
+
+  const resetState=initialSharedState();
+  resetState.stateRevision=Math.max(Date.now(),stateRevision+1);
+  applySharedState(resetState,{force:true});
+  stateRevision=resetState.stateRevision;
+
   document.getElementById('muralOverlay').classList.remove('show');
   document.getElementById('end').classList.remove('show');
-  stateChangeHandler();
+
+  markLocalMutation();
 }
 
 
@@ -1214,7 +1233,8 @@ function say(t){
 
 function exportSharedState(){
   return {
-    schemaVersion:1,
+    schemaVersion:2,
+    stateRevision,
     placements:[...placements],
     order:[...order],
     life,
@@ -1242,14 +1262,22 @@ function exportSharedState(){
   };
 }
 
-function applySharedState(sharedState){
-  if(!sharedState || sharedState.schemaVersion!==1)return;
+function applySharedState(sharedState,{force=false}={}){
+  if(!sharedState || ![1,2].includes(sharedState.schemaVersion))return false;
+
+  const incomingRevision=Number.isFinite(sharedState.stateRevision)
+    ? sharedState.stateRevision
+    : 0;
+
+  if(!force && incomingRevision<=stateRevision){
+    return false;
+  }
 
   isApplyingRemoteState=true;
   try{
     if(Array.isArray(sharedState.placements))placements=[...sharedState.placements];
     if(Array.isArray(sharedState.order))order=[...sharedState.order];
-    if(Number.isFinite(sharedState.life))life=sharedState.life;
+    if(Number.isFinite(sharedState.life))life=Math.max(0,Math.min(12,sharedState.life));
     if(Array.isArray(sharedState.memoryLevel))memoryLevel=[...sharedState.memoryLevel];
 
     corrupted=new Set(Array.isArray(sharedState.corrupted)?sharedState.corrupted:[]);
@@ -1260,7 +1288,9 @@ function applySharedState(sharedState){
       ? sharedState.pendingPurification
       : null;
     purificationBoosted=Boolean(sharedState.purificationBoosted);
-    ritualJournal=Array.isArray(sharedState.ritualJournal)?sharedState.ritualJournal.map(e=>({...e})).slice(-60):[];
+    ritualJournal=Array.isArray(sharedState.ritualJournal)
+      ? sharedState.ritualJournal.map(entry=>({...entry})).slice(-60)
+      : [];
 
     if(typeof sharedState.phaseHTML==='string'){
       document.getElementById('phase').innerHTML=sharedState.phaseHTML;
@@ -1301,7 +1331,10 @@ function applySharedState(sharedState){
       'show',Boolean(sharedState.victoryOpen)
     );
 
+    stateRevision=Math.max(stateRevision,incomingRevision);
+    localMutationPending=false;
     previousLife=life;
+
     render();
     renderRitualJournal();
 
@@ -1309,6 +1342,8 @@ function applySharedState(sharedState){
     board.classList.remove('remote-pulse');
     void board.offsetWidth;
     board.classList.add('remote-pulse');
+
+    return true;
   }finally{
     isApplyingRemoteState=false;
   }
@@ -1317,7 +1352,7 @@ function applySharedState(sharedState){
 window.ProjectMonolith={
   getParticipantName:()=>participantName,
   getSharedState:exportSharedState,
-  getLastLocalMutationAt:()=>lastLocalMutationAt,
+  getStateRevision:()=>stateRevision,
   isApplyingRemoteState:()=>isApplyingRemoteState,
   applySharedState,
   onStateChange(handler){

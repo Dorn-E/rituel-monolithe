@@ -16,7 +16,7 @@ import {
   setDoc
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
-const WRITE_DELAY_MS=180;
+const WRITE_DELAY_MS=120;
 const PRESENCE_HEARTBEAT_MS=30000;
 
 let database=null;
@@ -30,8 +30,6 @@ let writeTimer=null;
 let heartbeatTimer=null;
 let connected=false;
 let applyingInitialState=false;
-let localWriteInFlight=false;
-let lastSuccessfulWriteAt=0;
 
 function normalizeRoomId(value){
   return value
@@ -57,21 +55,20 @@ function scheduleStateWrite(){
 
   writeTimer=setTimeout(async()=>{
     writeTimer=null;
-    localWriteInFlight=true;
+    const state=window.ProjectMonolith.getSharedState();
+
     try{
       await setDoc(roomReference,{
-        state:window.ProjectMonolith.getSharedState(),
+        state,
         updatedAt:serverTimestamp(),
         updatedBy:currentUser.uid,
         updatedByName:window.ProjectMonolith.getParticipantName()
       },{merge:true});
-      lastSuccessfulWriteAt=Date.now();
+
       setStatus("Rituel partagé","online");
     }catch(error){
       console.error("Unable to synchronize ritual state:",error);
       setStatus("Erreur de liaison","error");
-    }finally{
-      localWriteInFlight=false;
     }
   },WRITE_DELAY_MS);
 }
@@ -110,7 +107,13 @@ async function loadSnapshot(id){
   try{
     const snap=await getDoc(doc(snapshotsCollection(),id));
     if(!snap.exists())return;
-    window.ProjectMonolith.applySharedState(snap.data().state);
+    const loadedState={...snap.data().state};
+    loadedState.schemaVersion=2;
+    loadedState.stateRevision=Math.max(
+      Date.now(),
+      (window.ProjectMonolith.getStateRevision?.()||0)+1
+    );
+    window.ProjectMonolith.applySharedState(loadedState,{force:true});
     await setDoc(roomReference,{state:window.ProjectMonolith.getSharedState(),updatedAt:serverTimestamp(),updatedBy:currentUser.uid,updatedByName:window.ProjectMonolith.getParticipantName()},{merge:true});
     window.ProjectMonolith.setSnapshotStatus(`Sauvegarde « ${snap.data().name||'sans nom'} » chargée.`);
   }catch(error){console.error(error);window.ProjectMonolith.setSnapshotStatus("Échec du chargement.");}
@@ -146,7 +149,7 @@ async function connectToRitual({participantName,ritualKey}){
     const existingRoom=await getDoc(roomReference);
     if(existingRoom.exists() && existingRoom.data()?.state){
       applyingInitialState=true;
-      window.ProjectMonolith.applySharedState(existingRoom.data().state);
+      window.ProjectMonolith.applySharedState(existingRoom.data().state,{force:true});
       applyingInitialState=false;
     }else{
       await setDoc(roomReference,{
@@ -162,16 +165,15 @@ async function connectToRitual({participantName,ritualKey}){
       const data=snapshot.data();
       if(!data?.state || data.updatedBy===currentUser.uid)return;
 
-      const localEditAt=window.ProjectMonolith.getLastLocalMutationAt?.()||0;
-      const recentlyEdited=Date.now()-localEditAt<900;
-      const recentlyWritten=Date.now()-lastSuccessfulWriteAt<650;
+      const incomingRevision=Number.isFinite(data.state.stateRevision)
+        ? data.state.stateRevision
+        : 0;
+      const localRevision=window.ProjectMonolith.getStateRevision?.()||0;
 
-      if(localWriteInFlight || writeTimer || recentlyEdited || recentlyWritten){
-        return;
-      }
+      if(incomingRevision<=localRevision)return;
 
-      window.ProjectMonolith.applySharedState(data.state);
-      setStatus("Rituel partagé","online");
+      const applied=window.ProjectMonolith.applySharedState(data.state);
+      if(applied)setStatus("Rituel partagé","online");
     },error=>{
       console.error("Room listener failed:",error);
       setStatus("Erreur de liaison","error");

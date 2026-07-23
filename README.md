@@ -1,36 +1,37 @@
-# Project Monolith — v4.2.1 — Liaisons et stabilité
+# Project Monolith — v4.3.0 — Synchronisation stable
 
-## Liaisons
+Cette version refond la synchronisation du rituel.
 
-La cause de leur absence était un ancien moteur SVG encore présent dans `update()` :
+## Principe
 
-- il effaçait immédiatement les nouveaux filaments HTML ;
-- il tentait ensuite de dessiner des chemins SVG dans une couche HTML.
+- `render()` et `update()` ne synchronisent plus rien ;
+- une modification locale réelle produit une révision unique ;
+- les modifications rapprochées sont regroupées en une seule écriture ;
+- Firebase ne peut plus réappliquer un état dont la révision est ancienne ou identique.
 
-Ce moteur est supprimé. Un seul système de liaisons subsiste désormais.
+## Effets attendus
 
-Les liaisons :
+- une Étincelle dépensée ne revient plus ;
+- le compteur passe bien de 12 à 11 ;
+- un déplacement récent ne peut plus être écrasé par un ancien état distant ;
+- le rituel ne doit plus sembler se réinitialiser spontanément.
 
-- apparaissent après **Éprouver la configuration** ;
-- relient les glyphes adjacents correctement placés et non corrompus ;
-- disparaissent après toute modification du plateau.
+## Nettoyage des anciennes valeurs
 
-## Stabilité Firebase
+Toutes les références restantes à 15 Étincelles sont remplacées :
 
-Les rendus purement visuels ne déclenchent plus systématiquement une synchronisation.
+- état initial : 12 ;
+- réinitialisation : 12 ;
+- bande d’Étincelles : 12 ;
+- progression du portail : calculée sur 12.
 
-De plus, un état distant est temporairement ignoré :
+## Compatibilité
 
-- pendant une écriture locale ;
-- juste après une modification locale ;
-- juste après la confirmation d’une écriture.
-
-Cela empêche un ancien état Firebase de revenir écraser un déplacement récent ou de donner l’impression que le rituel se réinitialise.
-
-## Autre correctif
-
-Le générateur d’Étincelles vérifie désormais correctement la présence de **12** éléments et non plus 15.
+- anciens états de schéma 1 lisibles à la première connexion ;
+- nouveaux états enregistrés en schéma 2 avec `stateRevision`.
 
 Commit conseillé :
 
-`Project Monolith v4.2.1 — Liaisons et stabilité`
+`Project Monolith v4.3.0 — Synchronisation stable`
+
+Aucune modification des règles Firebase.
