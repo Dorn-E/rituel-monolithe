@@ -184,17 +184,8 @@ function drop(e,i){
 
 
 function renderAdjacentCorrectLinks(){
-  const board=document.getElementById('board');
-  if(!board)return;
-
-  let layer=board.querySelector('.adjacency-link-layer');
-  if(!layer){
-    layer=document.createElementNS('http://www.w3.org/2000/svg','svg');
-    layer.setAttribute('class','adjacency-link-layer');
-    layer.setAttribute('viewBox','0 0 100 100');
-    layer.setAttribute('preserveAspectRatio','none');
-    board.insertBefore(layer,board.firstChild);
-  }
+  const layer=document.getElementById('links');
+  if(!layer)return;
 
   layer.innerHTML='';
 
@@ -211,25 +202,16 @@ function renderAdjacentCorrectLinks(){
 
     if(!firstCorrect || !secondCorrect)continue;
 
-    const firstSlot=board.querySelector(`.slot[data-index="${i}"]`);
-    const secondSlot=board.querySelector(`.slot[data-index="${j}"]`);
-    if(!firstSlot || !secondSlot)continue;
-
-    const boardRect=board.getBoundingClientRect();
-    const firstRect=firstSlot.getBoundingClientRect();
-    const secondRect=secondSlot.getBoundingClientRect();
-
-    const x1=((firstRect.left+firstRect.width/2-boardRect.left)/boardRect.width)*100;
-    const y1=((firstRect.top+firstRect.height/2-boardRect.top)/boardRect.height)*100;
-    const x2=((secondRect.left+secondRect.width/2-boardRect.left)/boardRect.width)*100;
-    const y2=((secondRect.top+secondRect.height/2-boardRect.top)/boardRect.height)*100;
+    const [x1,y1]=pos[i];
+    const [x2,y2]=pos[j];
 
     const line=document.createElementNS('http://www.w3.org/2000/svg','line');
-    line.setAttribute('x1',x1.toFixed(3));
-    line.setAttribute('y1',y1.toFixed(3));
-    line.setAttribute('x2',x2.toFixed(3));
-    line.setAttribute('y2',y2.toFixed(3));
+    line.setAttribute('x1',String(x1));
+    line.setAttribute('y1',String(y1));
+    line.setAttribute('x2',String(x2));
+    line.setAttribute('y2',String(y2));
     line.setAttribute('class','adjacency-link');
+    line.setAttribute('vector-effect','non-scaling-stroke');
     layer.appendChild(line);
   }
 }
@@ -1393,5 +1375,4 @@ buildSparks();
 renderSparks();
 renderRitualJournal();
 updateInteractionModeUI();
-window.addEventListener('resize',renderAdjacentCorrectLinks);
 initializeEntryGate();
