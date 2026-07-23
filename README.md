@@ -1,20 +1,27 @@
-# Project Monolith — v4.1.7 — Sprint 6
+# Project Monolith — v4.1.8 — Analyse avancée de Vathkül
 
-## Intelligence de Vathkül
+Le bouton **Examiner les gravures intérieures** analyse désormais réellement le plateau.
 
-Le bouton **Examiner les gravures intérieures** :
+Ordre de priorité des indices :
 
-- conserve et ouvre la fresque existante ;
-- compte les glyphes correctement placés ;
-- choisit une catégorie de réponse : 0, 1–3, 4–6, 7 ou 8 glyphes corrects ;
-- sélectionne une formulation parmi plusieurs réponses possibles ;
-- affiche la parole de Vathkül et la synchronise avec l’état partagé.
+1. inversion détectée entre deux glyphes ;
+2. position précise lorsqu’un seul glyphe est incorrect ;
+3. bilan global selon le nombre de glyphes corrects.
 
-Les dialogues sont séparés du moteur dans :
+Positions reconnues :
 
-`js/vathkul-dialogues.js`
+- Nord : Divination
+- Nord-Est : Abjuration
+- Est : Enchantement
+- Sud-Est : Nécromancie
+- Sud : Transmutation
+- Sud-Ouest : Évocation
+- Ouest : Invocation
+- Nord-Ouest : Illusion
 
-Les souvenirs, les Étincelles, la purification, Firebase et le drag & drop ne sont pas modifiés.
+Le vocabulaire utilise désormais **glyphe**, jamais **gravure**, pour parler des écoles de magie.
+
+Les souvenirs, Firebase, le drag & drop, la purification et l’interface ne sont pas modifiés.
 
 ## GitHub
 
@@ -22,6 +29,6 @@ Téléverser tout le contenu à la racine du dépôt, puis commit direct sur `ma
 
 Commit conseillé :
 
-`Project Monolith v4.1.7 — Sprint 6 Intelligence de Vathkül`
+`Project Monolith v4.1.8 — Analyse avancée de Vathkül`
 
 Aucun changement Firebase.

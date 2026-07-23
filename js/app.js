@@ -364,26 +364,82 @@ function chooseVathkulLine(lines){
   return lines[Math.floor(Math.random()*lines.length)];
 }
 
-function inspectInnerEngravings(){
-  const dialogues=window.VATHKUL_DIALOGUES?.inspect || {};
-  const placedCount=placements.filter(Boolean).length;
-  const {good}=score();
+function analyzeGlyphConfiguration(){
+  const positionKeys=[
+    'nord',
+    'nordEst',
+    'est',
+    'sudEst',
+    'sud',
+    'sudOuest',
+    'ouest',
+    'nordOuest'
+  ];
 
-  let category='empty';
+  const incorrect=[];
+  const empty=[];
+  const inversions=[];
 
-  if(placedCount===0 || good===0){
-    category='empty';
-  }else if(good<=3){
-    category='few';
-  }else if(good<=6){
-    category='middle';
-  }else if(good===7){
-    category='almost';
-  }else{
-    category='perfect';
+  for(let i=0;i<placements.length;i++){
+    const placed=placements[i];
+    const expected=schools[i];
+
+    if(!placed){
+      empty.push(i);
+      incorrect.push(i);
+      continue;
+    }
+
+    if(placed!==expected){
+      incorrect.push(i);
+    }
   }
 
-  speakVathkul(chooseVathkulLine(dialogues[category]));
+  for(let i=0;i<placements.length;i++){
+    if(!placements[i] || placements[i]===schools[i])continue;
+
+    for(let j=i+1;j<placements.length;j++){
+      if(!placements[j] || placements[j]===schools[j])continue;
+
+      if(placements[i]===schools[j] && placements[j]===schools[i]){
+        inversions.push([i,j]);
+      }
+    }
+  }
+
+  return {
+    correctCount:placements.length-incorrect.length,
+    placedCount:placements.filter(Boolean).length,
+    incorrect,
+    empty,
+    inversions,
+    incorrectPositions:incorrect.map(index=>positionKeys[index])
+  };
+}
+
+function inspectInnerEngravings(){
+  const dialogues=window.VATHKUL_DIALOGUES?.inspect || {};
+  const analysis=analyzeGlyphConfiguration();
+  let line='Le Monolithe demeure silencieux.';
+
+  if(analysis.placedCount===0){
+    line=chooseVathkulLine(dialogues.empty);
+  }else if(analysis.inversions.length>0){
+    line=chooseVathkulLine(dialogues.inversion);
+  }else if(analysis.incorrect.length===1){
+    const positionKey=analysis.incorrectPositions[0];
+    line=chooseVathkulLine(dialogues.position?.[positionKey]);
+  }else if(analysis.correctCount<=3){
+    line=chooseVathkulLine(dialogues.few);
+  }else if(analysis.correctCount<=6){
+    line=chooseVathkulLine(dialogues.middle);
+  }else if(analysis.correctCount===7){
+    line=chooseVathkulLine(dialogues.almost);
+  }else{
+    line=chooseVathkulLine(dialogues.perfect);
+  }
+
+  speakVathkul(line);
   update();
   document.getElementById('muralOverlay').classList.add('show');
 }
