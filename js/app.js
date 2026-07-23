@@ -7,6 +7,8 @@ let ritualJournal=[];
 let purificationMode=false;
 let purificationTargetIndex=null;
 let purificationDC=20;
+let ritualDestroyed=false;
+let finalSequenceRunning=false;
 let lokaugSwapMode=false;
 let lokaugFirstSwapIndex=null;
 
@@ -179,6 +181,8 @@ function drop(e,i){
 }
 
 function render(){
+  document.body.classList.toggle('ritual-destroyed',ritualDestroyed);
+  setRitualLocked(ritualDestroyed);
   const changedSlots=[];
   placements.forEach((school,index)=>{
     if(hasCompletedInitialRender && school!==lastRenderedPlacements[index])changedSlots.push(index);
@@ -534,38 +538,135 @@ function inspectInnerEngravings(){
   document.getElementById('muralOverlay').classList.add('show');
 }
 
+
+function setRitualLocked(locked){
+  document.body.classList.toggle('ritual-locked',locked);
+
+  document.querySelectorAll(
+    '.tile, .slot, #test, #openMural, #beginPurify, #lokaugSwap, .controls button'
+  ).forEach(element=>{
+    if('disabled' in element){
+      element.disabled=locked;
+    }
+    element.setAttribute('aria-disabled',locked?'true':'false');
+  });
+}
+
+function isPerfectConfiguration(){
+  const everyPlaced=placements.every(Boolean);
+  const everyCorrect=placements.every((school,index)=>school===schools[index]);
+  const noCorruption=corrupted.size===0;
+
+  return everyPlaced && everyCorrect && noCorruption;
+}
+
+function startFinalRitualSequence(){
+  if(finalSequenceRunning || ritualDestroyed)return;
+
+  finalSequenceRunning=true;
+  ritualDestroyed=true;
+  setRitualLocked(true);
+
+  const boardWrap=document.querySelector('.board-wrap');
+  const board=document.getElementById('board');
+  const vathkulPanel=document.querySelector('.vathkul-dialogue');
+  const vathkulPortrait=document.querySelector('.vathkul-portrait');
+  const overlay=document.getElementById('finalRitualOverlay');
+
+  boardWrap?.classList.add('final-awakening');
+  board?.classList.add('final-awakening');
+  vathkulPanel?.classList.add('vathkul-fading');
+  vathkulPortrait?.classList.add('vathkul-fading');
+
+  addJournalEntry('La fresque s’illumine.','Le Monolithe');
+  update();
+
+  window.setTimeout(()=>{
+    overlay?.classList.add('show');
+    overlay?.setAttribute('aria-hidden','false');
+    boardWrap?.classList.add('final-flash');
+  },1700);
+
+  window.setTimeout(()=>{
+    board?.classList.add('final-cracking');
+    boardWrap?.classList.add('final-cracking');
+    addJournalEntry('Le Monolithe se fissure.','Le Monolithe');
+    update();
+  },2450);
+
+  window.setTimeout(()=>{
+    board?.classList.add('final-destruction');
+    boardWrap?.classList.add('final-destruction');
+    document.body.classList.add('vathkul-gone');
+
+    if(typeof vathkulText!=='undefined'){
+      vathkulText='';
+    }
+
+    addJournalEntry('La présence de Vathkül s’est éteinte.','Le Monolithe');
+    update();
+  },3900);
+
+  window.setTimeout(()=>{
+    overlay?.classList.add('message-visible');
+    finalSequenceRunning=false;
+    update();
+  },5000);
+}
+
+
 function testConfiguration(){
+  if(ritualDestroyed || finalSequenceRunning)return;
+
+  const {good}=score();
   const placedCount=placements.filter(Boolean).length;
 
   if(placedCount===0){
     speakVathkul('Le Monolithe demeure silencieux.');
+    update();
+    return;
+  }
+
+  if(isPerfectConfiguration()){
+    startFinalRitualSequence();
+    return;
+  }
+
+  if(good===8 && corrupted.size>0){
+    speakVathkul('L’équilibre demeure impossible tant qu’un glyphe reste corrompu.');
+    addJournalEntry('La corruption empêche l’accomplissement du rituel.','Le Monolithe');
+    document.querySelector('.board-wrap')?.classList.add('configuration-corrupted');
+    window.setTimeout(
+      ()=>document.querySelector('.board-wrap')?.classList.remove('configuration-corrupted'),
+      900
+    );
+    update();
+    return;
+  }
+
+  if(good===7){
+    speakVathkul('Une résonance s’établit… mais elle demeure incomplète.');
+    document.querySelector('.board-wrap')?.classList.add('configuration-close');
+    window.setTimeout(
+      ()=>document.querySelector('.board-wrap')?.classList.remove('configuration-close'),
+      1000
+    );
+    update();
     return;
   }
 
   if(placedCount<8){
     speakVathkul('La configuration est trop incomplète pour être éprouvée.');
+    update();
     return;
   }
 
-  if(!spendSparks(1)){
-    say('Aucune Étincelle ne subsiste pour éprouver une nouvelle configuration.');
-    return;
-  }
-
-  const {good}=score();
-evaluationVisible=true;
-
-  if(good===8){
-    speakVathkul('Les huit principes retrouvent leur équilibre.');
-    document.getElementById('phase').innerHTML='<b>Calcul achevé :</b> les huit fonctions résonnent. Cliquez maintenant sur Vathkül pour libérer le Sang de la Terre.';
-  }else if(good>=6){
-    speakVathkul('Une résonance s’établit… mais elle demeure incomplète.');
-    document.getElementById('phase').innerHTML='<b>Résultat révélé :</b> observez les liaisons, puis modifiez le calcul. Elles disparaîtront dès le premier déplacement.';
-  }else{
-    speakVathkul('L’équilibre se refuse à vous.');
-    document.getElementById('phase').innerHTML='<b>Résultat révélé :</b> observez les liaisons, puis modifiez le calcul. Elles disparaîtront dès le premier déplacement.';
-  }
-
+  speakVathkul('L’équilibre se refuse à vous.');
+  document.querySelector('.board-wrap')?.classList.add('configuration-failed');
+  window.setTimeout(
+    ()=>document.querySelector('.board-wrap')?.classList.remove('configuration-failed'),
+    700
+  );
   update();
 }
 
