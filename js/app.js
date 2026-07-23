@@ -615,14 +615,40 @@ function startFinalRitualSequence(){
 }
 
 
+
+function correctGlyphCountSentence(count){
+  const numberWords=[
+    'Aucun',
+    'Un',
+    'Deux',
+    'Trois',
+    'Quatre',
+    'Cinq',
+    'Six',
+    'Sept',
+    'Huit'
+  ];
+
+  if(count===0){
+    return 'Aucun glyphe n’occupe sa juste place.';
+  }
+
+  if(count===1){
+    return 'Un glyphe occupe sa juste place.';
+  }
+
+  return `${numberWords[count]} glyphes occupent leur juste place.`;
+}
+
 function testConfiguration(){
   if(ritualDestroyed || finalSequenceRunning)return;
 
   const {good}=score();
   const placedCount=placements.filter(Boolean).length;
+  const countSentence=correctGlyphCountSentence(good);
 
   if(placedCount===0){
-    speakVathkul('Le Monolithe demeure silencieux.');
+    speakVathkul(`Le Monolithe demeure silencieux. ${countSentence}`);
     update();
     return;
   }
@@ -633,7 +659,7 @@ function testConfiguration(){
   }
 
   if(good===8 && corrupted.size>0){
-    speakVathkul('L’équilibre demeure impossible tant qu’un glyphe reste corrompu.');
+    speakVathkul(`L’équilibre demeure impossible tant qu’un glyphe reste corrompu. ${countSentence}`);
     addJournalEntry('La corruption empêche l’accomplissement du rituel.','Le Monolithe');
     document.querySelector('.board-wrap')?.classList.add('configuration-corrupted');
     window.setTimeout(
@@ -645,7 +671,7 @@ function testConfiguration(){
   }
 
   if(good===7){
-    speakVathkul('Une résonance s’établit… mais elle demeure incomplète.');
+    speakVathkul(`Une résonance s’établit… mais elle demeure incomplète. ${countSentence}`);
     document.querySelector('.board-wrap')?.classList.add('configuration-close');
     window.setTimeout(
       ()=>document.querySelector('.board-wrap')?.classList.remove('configuration-close'),
@@ -656,12 +682,12 @@ function testConfiguration(){
   }
 
   if(placedCount<8){
-    speakVathkul('La configuration est trop incomplète pour être éprouvée.');
+    speakVathkul(`La configuration est trop incomplète pour être éprouvée. ${countSentence}`);
     update();
     return;
   }
 
-  speakVathkul('L’équilibre se refuse à vous.');
+  speakVathkul(`L’équilibre se refuse à vous. ${countSentence}`);
   document.querySelector('.board-wrap')?.classList.add('configuration-failed');
   window.setTimeout(
     ()=>document.querySelector('.board-wrap')?.classList.remove('configuration-failed'),

@@ -1,24 +1,20 @@
-# Project Monolith — v4.1.19
+# Project Monolith — v4.1.20 — Compteur de glyphes corrects
 
-Correctif de la solution finale :
+Le bouton **Éprouver la configuration** indique désormais combien de glyphes occupent leur juste place, sans préciser lesquels.
 
-- la configuration parfaite est désormais comparée à la vraie solution du rituel ;
-- auparavant, elle était comparée par erreur à l’ordre de la réserve des glyphes ;
-- la séquence finale se déclenche donc maintenant avec :
+Exemples :
 
-1. Divination
-2. Abjuration
-3. Enchantement
-4. Nécromancie
-5. Transmutation
-6. Évocation
-7. Invocation
-8. Illusion
+- « Aucun glyphe n’occupe sa juste place. »
+- « Un glyphe occupe sa juste place. »
+- « Cinq glyphes occupent leur juste place. »
+- « Sept glyphes occupent leur juste place. »
 
-dans le sens horaire à partir du Nord.
+Un glyphe corrompu ne compte pas comme correctement placé, même s’il se trouve sur la bonne position.
 
-Aucun changement Firebase.
+La séquence finale reste inchangée.
 
 Commit conseillé :
 
-`Project Monolith v4.1.19 — Correctif solution finale`
+`Project Monolith v4.1.20 — Compteur de glyphes corrects`
+
+Aucun changement Firebase.
