@@ -647,10 +647,12 @@ function openPurificationFlow(){
     slot.classList.remove('purification-target');
   });
 
-  setPurificationStep('select');
-  document.getElementById('purificationFlowOverlay')?.classList.add('show');
-  document.getElementById('purificationFlowOverlay')?.setAttribute('aria-hidden','false');
+  document.getElementById('purificationFlowOverlay')?.classList.remove('show');
+  document.getElementById('purificationFlowOverlay')?.setAttribute('aria-hidden','true');
+
   addJournalEntry('Sélectionnez un glyphe à purifier.','Le Monolithe');
+  speakVathkul('Sélectionnez un glyphe à purifier.');
+  update();
 }
 
 function closePurificationFlow(){
@@ -667,6 +669,7 @@ function closePurificationFlow(){
 
 function choosePurificationTarget(index){
   if(!purificationMode)return;
+
   if(!placements[index]){
     speakVathkul('Aucun glyphe ne repose à cet emplacement.');
     update();
@@ -681,6 +684,11 @@ function choosePurificationTarget(index){
 
   speakVathkul('Désires-tu solliciter mon assistance ?');
   setPurificationStep('aid');
+
+  const overlay=document.getElementById('purificationFlowOverlay');
+  overlay?.classList.add('show');
+  overlay?.setAttribute('aria-hidden','false');
+
   update();
 }
 
