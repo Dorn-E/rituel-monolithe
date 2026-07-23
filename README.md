@@ -1,12 +1,10 @@
-# Project Monolith — v4.1.5 — Sprint 5
+# Project Monolith — v4.1.6 — Réponses de Vathkül
 
-Modification unique :
+Modifications ciblées :
 
-- ajout de runes très discrètes uniquement dans le fond du grand panneau gauche ;
-- les runes restent derrière toute l’interface de drag & drop ;
-- aucun changement au Monolithe, aux glyphes, Étincelles, panneaux, textes, actions, Firebase ou JavaScript.
-
-Publication GitHub :
-téléverser tout le contenu à la racine et commit direct sur `main`.
+- « Éprouver la configuration » emploie désormais les réponses validées de Vathkül ;
+- « Examiner les gravures intérieures » ouvre la fresque sans commentaire de Vathkül ;
+- la purification utilise les formulations validées ;
+- les souvenirs, l’interface, Firebase et les mécaniques restent inchangés.
 
 Aucun changement Firebase.

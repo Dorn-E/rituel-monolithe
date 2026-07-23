@@ -350,27 +350,45 @@ function update(){
   if(!isApplyingRemoteState)stateChangeHandler();
 }
 
+function speakVathkul(line){
+  const quoted=`« ${line} »`;
+  document.getElementById('vathkulVoice').textContent=quoted;
+  say(`Vathkül : ${quoted}`);
+}
+
 function testConfiguration(){
-  if(placements.some(x=>!x)){
-    say('Les huit fonctions doivent être placées avant d’éprouver le calcul.');
+  const placedCount=placements.filter(Boolean).length;
+
+  if(placedCount===0){
+    speakVathkul('Le Monolithe demeure silencieux.');
     return;
   }
+
+  if(placedCount<8){
+    speakVathkul('La configuration est trop incomplète pour être éprouvée.');
+    return;
+  }
+
   if(!spendSparks(1)){
     say('Aucune Étincelle ne subsiste pour éprouver une nouvelle configuration.');
     return;
   }
 
-  const {good,aby}=score();
+  const {good}=score();
   veiled.clear();
   evaluationVisible=true;
-  say(`Le Monolithe répond : ${good} résonance${good>1?'s':''} concordante${good>1?'s':''}.`
-    +(aby>=4?` Une seconde logique, abyssale, résonne à ${aby} reprises.`:''));
 
   if(good===8){
+    speakVathkul('Les huit principes retrouvent leur équilibre.');
     document.getElementById('phase').innerHTML='<b>Calcul achevé :</b> les huit fonctions résonnent. Cliquez maintenant sur Vathkül pour libérer le Sang de la Terre.';
+  }else if(good>=6){
+    speakVathkul('Une résonance s’établit… mais elle demeure incomplète.');
+    document.getElementById('phase').innerHTML='<b>Résultat révélé :</b> observez les liaisons, puis modifiez le calcul. Elles disparaîtront dès le premier déplacement.';
   }else{
+    speakVathkul('L’équilibre se refuse à vous.');
     document.getElementById('phase').innerHTML='<b>Résultat révélé :</b> observez les liaisons, puis modifiez le calcul. Elles disparaîtront dès le premier déplacement.';
   }
+
   update();
 }
 
@@ -407,7 +425,7 @@ function beginPurification(){
     return;
   }
   if(!corrupted.has(selected) && !veiled.has(selected)){
-    say(`La gravure « ${stationNames[selected]} » n’est pas parasitée.`);
+    speakVathkul('Cette gravure est déjà pure.');
     return;
   }
   if(!spendSparks(1)){
@@ -457,10 +475,10 @@ function resolvePurification(success){
     veiled.delete(i);
     lastGM=null;
     invalidateEvaluation();
-    say(`La gravure « ${stationNames[i]} » est purifiée. Les veines noires se rétractent.`);
+    speakVathkul('La gravure retrouve sa pureté.');
   }else{
     spendSparks(1);
-    say(`La purification échoue. La gravure « ${stationNames[i]} » demeure parasitée et Vathkül perd une Étincelle supplémentaire.`);
+    speakVathkul('La souillure demeure.');
   }
 
   pendingPurification=null;
