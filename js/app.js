@@ -811,8 +811,8 @@ function resolvePurification(success){
     addJournalEntry('Le glyphe ciblé a été purifié.');
 
     closePurificationFlow();
+    render();
     update();
-    stateChangeHandler();
     return;
   }else{
     speakVathkul('La souillure demeure.');

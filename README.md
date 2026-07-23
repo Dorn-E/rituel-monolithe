@@ -1,13 +1,14 @@
-# Project Monolith — v4.1.16
+# Project Monolith — v4.1.17
 
-Correctif ciblé :
+Correctif de rendu après purification :
 
-- après une purification réussie, l’anneau rouge disparaît immédiatement ;
-- la classe visuelle `corrupted` est recalculée à chaque rendu ;
-- l’état reste correct après synchronisation Firebase.
-
-Aucune autre mécanique n’a été modifiée.
+- l’état de corruption est supprimé ;
+- le Monolithe est immédiatement redessiné avec `render()` ;
+- l’anneau rouge disparaît dès la réussite ;
+- `update()` synchronise ensuite le nouvel état via Firebase.
 
 Commit conseillé :
 
-`Project Monolith v4.1.16 — Correctif anneau corruption`
+`Project Monolith v4.1.17 — Correctif rendu purification`
+
+Aucun changement Firebase.
