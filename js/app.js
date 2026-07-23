@@ -7,6 +7,7 @@ let ritualJournal=[];
 let stateRevision=0;
 let localMutationPending=false;
 let commitMicrotaskScheduled=false;
+let initializationLocked=false;
 let purificationMode=false;
 let purificationTargetIndex=null;
 let purificationDC=20;
@@ -35,6 +36,32 @@ function markLocalMutation(){
     localMutationPending=false;
     stateChangeHandler();
   });
+}
+
+
+function setInitializationLocked(locked){
+  initializationLocked=Boolean(locked);
+
+  document.body.classList.toggle('ritual-initializing',initializationLocked);
+
+  const overlay=document.getElementById('ritualInitOverlay');
+  if(overlay){
+    overlay.classList.toggle('show',initializationLocked);
+    overlay.setAttribute('aria-hidden',initializationLocked?'false':'true');
+  }
+
+  document.querySelectorAll(
+    '.tile, .slot, #test, #openMural, #memory, #beginPurify, #lokaugSwap, #swap, #corrupt, #restore, #clear, #shuffle'
+  ).forEach(element=>{
+    if('disabled' in element){
+      element.disabled=initializationLocked || element.disabled;
+    }
+    element.setAttribute('aria-disabled',initializationLocked?'true':'false');
+  });
+}
+
+function isInitializationLocked(){
+  return initializationLocked;
 }
 
 function normalizeRitualKey(value){
@@ -196,6 +223,7 @@ function selectSlot(i){
 }
 
 function drop(e,i){
+  if(initializationLocked)return;
   e.preventDefault();
   document.querySelectorAll('.slot').forEach(s=>s.classList.remove('dragover'));
   const school=e.dataTransfer.getData('school');
@@ -537,6 +565,7 @@ function pulseSlotEffect(index,className,duration=850){
 }
 
 function startLokaugSwap(){
+  if(initializationLocked)return;
   if(purificationMode)closePurificationFlow();
   lokaugSwapMode=true;
   lokaugFirstSwapIndex=null;
@@ -798,6 +827,7 @@ function correctGlyphCountSentence(count){
 }
 
 function testConfiguration(){
+  if(initializationLocked)return;
   markLocalMutation();
   if(ritualDestroyed || finalSequenceRunning)return;
 
@@ -867,6 +897,7 @@ function testConfiguration(){
 }
 
 function awakenMemory(){
+  if(initializationLocked)return;
   markLocalMutation();
   if(selected===null){say('Sélectionnez d’abord une gravure.');return;}
   if(memoryLevel[selected]>=2){say('Vathkül ne possède plus aucun autre souvenir concernant cette gravure.');return;}
@@ -1025,6 +1056,7 @@ function setPurificationStep(step){
 }
 
 function openPurificationFlow(){
+  if(initializationLocked)return;
   if(lokaugSwapMode)cancelLokaugSwap();
   if(life<=0){
     speakVathkul('Aucune Étincelle ne demeure.');
@@ -1185,6 +1217,7 @@ function resolvePurification(success){
 }
 
 function gmSwap(){
+  if(initializationLocked)return;
   const filled=[...Array(8).keys()].filter(i=>placements[i]);
   if(filled.length<2)return;
   const a=filled[Math.floor(Math.random()*filled.length)];
@@ -1194,6 +1227,7 @@ function gmSwap(){
 }
 
 function gmCorrupt(){
+  if(initializationLocked)return;
   markLocalMutation();
   clearRevealedLinks();
   cancelActiveInteractionMode();
@@ -1353,6 +1387,8 @@ window.ProjectMonolith={
   getParticipantName:()=>participantName,
   getSharedState:exportSharedState,
   getStateRevision:()=>stateRevision,
+  setInitializationLocked,
+  isInitializationLocked,
   isApplyingRemoteState:()=>isApplyingRemoteState,
   applySharedState,
   onStateChange(handler){

@@ -30,6 +30,7 @@ let writeTimer=null;
 let heartbeatTimer=null;
 let connected=false;
 let applyingInitialState=false;
+let initializationSafetyTimer=null;
 
 function normalizeRoomId(value){
   return value
@@ -124,12 +125,30 @@ async function deleteSnapshotById(id){
 }
 window.ProjectMonolithSync={saveSnapshot,loadSnapshot,deleteSnapshot:deleteSnapshotById};
 
+
+function beginInitializationLock(){
+  window.ProjectMonolith?.setInitializationLocked(true);
+
+  clearTimeout(initializationSafetyTimer);
+  initializationSafetyTimer=setTimeout(()=>{
+    window.ProjectMonolith?.setInitializationLocked(false);
+    setStatus("Rituel prêt","online");
+  },5000);
+}
+
+function endInitializationLock(){
+  clearTimeout(initializationSafetyTimer);
+  initializationSafetyTimer=null;
+  window.ProjectMonolith?.setInitializationLocked(false);
+}
+
 async function connectToRitual({participantName,ritualKey}){
   if(connected)return;
   const roomId=normalizeRoomId(ritualKey);
   if(!roomId)return;
 
-  setStatus("Connexion…","connecting");
+  beginInitializationLock();
+  setStatus("Synchronisation du rituel…","connecting");
 
   try{
     const app=initializeApp(firebaseConfig);
@@ -160,6 +179,8 @@ async function connectToRitual({participantName,ritualKey}){
         updatedByName:participantName
       });
     }
+
+    endInitializationLock();
 
     unsubscribeRoom=onSnapshot(roomReference,snapshot=>{
       const data=snapshot.data();
@@ -216,6 +237,7 @@ async function connectToRitual({participantName,ritualKey}){
       });
     },PRESENCE_HEARTBEAT_MS);
   }catch(error){
+    endInitializationLock();
     console.error("Firebase connection failed:",error);
     setStatus("Connexion impossible","error");
   }
@@ -226,6 +248,7 @@ window.addEventListener("project-monolith:entered",event=>{
 });
 
 window.addEventListener("pagehide",()=>{
+  clearTimeout(initializationSafetyTimer);
   clearInterval(heartbeatTimer);
   unsubscribeRoom?.();
   unsubscribeParticipants?.();

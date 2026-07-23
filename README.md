@@ -1,37 +1,30 @@
-# Project Monolith — v4.3.0 — Synchronisation stable
+# Project Monolith — v4.3.1 — Verrouillage d’initialisation
 
-Cette version refond la synchronisation du rituel.
+Cette version corrige les instabilités possibles pendant les premières secondes de connexion.
 
-## Principe
+## Fonctionnement
 
-- `render()` et `update()` ne synchronisent plus rien ;
-- une modification locale réelle produit une révision unique ;
-- les modifications rapprochées sont regroupées en une seule écriture ;
-- Firebase ne peut plus réappliquer un état dont la révision est ancienne ou identique.
+Après l’entrée dans le rituel :
 
-## Effets attendus
+1. l’interface affiche « Synchronisation du rituel… » ;
+2. le Monolithe reste temporairement en lecture seule ;
+3. Firebase charge ou crée l’état partagé ;
+4. l’interface se déverrouille automatiquement.
 
-- une Étincelle dépensée ne revient plus ;
-- le compteur passe bien de 12 à 11 ;
-- un déplacement récent ne peut plus être écrasé par un ancien état distant ;
-- le rituel ne doit plus sembler se réinitialiser spontanément.
+Un délai de sécurité de 5 secondes empêche l’interface de rester bloquée si la connexion est lente ou indisponible.
 
-## Nettoyage des anciennes valeurs
+## Objectif
 
-Toutes les références restantes à 15 Étincelles sont remplacées :
+Empêcher toute modification locale pendant que l’état initial partagé est encore en cours de chargement, afin d’éviter :
 
-- état initial : 12 ;
-- réinitialisation : 12 ;
-- bande d’Étincelles : 12 ;
-- progression du portail : calculée sur 12.
+- un premier déplacement écrasé par Firebase ;
+- un retour visuel à un ancien état ;
+- une instabilité au démarrage.
 
-## Compatibilité
-
-- anciens états de schéma 1 lisibles à la première connexion ;
-- nouveaux états enregistrés en schéma 2 avec `stateRevision`.
+Les règles du rituel, les liaisons et les Étincelles ne sont pas modifiées.
 
 Commit conseillé :
 
-`Project Monolith v4.3.0 — Synchronisation stable`
+`Project Monolith v4.3.1 — Verrouillage initialisation`
 
 Aucune modification des règles Firebase.
