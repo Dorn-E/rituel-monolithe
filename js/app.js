@@ -321,17 +321,7 @@ function renderSparks(){
 function update(){
   const {good,aby}=score();
   document.getElementById('life').textContent=life;
-  
-document.getElementById('closePurificationFlow')?.addEventListener('click',closePurificationFlow);
-document.getElementById('purificationAidYes')?.addEventListener('click',()=>chooseVathkulAid(true));
-document.getElementById('purificationAidNo')?.addEventListener('click',()=>chooseVathkulAid(false));
-document.getElementById('purificationSuccess')?.addEventListener('click',()=>resolvePurification(true));
-document.getElementById('purificationFailure')?.addEventListener('click',()=>resolvePurification(false));
-document.getElementById('purificationFlowOverlay')?.addEventListener('click',event=>{
-  if(event.target.id==='purificationFlowOverlay')closePurificationFlow();
-});
-
-renderSparks();
+  renderSparks();
   document.getElementById('score').textContent=evaluationVisible?good:'?';
   document.getElementById('links').innerHTML='';
 
@@ -905,9 +895,18 @@ window.ProjectMonolith={
 };
 
 
+document.getElementById('closePurificationFlow')?.addEventListener('click',closePurificationFlow);
+document.getElementById('purificationAidYes')?.addEventListener('click',()=>chooseVathkulAid(true));
+document.getElementById('purificationAidNo')?.addEventListener('click',()=>chooseVathkulAid(false));
+document.getElementById('purificationSuccess')?.addEventListener('click',()=>resolvePurification(true));
+document.getElementById('purificationFailure')?.addEventListener('click',()=>resolvePurification(false));
+document.getElementById('purificationFlowOverlay')?.addEventListener('click',event=>{
+  if(event.target.id==='purificationFlowOverlay')closePurificationFlow();
+});
+
 document.getElementById('test').onclick=testConfiguration;
 document.getElementById('memory').onclick=awakenMemory;
-document.getElementById('beginPurify').onclick=beginPurification;
+document.getElementById('beginPurify').onclick=openPurificationFlow;
 document.getElementById('purifyNormal').onclick=()=>choosePurification(false);
 document.getElementById('purifyBoost').onclick=()=>choosePurification(true);
 document.getElementById('purifySuccess').onclick=()=>resolvePurification(true);
@@ -927,7 +926,6 @@ document.getElementById('swap').onclick=gmSwap;
 document.getElementById('veil').onclick=gmVeil;
 document.getElementById('corrupt').onclick=gmCorrupt;
 document.getElementById('restore').onclick=gmRestore;
-document.getElementById('purify').onclick=openPurificationFlow;
 
 document.getElementById('resetRitual').onclick=()=>{
   if(confirm('Réinitialiser le rituel pour tous les participants ?')){
