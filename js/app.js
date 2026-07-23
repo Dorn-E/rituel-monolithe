@@ -7,6 +7,8 @@ let ritualJournal=[];
 let purificationMode=false;
 let purificationTargetIndex=null;
 let purificationDC=20;
+let purificationAttemptPaid=false;
+let purificationAidPaid=false;
 let ritualDestroyed=false;
 let finalSequenceRunning=false;
 let lokaugSwapMode=false;
@@ -345,10 +347,33 @@ function renderSparks(){
   previousLife=life;
 }
 
+
+function updateAbyssPortalStage(){
+  const consumed=Math.max(0,15-life);
+  const boardWrap=document.querySelector('.board-wrap');
+  const core=document.getElementById('core');
+
+  if(!boardWrap || !core)return;
+
+  const stage=
+    consumed>=7 ? 4 :
+    consumed>=6 ? 3 :
+    consumed>=4 ? 2 :
+    consumed>=2 ? 1 : 0;
+
+  for(let i=0;i<=4;i++){
+    boardWrap.classList.toggle(`abyss-stage-${i}`,stage===i);
+    core.classList.toggle(`abyss-stage-${i}`,stage===i);
+  }
+
+  boardWrap.dataset.abyssStage=String(stage);
+}
+
 function update(){
   const {good,aby}=score();
   document.getElementById('life').textContent=life;
   renderSparks();
+  updateAbyssPortalStage();
   document.getElementById('score').textContent=evaluationVisible?good:'?';
   document.getElementById('links').innerHTML='';
 
@@ -627,6 +652,8 @@ function startFinalRitualSequence(){
   const vathkulPortrait=document.querySelector('.vathkul-portrait');
   const overlay=document.getElementById('finalRitualOverlay');
 
+  boardWrap?.classList.add('abyss-closing');
+  board?.classList.add('abyss-closing');
   boardWrap?.classList.add('final-awakening');
   board?.classList.add('final-awakening');
   vathkulPanel?.classList.add('vathkul-fading');
@@ -908,6 +935,8 @@ function openPurificationFlow(){
   purificationMode=true;
   purificationTargetIndex=null;
   purificationDC=20;
+  purificationAttemptPaid=false;
+  purificationAidPaid=false;
 
   document.querySelectorAll('.slot').forEach(slot=>{
     slot.classList.add('purification-selectable');
@@ -926,6 +955,8 @@ function openPurificationFlow(){
 function closePurificationFlow(){
   purificationMode=false;
   purificationTargetIndex=null;
+  purificationAttemptPaid=false;
+  purificationAidPaid=false;
 
   document.querySelectorAll('.slot').forEach(slot=>{
     slot.classList.remove('purification-selectable','purification-target');
@@ -945,11 +976,37 @@ function choosePurificationTarget(index){
     return;
   }
 
+  if(!corrupted.has(index)){
+    speakVathkul('Ce glyphe est déjà pur.');
+    update();
+    return;
+  }
+
+  if(!purificationAttemptPaid){
+    if(!spendSparks(1)){
+      speakVathkul('Aucune Étincelle ne demeure pour tenter cette purification.');
+      closePurificationFlow();
+      update();
+      return;
+    }
+
+    purificationAttemptPaid=true;
+    addJournalEntry('Une Étincelle est engagée pour tenter la purification.');
+  }
+
   purificationTargetIndex=index;
 
   document.querySelectorAll('.slot').forEach((slot,slotIndex)=>{
     slot.classList.toggle('purification-target',slotIndex===index);
   });
+
+  const aidButton=document.getElementById('purificationAidYes');
+  if(aidButton){
+    aidButton.disabled=life<1;
+    aidButton.title=life<1
+      ? 'Aucune Étincelle supplémentaire ne demeure.'
+      : 'Consomme 1 Étincelle supplémentaire et réduit le DD à 15.';
+  }
 
   speakVathkul('Désires-tu solliciter mon assistance ?');
   setPurificationStep('aid');
@@ -963,6 +1020,20 @@ function choosePurificationTarget(index){
 
 function chooseVathkulAid(useAid){
   if(purificationTargetIndex===null)return;
+
+  if(useAid && !purificationAidPaid){
+    if(!spendSparks(1)){
+      const aidButton=document.getElementById('purificationAidYes');
+      if(aidButton)aidButton.disabled=true;
+      speakVathkul('Aucune Étincelle ne demeure pour soutenir mon assistance.');
+      update();
+      return;
+    }
+
+    purificationAidPaid=true;
+    addJournalEntry('Une seconde Étincelle est consacrée à l’assistance de Vathkül.');
+  }
+
   purificationDC=useAid?15:20;
 
   document.getElementById('purificationDcText').textContent=`DD ${purificationDC}`;
@@ -971,17 +1042,15 @@ function chooseVathkulAid(useAid){
 
   addJournalEntry(
     useAid
-      ? 'Vathkül prête son assistance à la purification. DD 15.'
-      : 'La purification est tentée sans l’assistance de Vathkül. DD 20.'
+      ? 'Vathkül prête son assistance à la purification. Coût total : 2 Étincelles. DD 15.'
+      : 'La purification est tentée sans l’assistance de Vathkül. Coût total : 1 Étincelle. DD 20.'
   );
 
   setPurificationStep('roll');
 }
 
 function resolvePurification(success){
-  if(purificationTargetIndex===null || life<=0)return;
-
-  life=Math.max(0,life-1);
+  if(purificationTargetIndex===null)return;
 
   if(success){
     const purifiedIndex=purificationTargetIndex;

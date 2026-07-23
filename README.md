@@ -1,29 +1,38 @@
-# Project Monolith — v4.1.21 — Livraison A
+# Project Monolith — v4.1.22 — Livraison B
 
-## Modifications visuelles
+## Coût exact de la purification
 
-- les runes du fond de la zone de drag & drop sont plus visibles ;
-- elles respirent très lentement, sans gêner la lecture ;
-- une purification réussie produit une onde et un rayon dorés ;
-- une corruption produit une brève ombre et une vibration ;
-- un échange anime les deux glyphes et provoque une onde sombre.
+Une purification consomme :
 
-## Vathkül
+- **1 Étincelle** dès qu’un glyphe corrompu est choisi comme cible ;
+- **+1 Étincelle** si l’aide de Vathkül est demandée.
 
-Répliques contextuelles ajoutées :
+Donc :
 
-- purification : « Une dissonance s’efface. »
-- corruption : « Une souillure gagne le Monolithe. »
-- échange : « L’ordre vacille. »
+- sans aide : coût total **1 Étincelle**, DD 20 ;
+- avec aide : coût total **2 Étincelles**, DD 15.
 
-## Interface MJ
+Le coût est identique en cas de réussite ou d’échec.
 
-- affichage clair du mode actif ;
-- bouton **Annuler le mode** ;
-- purification et échange ne peuvent plus rester actifs simultanément.
+Si aucune Étincelle supplémentaire ne demeure après le lancement de la tentative, le bouton d’aide de Vathkül est désactivé.
 
-Les souvenirs et les règles Firebase ne sont pas modifiés.
+## Runes
+
+Les runes du fond de la grande zone de drag & drop sont plus visibles et plus lumineuses.
+
+## Portail abyssal
+
+À mesure que les Étincelles sont consommées :
+
+- 2 consommées : une ombre apparaît autour du centre ;
+- 4 consommées : le centre commence à absorber la lumière ;
+- 6 consommées : des volutes sombres apparaissent ;
+- 7 consommées : une faille abyssale devient nettement perceptible.
+
+Lors de la réussite finale, la faille se referme avant l’éblouissement et la destruction du Monolithe.
 
 Commit conseillé :
 
-`Project Monolith v4.1.21 — Livraison A Polish`
+`Project Monolith v4.1.22 — Livraison B`
+
+Aucun changement dans les règles Firebase.
