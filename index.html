@@ -1,14 +1,14 @@
 <!doctype html>
-<!-- Project Monolith v4.1.20 — interface validée -->
+<!-- Project Monolith v4.1.21 — interface validée -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Le Rituel du Monolithe — v4.1.20</title>
+<title>Le Rituel du Monolithe — v4.1.21</title>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<link rel="stylesheet" href="css/style-v41.css?v=4.1.20">
+<link rel="stylesheet" href="css/style-v41.css?v=4.1.21">
 </head>
 <body data-build="4.1.0">
 <div class="entry-gate" id="entryGate" aria-modal="true" role="dialog">
@@ -100,6 +100,7 @@
         <h3>Interface MJ</h3>
         <div class="gm-section">
           <h4>Contre-rituel</h4>
+          <div class="interaction-mode-bar"><span id="interactionModeStatus">Aucun mode actif</span><button id="cancelInteractionMode" type="button">Annuler le mode</button></div>
           <div class="gm-actions">
             <button class="danger" id="swap">Inverser deux glyphes</button>
             
@@ -165,9 +166,9 @@
 <div class="overlay" id="victory"><div class="modal-card"><h2>Le Monolithe est détruit</h2><p>Vathkül libère le Sang de la Terre. Les huit fonctions exécutent le calcul de dissolution et l’architecture planaire du Monolithe s’effondre sur elle-même.</p><button onclick="location.reload()">Rejouer</button></div></div>
 <div class="overlay" id="end"><div class="modal-card"><h2>La dernière Étincelle s’éteint</h2><p>Son énergie est consumée. Le Monolithe conserve la dernière configuration éprouvée et le calcul planaire échappe désormais à son contrôle.</p><button onclick="location.reload()">Recommencer</button></div></div>
 
-<script src="js/vathkul-dialogues.js?v=4.1.20" defer></script>
-<script src="js/app.js?v=4.1.20" defer></script>
-<script type="module" src="js/sync.js?v=4.1.20"></script>
+<script src="js/vathkul-dialogues.js?v=4.1.21" defer></script>
+<script src="js/app.js?v=4.1.21" defer></script>
+<script type="module" src="js/sync.js?v=4.1.21"></script>
 
   <div class="overlay" id="purificationFlowOverlay" aria-hidden="true">
     <div class="modal purification-flow-modal" role="dialog" aria-modal="true" aria-labelledby="purificationFlowTitle">

@@ -1,20 +1,29 @@
-# Project Monolith — v4.1.20 — Compteur de glyphes corrects
+# Project Monolith — v4.1.21 — Livraison A
 
-Le bouton **Éprouver la configuration** indique désormais combien de glyphes occupent leur juste place, sans préciser lesquels.
+## Modifications visuelles
 
-Exemples :
+- les runes du fond de la zone de drag & drop sont plus visibles ;
+- elles respirent très lentement, sans gêner la lecture ;
+- une purification réussie produit une onde et un rayon dorés ;
+- une corruption produit une brève ombre et une vibration ;
+- un échange anime les deux glyphes et provoque une onde sombre.
 
-- « Aucun glyphe n’occupe sa juste place. »
-- « Un glyphe occupe sa juste place. »
-- « Cinq glyphes occupent leur juste place. »
-- « Sept glyphes occupent leur juste place. »
+## Vathkül
 
-Un glyphe corrompu ne compte pas comme correctement placé, même s’il se trouve sur la bonne position.
+Répliques contextuelles ajoutées :
 
-La séquence finale reste inchangée.
+- purification : « Une dissonance s’efface. »
+- corruption : « Une souillure gagne le Monolithe. »
+- échange : « L’ordre vacille. »
+
+## Interface MJ
+
+- affichage clair du mode actif ;
+- bouton **Annuler le mode** ;
+- purification et échange ne peuvent plus rester actifs simultanément.
+
+Les souvenirs et les règles Firebase ne sont pas modifiés.
 
 Commit conseillé :
 
-`Project Monolith v4.1.20 — Compteur de glyphes corrects`
-
-Aucun changement Firebase.
+`Project Monolith v4.1.21 — Livraison A Polish`

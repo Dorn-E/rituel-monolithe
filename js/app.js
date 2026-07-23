@@ -395,7 +395,50 @@ function chooseVathkulLine(lines){
 }
 
 
+
+function updateInteractionModeUI(){
+  const status=document.getElementById('interactionModeStatus');
+  const cancelButton=document.getElementById('cancelInteractionMode');
+  if(!status || !cancelButton)return;
+
+  if(purificationMode){
+    status.textContent='Mode actif : purification';
+    status.dataset.mode='purification';
+    cancelButton.disabled=false;
+    return;
+  }
+
+  if(lokaugSwapMode){
+    status.textContent=lokaugFirstSwapIndex===null
+      ? 'Mode actif : échange — premier glyphe'
+      : 'Mode actif : échange — second glyphe';
+    status.dataset.mode='swap';
+    cancelButton.disabled=false;
+    return;
+  }
+
+  status.textContent='Aucun mode actif';
+  status.dataset.mode='none';
+  cancelButton.disabled=true;
+}
+
+function cancelActiveInteractionMode(){
+  if(purificationMode)closePurificationFlow();
+  if(lokaugSwapMode)cancelLokaugSwap();
+  updateInteractionModeUI();
+}
+
+function pulseSlotEffect(index,className,duration=850){
+  window.requestAnimationFrame(()=>{
+    const slot=document.querySelector(`.slot[data-index="${index}"]`);
+    if(!slot)return;
+    slot.classList.add(className);
+    window.setTimeout(()=>slot.classList.remove(className),duration);
+  });
+}
+
 function startLokaugSwap(){
+  if(purificationMode)closePurificationFlow();
   lokaugSwapMode=true;
   lokaugFirstSwapIndex=null;
 
@@ -406,6 +449,7 @@ function startLokaugSwap(){
 
   addJournalEntry('Lokaug prépare l’échange de deux glyphes.','Lokaug');
   speakVathkul('Choisissez le premier glyphe.');
+  updateInteractionModeUI();
   update();
 }
 
@@ -416,6 +460,7 @@ function cancelLokaugSwap(){
   document.querySelectorAll('.slot').forEach(slot=>{
     slot.classList.remove('lokaug-swap-selectable','lokaug-swap-first');
   });
+  updateInteractionModeUI();
 }
 
 function chooseLokaugSwapTarget(index){
@@ -436,6 +481,7 @@ function chooseLokaugSwapTarget(index){
 
     addJournalEntry('Premier glyphe sélectionné pour l’échange.','Lokaug');
     speakVathkul('Choisissez le second glyphe.');
+    updateInteractionModeUI();
     update();
     return true;
   }
@@ -450,11 +496,19 @@ function chooseLokaugSwapTarget(index){
   [placements[firstIndex],placements[index]]=[placements[index],placements[firstIndex]];
 
   addJournalEntry('Lokaug échange deux glyphes.','Lokaug');
-  speakVathkul('Deux glyphes ont échangé leur place.');
+  speakVathkul('L’ordre vacille.');
 
   cancelLokaugSwap();
+  render();
+
+  pulseSlotEffect(firstIndex,'lokaug-swap-arrival',950);
+  pulseSlotEffect(index,'lokaug-swap-arrival',950);
+  const board=document.getElementById('board');
+  board?.classList.add('lokaug-swap-wave');
+  window.setTimeout(()=>board?.classList.remove('lokaug-swap-wave'),950);
+
+  updateInteractionModeUI();
   update();
-  stateChangeHandler();
   return true;
 }
 
@@ -844,6 +898,7 @@ function setPurificationStep(step){
 }
 
 function openPurificationFlow(){
+  if(lokaugSwapMode)cancelLokaugSwap();
   if(life<=0){
     speakVathkul('Aucune Étincelle ne demeure.');
     update();
@@ -864,6 +919,7 @@ function openPurificationFlow(){
 
   addJournalEntry('Sélectionnez un glyphe à purifier.','Le Monolithe');
   speakVathkul('Sélectionnez un glyphe à purifier.');
+  updateInteractionModeUI();
   update();
 }
 
@@ -877,6 +933,7 @@ function closePurificationFlow(){
 
   document.getElementById('purificationFlowOverlay')?.classList.remove('show');
   document.getElementById('purificationFlowOverlay')?.setAttribute('aria-hidden','true');
+  updateInteractionModeUI();
 }
 
 function choosePurificationTarget(index){
@@ -934,11 +991,17 @@ function resolvePurification(success){
     const purifiedSlot=document.querySelector(`.slot[data-index="${purifiedIndex}"]`);
     purifiedSlot?.classList.remove('corrupted');
 
-    speakVathkul('Le glyphe retrouve sa pureté.');
+    speakVathkul('Une dissonance s’efface.');
     addJournalEntry('Le glyphe ciblé a été purifié.');
 
     closePurificationFlow();
     render();
+    pulseSlotEffect(purifiedIndex,'purification-cleansed',900);
+
+    const board=document.getElementById('board');
+    board?.classList.add('purification-wave');
+    window.setTimeout(()=>board?.classList.remove('purification-wave'),900);
+
     update();
     return;
   }else{
@@ -962,10 +1025,26 @@ function gmSwap(){
 }
 
 function gmCorrupt(){
+  cancelActiveInteractionMode();
   const filled=[...Array(8).keys()].filter(i=>placements[i]);
   if(!filled.length)return;
-  const i=filled[Math.floor(Math.random()*filled.length)];
-  corrupted.add(i);lastGM={type:'corrupt',i};invalidateEvaluation();say(`Une influence extérieure corrompt la gravure « ${stationNames[i]} ».`);render();
+
+  const candidates=filled.filter(i=>!corrupted.has(i));
+  if(!candidates.length){
+    speakVathkul('La souillure est déjà partout présente.');
+    update();
+    return;
+  }
+
+  const i=candidates[Math.floor(Math.random()*candidates.length)];
+  corrupted.add(i);
+  lastGM={type:'corrupt',i};
+  invalidateEvaluation();
+  addJournalEntry(`Lokaug corrompt le glyphe « ${stationNames[i]} ».`,'Lokaug');
+  speakVathkul('Une souillure gagne le Monolithe.');
+  render();
+  pulseSlotEffect(i,'corruption-arriving',1000);
+  update();
 }
 function gmRestore(){
   if(!lastGM)return;
@@ -1127,6 +1206,7 @@ document.getElementById('purificationFlowOverlay')?.addEventListener('click',eve
   if(event.target.id==='purificationFlowOverlay')closePurificationFlow();
 });
 
+document.getElementById('cancelInteractionMode')?.addEventListener('click',cancelActiveInteractionMode);
 document.getElementById('lokaugSwap')?.addEventListener('click',startLokaugSwap);
 document.getElementById('test').onclick=testConfiguration;
 document.getElementById('memory').onclick=awakenMemory;
@@ -1180,4 +1260,5 @@ build();
 buildSparks();
 renderSparks();
 renderRitualJournal();
+updateInteractionModeUI();
 initializeEntryGate();

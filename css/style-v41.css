@@ -1010,3 +1010,144 @@ body::before{
   0%,100%{box-shadow:none}
   50%{box-shadow:0 0 35px rgba(173,34,34,.72)}
 }
+
+
+/* v4.1.21 — Livraison A : polissage visuel et ergonomique */
+
+/* Runes du fond gauche plus lisibles, sans dominer l’interface. */
+.board-wrap::before{
+  color:rgba(204,159,77,.145) !important;
+  font-size:clamp(24px,2.65vw,50px) !important;
+  text-shadow:
+    0 1px 0 rgba(0,0,0,.92),
+    0 0 5px rgba(204,159,77,.16) !important;
+  animation:background-runes-breathe 9s ease-in-out infinite;
+}
+
+@keyframes background-runes-breathe{
+  0%,100%{opacity:.72;filter:blur(.2px) brightness(.9)}
+  50%{opacity:1;filter:blur(0) brightness(1.2)}
+}
+
+/* Indicateur clair du mode interactif dans l’interface MJ. */
+.interaction-mode-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:0 0 10px;
+  padding:8px 10px;
+  border:1px solid #5c4623;
+  border-radius:8px;
+  background:#080706;
+}
+
+#interactionModeStatus{
+  color:#b9aa8f;
+  font-size:.9rem;
+  letter-spacing:.03em;
+}
+
+#interactionModeStatus[data-mode="purification"]{
+  color:#e5c878;
+  text-shadow:0 0 7px rgba(224,182,76,.35);
+}
+
+#interactionModeStatus[data-mode="swap"]{
+  color:#c891e4;
+  text-shadow:0 0 7px rgba(174,87,220,.38);
+}
+
+#cancelInteractionMode{
+  min-height:32px;
+  padding:5px 10px;
+  font-size:.8rem;
+}
+
+#cancelInteractionMode:disabled{
+  opacity:.38;
+  cursor:default;
+}
+
+/* Purification : rayon doré et onde douce. */
+.slot.purification-cleansed{
+  z-index:8;
+  animation:purification-cleanse-slot .9s ease-out;
+}
+
+.slot.purification-cleansed::after{
+  content:"";
+  position:absolute;
+  inset:-12%;
+  border-radius:50%;
+  border:2px solid rgba(255,223,125,.9);
+  animation:purification-cleanse-ring .9s ease-out forwards;
+  pointer-events:none;
+}
+
+.board.purification-wave{
+  animation:purification-board-wave .9s ease-out;
+}
+
+@keyframes purification-cleanse-slot{
+  0%{filter:brightness(1)}
+  35%{filter:brightness(2.15) drop-shadow(0 0 12px rgba(255,221,120,.95))}
+  100%{filter:brightness(1)}
+}
+
+@keyframes purification-cleanse-ring{
+  0%{opacity:1;transform:scale(.65)}
+  100%{opacity:0;transform:scale(1.7)}
+}
+
+@keyframes purification-board-wave{
+  0%,100%{filter:brightness(1)}
+  42%{filter:brightness(1.32) drop-shadow(0 0 18px rgba(226,180,76,.42))}
+}
+
+/* Corruption : ombre brève, vibration et installation de l’anneau rouge. */
+.slot.corruption-arriving{
+  z-index:8;
+  animation:corruption-arrival 1s ease-out;
+}
+
+.slot.corruption-arriving::before{
+  opacity:1 !important;
+  background:
+    radial-gradient(circle,rgba(42,0,0,.8),rgba(90,0,0,.24) 56%,transparent 72%);
+  animation:corruption-shadow-bloom 1s ease-out;
+}
+
+@keyframes corruption-arrival{
+  0%{transform:translate(-50%,-50%) scale(1);filter:brightness(1)}
+  18%{transform:translate(calc(-50% - 2px),-50%) scale(.98)}
+  34%{transform:translate(calc(-50% + 2px),calc(-50% + 1px)) scale(1.02)}
+  55%{filter:brightness(.58) saturate(1.4)}
+  100%{transform:translate(-50%,-50%) scale(1);filter:brightness(1)}
+}
+
+@keyframes corruption-shadow-bloom{
+  0%{opacity:0;transform:scale(.4)}
+  55%{opacity:.95;transform:scale(1.12)}
+  100%{opacity:0;transform:scale(1.35)}
+}
+
+/* Échange : rotation des deux glyphes et onde sombre sur le disque. */
+.slot.lokaug-swap-arrival img.placed{
+  animation:lokaug-glyph-arrival .95s cubic-bezier(.2,.8,.25,1);
+}
+
+.board.lokaug-swap-wave{
+  animation:lokaug-board-wave .95s ease-out;
+}
+
+@keyframes lokaug-glyph-arrival{
+  0%{opacity:.15;transform:rotate(-28deg) scale(.72);filter:brightness(.55)}
+  55%{opacity:1;transform:rotate(8deg) scale(1.08);filter:brightness(1.35)}
+  100%{transform:rotate(0) scale(1);filter:brightness(1)}
+}
+
+@keyframes lokaug-board-wave{
+  0%,100%{box-shadow:0 0 0 7px #15110c,0 0 0 9px #63491f,0 16px 42px #000,inset 0 0 85px #000}
+  48%{box-shadow:0 0 0 7px #15110c,0 0 0 9px #7b3e91,0 0 38px rgba(130,48,160,.52),inset 0 0 85px #000}
+}
