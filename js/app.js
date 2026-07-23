@@ -356,6 +356,38 @@ function speakVathkul(line){
   say(`Vathkül : ${quoted}`);
 }
 
+
+function chooseVathkulLine(lines){
+  if(!Array.isArray(lines) || lines.length===0){
+    return 'Le Monolithe demeure silencieux.';
+  }
+  return lines[Math.floor(Math.random()*lines.length)];
+}
+
+function inspectInnerEngravings(){
+  const dialogues=window.VATHKUL_DIALOGUES?.inspect || {};
+  const placedCount=placements.filter(Boolean).length;
+  const {good}=score();
+
+  let category='empty';
+
+  if(placedCount===0 || good===0){
+    category='empty';
+  }else if(good<=3){
+    category='few';
+  }else if(good<=6){
+    category='middle';
+  }else if(good===7){
+    category='almost';
+  }else{
+    category='perfect';
+  }
+
+  speakVathkul(chooseVathkulLine(dialogues[category]));
+  update();
+  document.getElementById('muralOverlay').classList.add('show');
+}
+
 function testConfiguration(){
   const placedCount=placements.filter(Boolean).length;
 
@@ -715,7 +747,7 @@ document.getElementById('memoryClose').onclick=()=>{
   document.getElementById('memoryOverlay').classList.remove('show');
   stateChangeHandler();
 };
-document.getElementById('openMural').onclick=()=>document.getElementById('muralOverlay').classList.add('show');
+document.getElementById('openMural').onclick=inspectInnerEngravings;
 document.getElementById('closeMural').onclick=()=>document.getElementById('muralOverlay').classList.remove('show');
 document.getElementById('muralOverlay').onclick=e=>{if(e.target.id==='muralOverlay')document.getElementById('muralOverlay').classList.remove('show');};
 
