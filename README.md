@@ -1,23 +1,25 @@
-# Project Monolith — v4.1.23
+# Project Monolith — v4.1.24 — Correctifs playtest
 
-## Éprouver la configuration
+## Colonne de droite
 
-Chaque tentative consomme désormais **1 Étincelle**, quel que soit le résultat.
+- la hauteur de l’interface est désormais fixe sur grand écran ;
+- le texte de Vathkül défile à l’intérieur de sa propre boîte ;
+- le journal défile à l’intérieur de son panneau ;
+- la zone du Monolithe ne s’agrandit plus quand du texte est ajouté ;
+- le drag & drop reste stable.
 
-Sans Étincelle restante, l’épreuve ne peut pas être lancée.
+## Liaisons entre glyphes
 
-## Mur runique
+Une liaison dorée apparaît entre deux positions voisines lorsque :
 
-La grande zone de drag & drop possède désormais un fond de pierre runique continu :
+- les deux glyphes sont correctement placés ;
+- les deux glyphes sont adjacents sur l’anneau ;
+- aucun des deux glyphes n’est corrompu.
 
-- texture de pierre sombre sur toute la surface ;
-- runes gravées partout ;
-- légère pulsation lumineuse ;
-- rendu inspiré du cercle central de « Examiner les gravures intérieures » ;
-- Monolithe et glyphes conservés au premier plan.
+Les liaisons sont recalculées après chaque rendu et lors d’un redimensionnement de la fenêtre.
 
 Commit conseillé :
 
-`Project Monolith v4.1.23 — Épreuve et mur runique`
+`Project Monolith v4.1.24 — Correctifs playtest`
 
 Aucun changement Firebase.

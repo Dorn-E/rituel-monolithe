@@ -1455,3 +1455,146 @@ body::before{
   0%,100%{opacity:.83;filter:brightness(.96)}
   50%{opacity:1;filter:brightness(1.20)}
 }
+
+
+/* v4.1.24 — Correctifs issus du playtest */
+
+/* La colonne de droite ne peut plus agrandir la zone du Monolithe. */
+.app-shell{
+  height:100vh;
+  max-height:100vh;
+  overflow:hidden;
+}
+
+.main-grid{
+  height:calc(100vh - 82px);
+  min-height:0 !important;
+  overflow:hidden;
+}
+
+.left-column,
+.right-column{
+  min-height:0;
+  height:100%;
+}
+
+.left-column{
+  grid-template-rows:minmax(0,1fr) 68px 155px !important;
+}
+
+.right-column{
+  grid-template-rows:minmax(0,1.02fr) minmax(0,.86fr) auto !important;
+  overflow:hidden;
+}
+
+.board-wrap{
+  min-height:0 !important;
+  height:100%;
+}
+
+.stone-panel{
+  min-height:0;
+  overflow:hidden;
+}
+
+.vathkul-dialogue{
+  min-height:0;
+  height:calc(100% - 54px) !important;
+  overflow:hidden;
+}
+
+.vathkul-voice-text{
+  min-height:0;
+  max-height:100%;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+}
+
+.ritual-journal{
+  min-height:0;
+  height:calc(100% - 8px);
+  max-height:100%;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+}
+
+.vathkul-voice-text::-webkit-scrollbar,
+.ritual-journal::-webkit-scrollbar{
+  width:8px;
+}
+
+.vathkul-voice-text::-webkit-scrollbar-thumb,
+.ritual-journal::-webkit-scrollbar-thumb{
+  background:#6a4d21;
+  border-radius:8px;
+}
+
+.vathkul-voice-text::-webkit-scrollbar-track,
+.ritual-journal::-webkit-scrollbar-track{
+  background:#080706;
+}
+
+/* Liaisons dorées entre deux glyphes voisins correctement placés. */
+.adjacency-link-layer{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:3;
+  pointer-events:none;
+  overflow:visible;
+}
+
+.adjacency-link{
+  stroke:#d8ad58;
+  stroke-width:.62;
+  stroke-linecap:round;
+  opacity:.82;
+  filter:drop-shadow(0 0 1.4px rgba(255,219,134,.95));
+  animation:adjacency-link-appear .45s ease-out both;
+}
+
+@keyframes adjacency-link-appear{
+  from{
+    opacity:0;
+    stroke-dasharray:1 6;
+  }
+  to{
+    opacity:.82;
+    stroke-dasharray:100 0;
+  }
+}
+
+/* Les cases et le visage restent au-dessus des liaisons. */
+.core{
+  z-index:5 !important;
+}
+
+.slot{
+  z-index:6 !important;
+}
+
+@media(max-width:1050px){
+  .app-shell{
+    height:auto;
+    max-height:none;
+    overflow:visible;
+  }
+
+  .main-grid{
+    height:auto;
+    overflow:visible;
+  }
+
+  .left-column,
+  .right-column{
+    height:auto;
+  }
+
+  .vathkul-voice-text,
+  .ritual-journal{
+    max-height:320px;
+  }
+}
