@@ -10,6 +10,7 @@ let purificationDC=20;
 let purificationAttemptPaid=false;
 let purificationAidPaid=false;
 let ritualDestroyed=false;
+let adjacencyLinksRevealed=false;
 let finalSequenceRunning=false;
 let lokaugSwapMode=false;
 let lokaugFirstSwapIndex=null;
@@ -88,7 +89,7 @@ const memories=[
 let placements=Array(8).fill(null);
 let order=[...schools];
 let selected=null;
-let life=15;
+let life=12;
 let memoryLevel=Array(8).fill(0);
 let corrupted=new Set();
 let lastGM=null;
@@ -101,6 +102,7 @@ let lastRenderedPlacements=Array(8).fill(null);
 let hasCompletedInitialRender=false;
 
 function invalidateEvaluation(){
+  clearRevealedLinks();
   evaluationVisible=false;
   finalReady=false;
   document.getElementById('core').classList.remove('ready');
@@ -183,11 +185,22 @@ function drop(e,i){
 }
 
 
+
+function clearRevealedLinks(){
+  adjacencyLinksRevealed=false;
+  const layer=document.getElementById('links');
+  if(layer)layer.innerHTML='';
+}
+
 function renderAdjacentCorrectLinks(){
   const layer=document.getElementById('links');
   if(!layer)return;
 
   layer.innerHTML='';
+
+  if(!adjacencyLinksRevealed)return;
+
+  let revealedIndex=0;
 
   for(let i=0;i<8;i++){
     const j=(i+1)%8;
@@ -205,6 +218,18 @@ function renderAdjacentCorrectLinks(){
     const [x1,y1]=pos[i];
     const [x2,y2]=pos[j];
 
+    const group=document.createElementNS('http://www.w3.org/2000/svg','g');
+    group.setAttribute('class','adjacency-link-group');
+    group.style.setProperty('--link-delay',`${revealedIndex*95}ms`);
+
+    const glow=document.createElementNS('http://www.w3.org/2000/svg','line');
+    glow.setAttribute('x1',String(x1));
+    glow.setAttribute('y1',String(y1));
+    glow.setAttribute('x2',String(x2));
+    glow.setAttribute('y2',String(y2));
+    glow.setAttribute('class','adjacency-link-glow');
+    glow.setAttribute('vector-effect','non-scaling-stroke');
+
     const line=document.createElementNS('http://www.w3.org/2000/svg','line');
     line.setAttribute('x1',String(x1));
     line.setAttribute('y1',String(y1));
@@ -212,7 +237,24 @@ function renderAdjacentCorrectLinks(){
     line.setAttribute('y2',String(y2));
     line.setAttribute('class','adjacency-link');
     line.setAttribute('vector-effect','non-scaling-stroke');
-    layer.appendChild(line);
+
+    const spark=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    spark.setAttribute('r','0.8');
+    spark.setAttribute('class','adjacency-link-spark');
+
+    const motion=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
+    motion.setAttribute('dur','2.8s');
+    motion.setAttribute('repeatCount','indefinite');
+    motion.setAttribute('begin',`${revealedIndex*0.18}s`);
+    motion.setAttribute('path',`M ${x1} ${y1} L ${x2} ${y2}`);
+    spark.appendChild(motion);
+
+    group.appendChild(glow);
+    group.appendChild(line);
+    group.appendChild(spark);
+    layer.appendChild(group);
+
+    revealedIndex++;
   }
 }
 
@@ -303,7 +345,7 @@ function score(){
 
 
 
-let previousLife=15;
+let previousLife=12;
 const spokenThresholds=new Set();
 const thresholdLines={
   12:'« Ne retenez pas votre main… Ces Étincelles ne m’ont jamais été données pour être conservées, mais pour accomplir mon serment. »',
@@ -318,7 +360,7 @@ function buildSparks(){
   const container=document.getElementById('sparks');
   if(!container || container.children.length===15)return;
   container.innerHTML='';
-  for(let i=0;i<15;i++){
+  for(let i=0;i<12;i++){
     const flame=document.createElement('span');
     flame.className='spark';
     flame.setAttribute('aria-hidden','true');
@@ -525,6 +567,7 @@ function cancelLokaugSwap(){
 }
 
 function chooseLokaugSwapTarget(index){
+  if(lokaugSwapMode && lokaugFirstSwapIndex!==null)clearRevealedLinks();
   if(!lokaugSwapMode)return false;
 
   if(!placements[index]){
@@ -769,6 +812,9 @@ function testConfiguration(){
 
   addJournalEntry('Une Étincelle est consacrée à l’épreuve de la configuration.','Le Monolithe');
 
+  adjacencyLinksRevealed=true;
+  renderAdjacentCorrectLinks();
+
   const {good}=score();
   const placedCount=placements.filter(Boolean).length;
   const countSentence=correctGlyphCountSentence(good);
@@ -897,6 +943,7 @@ function choosePurification(boosted){
 }
 
 function resolvePurification(success){
+  clearRevealedLinks();
   if(pendingPurification===null)return;
   const i=pendingPurification;
 
@@ -951,7 +998,7 @@ function initialSharedState(){
   };
 }
 function resetRitualState(){
-  spokenThresholds.clear();selected=null;previousLife=15;
+  spokenThresholds.clear();selected=null;previousLife=12;
   applySharedState(initialSharedState());
   document.getElementById('muralOverlay').classList.remove('show');
   document.getElementById('end').classList.remove('show');
@@ -1139,6 +1186,7 @@ function gmSwap(){
 }
 
 function gmCorrupt(){
+  clearRevealedLinks();
   cancelActiveInteractionMode();
   const filled=[...Array(8).keys()].filter(i=>placements[i]);
   if(!filled.length)return;

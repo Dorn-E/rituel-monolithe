@@ -1638,3 +1638,73 @@ body::before{
 .slot{
   z-index:6 !important;
 }
+
+
+/* v4.1.26 — Liaisons révélées uniquement après une épreuve */
+
+#links.link-layer{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:4 !important;
+  pointer-events:none;
+  overflow:visible;
+}
+
+.adjacency-link-group{
+  opacity:0;
+  animation:adjacency-group-reveal .45s ease-out forwards;
+  animation-delay:var(--link-delay,0ms);
+}
+
+.adjacency-link-glow{
+  stroke:rgba(228,178,67,.34);
+  stroke-width:4.6;
+  stroke-linecap:round;
+  filter:blur(2.2px);
+}
+
+.adjacency-link{
+  fill:none;
+  stroke:#ffd978 !important;
+  stroke-width:1.15 !important;
+  stroke-linecap:round;
+  opacity:1;
+  filter:
+    drop-shadow(0 0 1.6px rgba(255,239,184,1))
+    drop-shadow(0 0 5px rgba(215,159,42,.95));
+  stroke-dasharray:100;
+  stroke-dashoffset:100;
+  animation:
+    adjacency-link-draw .7s ease-out forwards,
+    adjacency-link-pulse 2.6s ease-in-out infinite 1s;
+  animation-delay:var(--link-delay,0ms),calc(var(--link-delay,0ms) + 800ms);
+}
+
+.adjacency-link-spark{
+  fill:#fff3b7;
+  filter:
+    drop-shadow(0 0 2px #fff)
+    drop-shadow(0 0 6px #e8af3f);
+  opacity:.95;
+}
+
+@keyframes adjacency-group-reveal{
+  to{opacity:1}
+}
+
+@keyframes adjacency-link-draw{
+  to{stroke-dashoffset:0}
+}
+
+@keyframes adjacency-link-pulse{
+  0%,100%{opacity:.78;stroke-width:1.05}
+  50%{opacity:1;stroke-width:1.38}
+}
+
+/* Douze Étincelles : la bande reste centrée et respirante. */
+.sparks{
+  grid-template-columns:repeat(12,minmax(13px,1fr)) !important;
+  max-width:690px;
+}
