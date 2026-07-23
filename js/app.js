@@ -803,7 +803,11 @@ function resolvePurification(success){
     const purifiedIndex=purificationTargetIndex;
 
     corrupted.delete(purifiedIndex);
-speakVathkul('Le glyphe retrouve sa pureté.');
+
+    const purifiedSlot=document.querySelector(`.slot[data-index="${purifiedIndex}"]`);
+    purifiedSlot?.classList.remove('corrupted');
+
+    speakVathkul('Le glyphe retrouve sa pureté.');
     addJournalEntry('Le glyphe ciblé a été purifié.');
 
     closePurificationFlow();
