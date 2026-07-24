@@ -54,9 +54,34 @@ function setInitializationLocked(locked){
     '.tile, .slot, #test, #openMural, #memory, #beginPurify, #lokaugSwap, #swap, #corrupt, #restore, #clear, #shuffle'
   ).forEach(element=>{
     if('disabled' in element){
-      element.disabled=initializationLocked || element.disabled;
+      if(initializationLocked){
+        if(!element.dataset.initDisabledState){
+          element.dataset.initDisabledState=element.disabled?'true':'false';
+        }
+        element.disabled=true;
+      }else{
+        const wasDisabled=element.dataset.initDisabledState==='true';
+        element.disabled=wasDisabled;
+        delete element.dataset.initDisabledState;
+      }
     }
+
     element.setAttribute('aria-disabled',initializationLocked?'true':'false');
+  });
+
+  if(!initializationLocked)ensureGMControlsUnlocked();
+}
+
+
+function ensureGMControlsUnlocked(){
+  if(initializationLocked || ritualDestroyed)return;
+
+  ['swap','corrupt','restore'].forEach(id=>{
+    const button=document.getElementById(id);
+    if(button && button.dataset.initDisabledState!=='true'){
+      button.disabled=false;
+      button.setAttribute('aria-disabled','false');
+    }
   });
 }
 

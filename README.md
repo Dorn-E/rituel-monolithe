@@ -1,30 +1,28 @@
-# Project Monolith — v4.5.4 — Corruption corrigée
+# Project Monolith — v4.5.5 — Boutons déverrouillés
 
-## Audit
+## Cause exacte
 
-Le bouton était bien présent et `gmCorrupt()` existait toujours.  
-Le problème venait de sorties anticipées silencieuses et d’un déclenchement
-trop fragile pour diagnostiquer l’état réel du rituel.
+Pendant l’initialisation, les boutons étaient désactivés avec :
 
-## Corrections fonctionnelles
+`element.disabled = initializationLocked || element.disabled`
 
-- bouton déclaré explicitement avec `type="button"` ;
-- liaison `click` explicite et protégée ;
-- message de Vathkül si le rituel se synchronise encore ;
-- message de Vathkül si aucun glyphe n’est posé ;
-- message si tous les glyphes posés sont déjà corrompus ;
-- état corrompu appliqué avant le rendu ;
-- modification marquée puis synchronisée une seule fois ;
-- bouton brièvement désactivé contre les doubles clics.
+Quand l’initialisation se terminait, `element.disabled` était déjà `true`.
+Le bouton restait donc désactivé définitivement.
 
-## Corrections visuelles
+Cela empêchait totalement :
 
-- anneau rouge permanent ;
-- halo cramoisi ;
-- pulsation ;
-- animation d’impact à l’arrivée de la corruption ;
-- glyphe toujours lisible.
+- le clic sur « Corrompre une gravure » ;
+- l’appel à `gmCorrupt()` ;
+- le message de Vathkül ;
+- l’animation et le halo rouge.
+
+## Correction
+
+- mémorisation de l’état initial de chaque bouton avant verrouillage ;
+- restauration exacte de cet état au déverrouillage ;
+- sécurité supplémentaire pour réactiver les contrôles MJ après synchronisation ;
+- aucun changement à la logique de corruption elle-même.
 
 Commit conseillé :
 
-`Project Monolith v4.5.4 — Corruption corrigée`
+`Project Monolith v4.5.5 — Boutons déverrouillés`
