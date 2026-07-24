@@ -1922,3 +1922,51 @@ body::before{
     repeating-conic-gradient(from 0deg,rgba(197,154,69,.12) 0 1deg,transparent 1deg 14deg),
     radial-gradient(circle,rgba(25,22,17,.92) 0,rgba(12,11,9,.90) 62%,rgba(4,4,4,.86) 100%) !important;
 }
+
+
+/* ===== v4.4.2 — 8 anneaux correctement positionnés et agrandis ===== */
+
+/* Taille plus généreuse, tout en gardant les 8 anneaux dans le disque. */
+.board .slot{
+  width:clamp(104px,12.2vw,142px) !important;
+  height:clamp(104px,12.2vw,142px) !important;
+  position:absolute !important;
+  transform:translate(-50%,-50%) !important;
+  z-index:8 !important;
+  box-sizing:border-box;
+}
+
+/* Les images restent parfaitement contenues dans les anneaux agrandis. */
+.board .slot img.placed{
+  width:82% !important;
+  height:82% !important;
+  max-width:82% !important;
+  max-height:82% !important;
+  object-fit:contain !important;
+  object-position:center !important;
+}
+
+/* Le sigil discret reste centré. */
+.board .slot .station-sigil{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* Sur écrans intermédiaires, on conserve une taille confortable sans débordement. */
+@media (max-width:1200px){
+  .board .slot{
+    width:clamp(92px,11.4vw,126px) !important;
+    height:clamp(92px,11.4vw,126px) !important;
+  }
+}
+
+/* Sur petits écrans, la taille suit le plateau. */
+@media (max-width:760px){
+  .board .slot{
+    width:clamp(72px,17vw,104px) !important;
+    height:clamp(72px,17vw,104px) !important;
+  }
+}

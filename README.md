@@ -1,24 +1,28 @@
-# Project Monolith — v4.4.1 — Correctif mur runique
-
-## Cause du problème
-
-Une ancienne règle CSS imposait :
-
-`display:none !important`
-
-sur `.board-wrap::before`, la couche choisie dans la v4.4.0.  
-L’image du mur ne pouvait donc pas apparaître.
+# Project Monolith — v4.4.2 — Huit anneaux
 
 ## Correction
 
-- utilisation de la vraie couche `.rune-wall-layer`, déjà présente dans le HTML ;
-- image de pierre appliquée directement à cette couche ;
-- suppression des anciennes grandes runes CSS ;
-- Monolithe, liaisons, emplacements et Vathkül maintenus au-dessus ;
-- légère transparence du disque afin de donner l’impression que le mécanisme est encastré dans la pierre.
+Les huit anneaux de drag & drop sont désormais :
 
-Aucun changement JavaScript ou Firebase.
+- tous visibles ;
+- correctement répartis autour du Monolithe ;
+- recentrés sur leurs coordonnées d’origine ;
+- agrandis pour améliorer la lisibilité et le confort de manipulation.
+
+## Cause du décalage
+
+Une règle CSS ajoutée lors de l’intégration du mur imposait `position: relative` aux `.slot`.
+Cela neutralisait leur positionnement absolu autour du cercle et provoquait leur décalage.
+
+## Modifications
+
+- rétablissement de `position: absolute` ;
+- rétablissement de `transform: translate(-50%, -50%)` ;
+- augmentation de la taille des anneaux ;
+- ajustement des glyphes à 82 % de l’anneau.
+
+Aucun changement JavaScript, Firebase ou logique de jeu.
 
 Commit conseillé :
 
-`Project Monolith v4.4.1 — Correctif mur runique`
+`Project Monolith v4.4.2 — Huit anneaux`
