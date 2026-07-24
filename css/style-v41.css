@@ -2916,3 +2916,120 @@ inset 0 -5px 8px rgba(255,255,255,.03),
     animation:none !important;
   }
 }
+
+
+/* ===== v4.6.2 — Épreuve animée de la configuration ===== */
+
+.board-wrap.configuration-analyzing .board{
+  animation:configuration-analysis-breath 1.15s ease-in-out infinite;
+}
+
+.board-wrap.configuration-analyzing .core{
+  box-shadow:
+    0 0 0 5px rgba(10,10,9,.98),
+    0 0 0 7px rgba(91,67,28,.92),
+    inset 0 0 24px rgba(0,0,0,.62),
+    0 0 22px rgba(210,154,51,.28),
+    0 8px 18px rgba(0,0,0,.72) !important;
+}
+
+.resonance-link{
+  opacity:0;
+  clip-path:inset(0 100% 0 0);
+  animation:
+    resonance-link-unveil .72s cubic-bezier(.16,.78,.2,1) forwards !important;
+  animation-delay:var(--link-delay,0ms) !important;
+}
+
+.resonance-link-filament{
+  transform:translateY(-50%) scaleX(0) !important;
+  animation:
+    resonance-filament-draw-v462 .72s cubic-bezier(.16,.78,.2,1) forwards !important;
+  animation-delay:var(--link-delay,0ms) !important;
+}
+
+.resonance-link-glow{
+  transform:translateY(-50%) scaleX(0);
+  transform-origin:left center;
+  animation:
+    resonance-glow-draw-v462 .72s cubic-bezier(.16,.78,.2,1) forwards,
+    resonance-glow-pulse-strong 2.4s ease-in-out infinite !important;
+  animation-delay:
+    var(--link-delay,0ms),
+    calc(var(--link-delay,0ms) + .72s) !important;
+}
+
+.resonance-link-spark{
+  animation:
+    resonance-spark-first-pass .76s cubic-bezier(.12,.72,.18,1) 1 forwards,
+    resonance-spark-travel 2.7s linear infinite !important;
+  animation-delay:
+    calc(var(--link-delay,0ms) + .10s),
+    calc(var(--link-delay,0ms) + .94s) !important;
+}
+
+@keyframes resonance-link-unveil{
+  0%{
+    opacity:0;
+    clip-path:inset(0 100% 0 0);
+  }
+  16%{opacity:1}
+  100%{
+    opacity:1;
+    clip-path:inset(0 0 0 0);
+  }
+}
+
+@keyframes resonance-filament-draw-v462{
+  from{transform:translateY(-50%) scaleX(0)}
+  to{transform:translateY(-50%) scaleX(1)}
+}
+
+@keyframes resonance-glow-draw-v462{
+  from{
+    opacity:0;
+    transform:translateY(-50%) scaleX(0);
+  }
+  to{
+    opacity:1;
+    transform:translateY(-50%) scaleX(1);
+  }
+}
+
+@keyframes resonance-spark-first-pass{
+  0%{
+    left:0;
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.5);
+  }
+  12%{opacity:1}
+  55%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1.18);
+  }
+  100%{
+    left:100%;
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.5);
+  }
+}
+
+@keyframes configuration-analysis-breath{
+  0%,100%{
+    filter:contrast(1.05) saturate(.95) brightness(1);
+  }
+  50%{
+    filter:contrast(1.08) saturate(1.02) brightness(1.055);
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .board-wrap.configuration-analyzing .board,
+  .resonance-link,
+  .resonance-link-filament,
+  .resonance-link-glow,
+  .resonance-link-spark{
+    animation-duration:.01ms !important;
+    animation-delay:0ms !important;
+  }
+}

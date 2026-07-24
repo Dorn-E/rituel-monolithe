@@ -15,6 +15,8 @@ let purificationAttemptPaid=false;
 let purificationAidPaid=false;
 let ritualDestroyed=false;
 let adjacencyLinksRevealed=false;
+let configurationAnalysisToken=0;
+let configurationAnalysisRunning=false;
 let finalSequenceRunning=false;
 let lokaugSwapMode=false;
 let lokaugFirstSwapIndex=null;
@@ -176,6 +178,11 @@ let lastRenderedPlacements=Array(8).fill(null);
 let hasCompletedInitialRender=false;
 
 function invalidateEvaluation(){
+  configurationAnalysisToken+=1;
+  configurationAnalysisRunning=false;
+  document.querySelector('.board-wrap')?.classList.remove('configuration-analyzing');
+  const testButton=document.getElementById('test');
+  if(testButton && !ritualDestroyed)testButton.disabled=false;
   markLocalMutation();
   clearRevealedLinks();
   evaluationVisible=false;
@@ -305,7 +312,8 @@ function renderAdjacentCorrectLinks(){
     link.style.top=`${y1}%`;
     link.style.width=`${length}%`;
     link.style.transform=`translateY(-50%) rotate(${angle}deg)`;
-    link.style.setProperty('--link-delay',`${revealedIndex*110}ms`);
+    link.style.setProperty('--link-delay',`${revealedIndex*150}ms`);
+    link.style.setProperty('--link-index',revealedIndex);
 
     const glow=document.createElement('span');
     glow.className='resonance-link-glow';
@@ -878,34 +886,26 @@ function correctGlyphCountSentence(count){
   return `${numberWords[count]} glyphes occupent leur juste place.`;
 }
 
-function testConfiguration(){
-  if(initializationLocked)return;
-  markLocalMutation();
-  if(ritualDestroyed || finalSequenceRunning)return;
+function finishConfigurationVerdict(token,good,placedCount){
+  if(token!==configurationAnalysisToken)return;
 
-  if(!spendSparks(1)){
-    speakVathkul('Le rituel ne peut plus être éprouvé. Les Étincelles se sont éteintes.');
-    addJournalEntry('La configuration ne peut pas être éprouvée : aucune Étincelle ne demeure.','Le Monolithe');
-    update();
-    return;
-  }
+  configurationAnalysisRunning=false;
+  document.querySelector('.board-wrap')?.classList.remove('configuration-analyzing');
 
-  addJournalEntry('Une Étincelle est consacrée à l’épreuve de la configuration.','Le Monolithe');
+  const testButton=document.getElementById('test');
+  if(testButton)testButton.disabled=false;
 
-  adjacencyLinksRevealed=true;
-  renderAdjacentCorrectLinks();
-
-  const {good}=score();
-  const placedCount=placements.filter(Boolean).length;
   const countSentence=correctGlyphCountSentence(good);
 
   if(placedCount===0){
     speakVathkul(`Le Monolithe demeure silencieux. ${countSentence}`);
+    markLocalMutation();
     update();
     return;
   }
 
   if(isPerfectConfiguration()){
+    markLocalMutation();
     startFinalRitualSequence();
     return;
   }
@@ -918,6 +918,7 @@ function testConfiguration(){
       ()=>document.querySelector('.board-wrap')?.classList.remove('configuration-corrupted'),
       900
     );
+    markLocalMutation();
     update();
     return;
   }
@@ -929,12 +930,14 @@ function testConfiguration(){
       ()=>document.querySelector('.board-wrap')?.classList.remove('configuration-close'),
       1000
     );
+    markLocalMutation();
     update();
     return;
   }
 
   if(placedCount<8){
     speakVathkul(`La configuration est trop incomplète pour être éprouvée. ${countSentence}`);
+    markLocalMutation();
     update();
     return;
   }
@@ -945,7 +948,60 @@ function testConfiguration(){
     ()=>document.querySelector('.board-wrap')?.classList.remove('configuration-failed'),
     700
   );
+  markLocalMutation();
   update();
+}
+
+function testConfiguration(){
+  if(initializationLocked || configurationAnalysisRunning)return;
+  if(ritualDestroyed || finalSequenceRunning)return;
+
+  if(!spendSparks(1)){
+    speakVathkul('Le rituel ne peut plus être éprouvé. Les Étincelles se sont éteintes.');
+    addJournalEntry('La configuration ne peut pas être éprouvée : aucune Étincelle ne demeure.','Le Monolithe');
+    update();
+    return;
+  }
+
+  addJournalEntry('Une Étincelle est consacrée à l’épreuve de la configuration.','Le Monolithe');
+
+  configurationAnalysisToken+=1;
+  const token=configurationAnalysisToken;
+  configurationAnalysisRunning=true;
+
+  const testButton=document.getElementById('test');
+  if(testButton)testButton.disabled=true;
+
+  clearRevealedLinks();
+  document.querySelector('.board-wrap')?.classList.add('configuration-analyzing');
+
+  const {good}=score();
+  const placedCount=placements.filter(Boolean).length;
+
+  window.setTimeout(()=>{
+    if(token!==configurationAnalysisToken)return;
+
+    adjacencyLinksRevealed=true;
+    markLocalMutation();
+    renderAdjacentCorrectLinks();
+
+    let correctAdjacentLinks=0;
+    for(let i=0;i<8;i++){
+      const j=(i+1)%8;
+      const firstCorrect=placements[i]===solution[i]&&!corrupted.has(i);
+      const secondCorrect=placements[j]===solution[j]&&!corrupted.has(j);
+      if(firstCorrect&&secondCorrect)correctAdjacentLinks++;
+    }
+
+    const drawingDuration=correctAdjacentLinks>0
+      ? 720+((correctAdjacentLinks-1)*150)
+      : 520;
+
+    window.setTimeout(
+      ()=>finishConfigurationVerdict(token,good,placedCount),
+      drawingDuration
+    );
+  },180);
 }
 
 function awakenMemory(){

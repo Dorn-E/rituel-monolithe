@@ -1,37 +1,35 @@
-# Project Monolith — v4.6.1b — Pose de glyphe corrigée
+# Project Monolith — v4.6.2 — Épreuve animée
 
-## Correctif principal
+## Nouvelle séquence
 
-Les glyphes sont des images carrées sur fond noir.  
-La v4.6.1 affichait à nouveau ce carré complet, qui débordait largement des cavités.
+Lorsque la configuration est éprouvée :
 
-Cette version :
+1. une Étincelle est dépensée immédiatement ;
+2. les anciennes liaisons disparaissent ;
+3. le Monolithe entre brièvement en phase d’analyse ;
+4. les liaisons correctes se dessinent progressivement ;
+5. une énergie dorée parcourt chaque nouvelle liaison ;
+6. le verdict et le nombre de glyphes bien placés apparaissent à la fin.
 
-- masque chaque glyphe dans un cercle ;
-- recentre précisément l’image ;
-- conserve le redimensionnement spécifique du bouclier ;
-- empêche tout fond noir carré de dépasser du logement.
+## Sécurité
 
-## Animation de pose retravaillée
+Si un glyphe est déplacé pendant l’analyse :
 
-L’animation est désormais centrée sur la cavité :
-
-- onde dorée plus visible ;
-- bref éclair dans la pierre ;
-- cavité qui semble absorber le glyphe ;
-- léger rebond d’emboîtement ;
-- durée totale d’environ une seconde.
+- l’animation est annulée ;
+- les liaisons sont effacées ;
+- aucun ancien verdict n’est affiché ;
+- le bouton d’épreuve redevient disponible.
 
 ## Inchangé
 
-- drag & drop ;
+- coût d’une Étincelle ;
+- logique du score ;
+- conditions de victoire ;
 - Firebase ;
 - synchronisation ;
 - corruption ;
-- purification ;
-- liaisons ;
-- logique du rituel.
+- purification.
 
 Commit conseillé :
 
-`Project Monolith v4.6.1b — Pose glyphe corrigée`
+`Project Monolith v4.6.2 — Épreuve animée`
