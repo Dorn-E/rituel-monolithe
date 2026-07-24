@@ -163,13 +163,54 @@ function toggle() {
     }
   }
 
+
+  function openAudioSettings() {
+    const overlay = document.getElementById("audioSettingsOverlay");
+    if (!overlay) return;
+
+    overlay.classList.add("show");
+    overlay.setAttribute("aria-hidden", "false");
+    updateControls();
+
+    window.setTimeout(() => {
+      document.getElementById("audioToggle")?.focus();
+    }, 20);
+  }
+
+  function closeAudioSettings() {
+    const overlay = document.getElementById("audioSettingsOverlay");
+    if (!overlay) return;
+
+    overlay.classList.remove("show");
+    overlay.setAttribute("aria-hidden", "true");
+    document.getElementById("openAudioSettings")?.focus();
+  }
+
   function initializeControls() {
     const toggleButton = document.getElementById("audioToggle");
     const volumeInput = document.getElementById("audioVolume");
+    const openButton = document.getElementById("openAudioSettings");
+    const closeButton = document.getElementById("closeAudioSettings");
+    const closeBottomButton = document.getElementById("closeAudioSettingsBottom");
+    const overlay = document.getElementById("audioSettingsOverlay");
 
     toggleButton?.addEventListener("click", toggle);
     volumeInput?.addEventListener("input", event => {
       setVolume(Number(event.target.value) / 100);
+    });
+
+    openButton?.addEventListener("click", openAudioSettings);
+    closeButton?.addEventListener("click", closeAudioSettings);
+    closeBottomButton?.addEventListener("click", closeAudioSettings);
+
+    overlay?.addEventListener("click", event => {
+      if (event.target === overlay) closeAudioSettings();
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && overlay?.classList.contains("show")) {
+        closeAudioSettings();
+      }
     });
 
     updateControls();

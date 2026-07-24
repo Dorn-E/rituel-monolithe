@@ -1,14 +1,14 @@
 <!doctype html>
-<!-- Project Monolith v4.7.1b — interface validée -->
+<!-- Project Monolith v4.7.2b — interface validée -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Le Rituel du Monolithe — v4.7.1b</title>
+<title>Le Rituel du Monolithe — v4.7.2b</title>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<link rel="stylesheet" href="css/style-v41.css?v=4.7.1">
+<link rel="stylesheet" href="css/style-v41.css?v=4.7.2">
 </head>
 <body data-build="4.1.0">
 <div class="entry-gate" id="entryGate" aria-modal="true" role="dialog">
@@ -85,33 +85,12 @@
           <button id="openMural">Examiner les gravures intérieures</button>
           <button id="memory">Éveiller un souvenir</button>
           <button id="beginPurify">Purifier une gravure</button>
+          <button id="openAudioSettings" type="button">Gestion du son</button>
           <button class="utility-hidden" id="clear">Retirer tous les glyphes</button>
           <button class="utility-hidden" id="shuffle">Mélanger les glyphes</button>
         </div>
       </section>
-
-      <section class="stone-panel audio-panel" id="audioControls" aria-labelledby="audioPanelTitle">
-        <h2 id="audioPanelTitle">Ambiance du Monolithe</h2>
-        <div class="audio-panel-body">
-          <button id="audioToggle" type="button" class="audio-toggle" aria-pressed="false">
-            <span class="audio-toggle-icon" aria-hidden="true">🔇</span>
-            <span class="audio-toggle-label">Son coupé</span>
-          </button>
-
-          <label class="audio-volume" for="audioVolume">
-            <span class="audio-volume-label">Volume général</span>
-            <input id="audioVolume" type="range" min="0" max="100" step="1" value="55">
-            <output id="audioVolumeValue" for="audioVolume">55 %</output>
-          </label>
-
-          <p class="audio-memory-status" id="audioMemoryStatus">
-            Les préférences sont mémorisées dans ce navigateur.
-          </p>
-        </div>
-      </section>
-
-
-      <div class="memory-panel utility-hidden">
+<div class="memory-panel utility-hidden">
         <h3>Dernier souvenir révélé</h3>
         <div class="memory-text" id="memoryText">Sélectionnez une gravure du cercle, puis demandez à Vathkül d’éveiller un souvenir.</div>
       </div>
@@ -188,10 +167,10 @@
 <div class="overlay" id="victory"><div class="modal-card"><h2>Le Monolithe est détruit</h2><p>Vathkül libère le Sang de la Terre. Les huit fonctions exécutent le calcul de dissolution et l’architecture planaire du Monolithe s’effondre sur elle-même.</p><button onclick="location.reload()">Rejouer</button></div></div>
 <div class="overlay" id="end"><div class="modal-card"><h2>La dernière Étincelle s’éteint</h2><p>Son énergie est consumée. Le Monolithe conserve la dernière configuration éprouvée et le calcul planaire échappe désormais à son contrôle.</p><button onclick="location.reload()">Recommencer</button></div></div>
 
-<script src="js/vathkul-dialogues.js?v=4.7.1" defer></script>
-<script src="js/audio.js?v=4.7.1"></script>
-<script src="js/app.js?v=4.7.1" defer></script>
-<script type="module" src="js/sync.js?v=4.7.1"></script>
+<script src="js/vathkul-dialogues.js?v=4.7.2" defer></script>
+<script src="js/audio.js?v=4.7.2"></script>
+<script src="js/app.js?v=4.7.2" defer></script>
+<script type="module" src="js/sync.js?v=4.7.2"></script>
 
   <div class="overlay" id="purificationFlowOverlay" aria-hidden="true">
     <div class="modal purification-flow-modal" role="dialog" aria-modal="true" aria-labelledby="purificationFlowTitle">
@@ -222,7 +201,37 @@
   </div>
 
 
-  <div id="finalRitualOverlay" class="final-ritual-overlay" aria-hidden="true">
+  
+  <div class="overlay audio-settings-overlay" id="audioSettingsOverlay" aria-hidden="true">
+    <div class="modal audio-settings-modal" role="dialog" aria-modal="true" aria-labelledby="audioPanelTitle">
+      <button class="modal-close" id="closeAudioSettings" type="button" aria-label="Fermer">×</button>
+
+      <div id="audioControls" class="audio-controls-modal">
+        <h2 id="audioPanelTitle">Ambiance du Monolithe</h2>
+
+        <div class="audio-panel-body">
+          <button id="audioToggle" type="button" class="audio-toggle" aria-pressed="false">
+            <span class="audio-toggle-icon" aria-hidden="true">🔇</span>
+            <span class="audio-toggle-label">Son coupé</span>
+          </button>
+
+          <label class="audio-volume" for="audioVolume">
+            <span class="audio-volume-label">Volume général</span>
+            <input id="audioVolume" type="range" min="0" max="100" step="1" value="55">
+            <output id="audioVolumeValue" for="audioVolume">55 %</output>
+          </label>
+
+          <p class="audio-memory-status" id="audioMemoryStatus">
+            Les préférences sont mémorisées dans ce navigateur.
+          </p>
+
+          <button id="closeAudioSettingsBottom" type="button" class="audio-close-button">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div id="finalRitualOverlay" class="final-ritual-overlay" aria-hidden="true">
     <div class="final-white-flash"></div>
     <div class="final-message">La présence de Vathkül s’est éteinte.</div>
   </div>
