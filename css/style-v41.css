@@ -1801,3 +1801,25 @@ body::before{
 @keyframes ritual-init-spin{
   to{transform:rotate(360deg)}
 }
+
+
+/* v4.3.2 — Ajustement du Monolithe */
+.board-wrap{
+  padding:14px !important;
+  box-sizing:border-box;
+}
+
+.board{
+  width:min(66.5vh,676px,62.5vw) !important;
+  height:min(66.5vh,676px,62.5vw) !important;
+  max-width:100%;
+  max-height:100%;
+  margin:auto;
+}
+
+@media (max-width:1050px){
+  .board{
+    width:min(88vw,676px) !important;
+    height:min(88vw,676px) !important;
+  }
+}
