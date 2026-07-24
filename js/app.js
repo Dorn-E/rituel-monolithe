@@ -587,6 +587,8 @@ function playGlyphPlacementEffect(index){
   if(!slot)return;
 
   slot.classList.remove('glyph-placement-impact');
+  slot.querySelectorAll('.glyph-placement-wave,.glyph-placement-flash').forEach(node=>node.remove());
+
   void slot.offsetWidth;
   slot.classList.add('glyph-placement-impact');
 
@@ -602,7 +604,7 @@ function playGlyphPlacementEffect(index){
     wave.remove();
     flash.remove();
     slot.classList.remove('glyph-placement-impact');
-  },900);
+  },1050);
 }
 
 function pulseSlotEffect(index,className,duration=850){

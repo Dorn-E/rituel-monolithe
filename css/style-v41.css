@@ -2741,3 +2741,178 @@ inset 0 -5px 8px rgba(255,255,255,.03),
     animation:none !important;
   }
 }
+
+
+/* ===== v4.6.1b — Correction intégration des glyphes et animation de pose ===== */
+
+/*
+  Les images embarquent un fond noir carré.
+  On les masque dans un cercle légèrement plus petit que la cavité pour que
+  seul le sigil utile reste visible et que le carré noir ne déborde plus.
+*/
+.board .slot{
+  overflow:hidden !important;
+  isolation:isolate;
+}
+
+.board .slot img.placed{
+  position:absolute !important;
+  left:50% !important;
+  top:50% !important;
+  transform:translate(-50%,-50%) !important;
+  width:88% !important;
+  height:88% !important;
+  max-width:88% !important;
+  max-height:88% !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  border-radius:50% !important;
+  clip-path:circle(49% at 50% 50%) !important;
+  background:#000 !important;
+  z-index:4 !important;
+  transition:
+    transform .28s cubic-bezier(.2,.8,.2,1),
+    filter .28s ease !important;
+}
+
+/* Ajustement spécifique du bouclier, plus vertical que les autres glyphes. */
+.board .slot img.placed[data-school="abjuration"]{
+  width:76% !important;
+  height:82% !important;
+  max-width:76% !important;
+  max-height:82% !important;
+  object-position:center 48% !important;
+  clip-path:circle(49% at 50% 50%) !important;
+}
+
+/* L'effet de pose anime la cavité entière, pas le carré de l'image. */
+.board .slot.glyph-placement-impact{
+  animation:glyph-cavity-impact .62s cubic-bezier(.16,.82,.22,1) both !important;
+}
+
+.board .slot.glyph-placement-impact img.placed{
+  animation:glyph-seat-impact-fixed .58s cubic-bezier(.16,.82,.22,1) both !important;
+}
+
+.glyph-placement-wave,
+.glyph-placement-flash{
+  position:absolute;
+  left:50%;
+  top:50%;
+  border-radius:50%;
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+}
+
+.glyph-placement-wave{
+  width:86%;
+  height:86%;
+  z-index:7;
+  border:3px solid rgba(255,218,128,.92);
+  box-shadow:
+    0 0 9px rgba(255,218,128,.78),
+    0 0 18px rgba(221,159,48,.52),
+    inset 0 0 7px rgba(255,239,182,.28);
+  animation:glyph-placement-wave-fixed .90s cubic-bezier(.12,.72,.18,1) forwards;
+}
+
+.glyph-placement-flash{
+  width:88%;
+  height:88%;
+  z-index:6;
+  background:
+    radial-gradient(circle,
+      rgba(255,245,197,.56) 0%,
+      rgba(255,215,118,.24) 34%,
+      rgba(224,156,45,.09) 58%,
+      transparent 74%);
+  filter:blur(1px);
+  animation:glyph-placement-flash-fixed .62s ease-out forwards;
+}
+
+@keyframes glyph-cavity-impact{
+  0%{
+    box-shadow:
+      inset 0 12px 18px rgba(0,0,0,.45),
+      inset 0 -5px 8px rgba(255,255,255,.03),
+      0 0 0 1px rgba(20,20,20,.5),
+      0 2px 6px rgba(0,0,0,.4);
+  }
+  35%{
+    box-shadow:
+      inset 0 15px 24px rgba(0,0,0,.64),
+      inset 0 -2px 5px rgba(255,235,180,.08),
+      0 0 0 3px rgba(230,179,77,.54),
+      0 0 20px rgba(226,164,53,.52);
+  }
+  100%{
+    box-shadow:
+      inset 0 12px 18px rgba(0,0,0,.45),
+      inset 0 -5px 8px rgba(255,255,255,.03),
+      0 0 0 1px rgba(20,20,20,.5),
+      0 2px 6px rgba(0,0,0,.4);
+  }
+}
+
+@keyframes glyph-seat-impact-fixed{
+  0%{
+    transform:translate(-50%,-50%) scale(.90);
+    filter:
+      brightness(1.55)
+      drop-shadow(0 0 10px rgba(255,217,121,.74))
+      drop-shadow(0 2px 2px rgba(0,0,0,.95));
+  }
+  48%{
+    transform:translate(-50%,-50%) scale(1.025);
+    filter:
+      brightness(1.20)
+      drop-shadow(0 0 7px rgba(255,217,121,.48))
+      drop-shadow(0 2px 2px rgba(0,0,0,.95));
+  }
+  100%{
+    transform:translate(-50%,-50%) scale(1);
+  }
+}
+
+@keyframes glyph-placement-wave-fixed{
+  0%{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(.70);
+  }
+  55%{
+    opacity:.82;
+  }
+  100%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(1.52);
+  }
+}
+
+@keyframes glyph-placement-flash-fixed{
+  0%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.60);
+  }
+  22%{
+    opacity:1;
+  }
+  100%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(1.16);
+  }
+}
+
+/* Le plateau inférieur conserve ses dimensions propres. */
+.tile img{
+  object-fit:contain !important;
+}
+
+/* Réduction des mouvements pour les utilisateurs concernés. */
+@media (prefers-reduced-motion:reduce){
+  .board .slot.glyph-placement-impact,
+  .board .slot.glyph-placement-impact img.placed,
+  .glyph-placement-wave,
+  .glyph-placement-flash{
+    animation:none !important;
+  }
+}
