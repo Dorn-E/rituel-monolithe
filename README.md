@@ -1,26 +1,32 @@
-# Project Monolith — v4.4.6 — Livraison B2 : logements sculptés
+# Project Monolith — v4.5.0 — Texture du Monolithe
 
-## Modifications visuelles
+## Nouvelle direction graphique
 
-- cavités plus profondes et plus sombres ;
-- chanfrein de pierre autour des huit logements ;
-- arêtes légèrement usées ;
-- aucun symbole visible lorsque le logement est vide ;
-- glyphes visuellement encastrés à fleur de pierre ;
-- très discret filet doré uniquement dans la rainure lorsqu’un glyphe est présent.
+Le disque du Monolithe utilise désormais une véritable texture de basalte :
+
+- pierre plus sombre ;
+- matière irrégulière ;
+- gravures et anneaux intégrés à la texture ;
+- huit cavités sculptées visibles sous les zones interactives ;
+- tête actuelle de Vathkül conservée au premier plan.
+
+## Intégration
+
+- nouvel asset : `assets/monolith-basalt-texture.png` ;
+- les anciens anneaux CSS sont rendus transparents ;
+- les zones de drag & drop restent interactives ;
+- les cavités vides ne montrent aucun symbole ;
+- les glyphes, liaisons, animations et mécaniques sont conservés.
 
 ## Inchangé
 
-- positions et tailles des logements ;
-- taille et identité des glyphes ;
-- drag & drop ;
-- liaisons ;
 - JavaScript ;
 - Firebase ;
-- mécaniques du rituel ;
+- positions des huit logements ;
+- drag & drop ;
 - partie inférieure de l’interface ;
-- portrait de Vathkül.
+- règles du rituel.
 
 Commit conseillé :
 
-`Project Monolith v4.4.6 — B2 Logements sculptés`
+`Project Monolith v4.5.0 — Texture du Monolithe`
