@@ -1,39 +1,48 @@
-# Project Monolith — v4.7.2 — Gestion du son en modale
+# Project Monolith — v4.8.0A — Infrastructure audio
 
-## Modification d’interface
+## Nouvelle architecture
 
-Le panneau audio fixe a été retiré de la colonne de droite.
+Cette version prépare l’intégration professionnelle du pack sonore définitif.
 
-Un bouton **Gestion du son** est maintenant placé dans
-**Actions du rituel**. Il ouvre une fenêtre modale contenant :
+### Gestionnaire audio
 
-- activation / désactivation du son ;
-- volume général ;
-- pourcentage du volume ;
-- rappel de la mémorisation locale ;
-- bouton de fermeture.
+- gains individuels par événement ;
+- groupes audio ;
+- priorités ;
+- délais anti-répétition ;
+- nombre maximal de voix simultanées ;
+- arrêt et fondu d’un groupe sonore ;
+- préchargement ;
+- détection des fichiers manquants ;
+- aucune erreur utilisateur si un fichier est absent.
 
-## Fermeture de la fenêtre
+### Modale audio
 
-La modale peut être fermée :
+Un bouton **Tester les sons** joue une séquence de démonstration :
 
-- avec la croix ;
-- avec le bouton Fermer ;
-- en cliquant hors de la fenêtre ;
-- avec la touche Échap.
+1. pose d’un glyphe ;
+2. corruption ;
+3. purification ;
+4. liaison ;
+5. configuration parfaite ;
+6. pulsation finale.
 
-## Persistance
+La modale signale les fichiers manquants.
 
-Les préférences `localStorage` de la v4.7.1 sont conservées.
+### Paramètres techniques
+
+Les gains de référence et noms des fichiers sont documentés dans :
+
+`assets/audio/audio-manifest.json`
 
 ## Inchangé
 
-- gestionnaire audio ;
-- événements sonores déjà câblés ;
-- Firebase ;
 - gameplay ;
-- mise en page principale.
+- Firebase ;
+- synchronisation ;
+- graphismes ;
+- règles du rituel.
 
 Commit conseillé :
 
-`Project Monolith v4.7.2 — Gestion du son en modale`
+`Project Monolith v4.8.0A — Infrastructure audio`

@@ -1,0 +1,62 @@
+{
+  "version": "4.8.0A",
+  "description": "Audio event mapping and mixing parameters.",
+  "sounds": {
+    "glyphPlace": {
+      "file": "glyph-place.ogg",
+      "gain": 0.7
+    },
+    "glyphRemove": {
+      "file": "glyph-remove.ogg",
+      "gain": 0.45
+    },
+    "corruption": {
+      "file": "corruption.ogg",
+      "gain": 0.85
+    },
+    "purification": {
+      "file": "purification.ogg",
+      "gain": 0.65
+    },
+    "configurationStart": {
+      "file": "configuration-start.ogg",
+      "gain": 0.42
+    },
+    "linkReveal": {
+      "file": "link-reveal.ogg",
+      "gain": 0.34
+    },
+    "configurationSuccess": {
+      "file": "configuration-success.ogg",
+      "gain": 0.72
+    },
+    "configurationFailure": {
+      "file": "configuration-failure.ogg",
+      "gain": 0.4
+    },
+    "vathkulMessage": {
+      "file": "vathkul-message.ogg",
+      "gain": 0.18
+    },
+    "finalCharge": {
+      "file": "final-charge.ogg",
+      "gain": 0.8
+    },
+    "finalPulse": {
+      "file": "final-pulse.ogg",
+      "gain": 0.82
+    },
+    "finalFlash": {
+      "file": "final-flash.ogg",
+      "gain": 0.68
+    },
+    "finalCrack": {
+      "file": "final-crack.ogg",
+      "gain": 0.88
+    },
+    "finalDestruction": {
+      "file": "final-destruction.ogg",
+      "gain": 0.92
+    }
+  }
+}
