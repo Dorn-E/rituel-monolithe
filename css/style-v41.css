@@ -1854,3 +1854,71 @@ body::before{
   filter:drop-shadow(0 0 8px rgba(0,0,0,.9))
          drop-shadow(0 0 18px rgba(0,0,0,.45));
 }
+
+
+/* ===== v4.4.1 — Correctif réel du mur runique ===== */
+
+/* Le pseudo-élément historique reste désactivé. */
+.board-wrap::before{
+  content:none !important;
+  display:none !important;
+}
+
+/* La vraie couche présente dans le HTML porte désormais la texture. */
+.rune-wall-layer{
+  position:absolute !important;
+  inset:0 !important;
+  z-index:0 !important;
+  display:block !important;
+  pointer-events:none !important;
+  opacity:1 !important;
+  background:
+    radial-gradient(circle at 50% 48%,rgba(0,0,0,.08) 0 28%,rgba(0,0,0,.24) 66%,rgba(0,0,0,.56) 100%),
+    linear-gradient(rgba(0,0,0,.18),rgba(0,0,0,.18)),
+    url("../assets/stone-wall-background.png") center center / cover no-repeat !important;
+  filter:saturate(.82) brightness(.76) contrast(1.08);
+  overflow:hidden;
+}
+
+/* Suppression des anciennes grandes runes CSS qui masquaient la pierre. */
+.rune-wall-layer::before,
+.rune-wall-layer::after{
+  content:none !important;
+  display:none !important;
+}
+
+/* Le Monolithe et tous ses éléments interactifs restent au-dessus. */
+.board-wrap > .board{
+  position:relative !important;
+  z-index:5 !important;
+}
+
+.board .ring{
+  z-index:6;
+}
+
+#links,
+.resonance-link-layer{
+  z-index:7 !important;
+}
+
+.board .slot{
+  z-index:8 !important;
+}
+
+.board .core{
+  z-index:9 !important;
+  filter:
+    drop-shadow(0 0 10px rgba(0,0,0,.95))
+    drop-shadow(0 0 22px rgba(0,0,0,.58));
+}
+
+/* Légère transparence du disque afin que la pierre paraisse derrière le mécanisme,
+   tout en conservant une excellente lisibilité des tracés dorés. */
+.board{
+  background:
+    radial-gradient(circle at 50% 50%,transparent 0 23%,rgba(197,154,69,.09) 23.4% 24%,transparent 24.4%),
+    repeating-radial-gradient(circle,transparent 0 7.2%,rgba(197,154,69,.1) 7.4% 7.7%,transparent 7.9% 10.2%),
+    repeating-conic-gradient(from 0deg,rgba(197,154,69,.12) 0 1deg,transparent 1deg 14deg),
+    radial-gradient(circle,rgba(25,22,17,.92) 0,rgba(12,11,9,.90) 62%,rgba(4,4,4,.86) 100%) !important;
+}

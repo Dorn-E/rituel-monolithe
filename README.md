@@ -1,30 +1,24 @@
-# Project Monolith — v4.3.1 — Verrouillage d’initialisation
+# Project Monolith — v4.4.1 — Correctif mur runique
 
-Cette version corrige les instabilités possibles pendant les premières secondes de connexion.
+## Cause du problème
 
-## Fonctionnement
+Une ancienne règle CSS imposait :
 
-Après l’entrée dans le rituel :
+`display:none !important`
 
-1. l’interface affiche « Synchronisation du rituel… » ;
-2. le Monolithe reste temporairement en lecture seule ;
-3. Firebase charge ou crée l’état partagé ;
-4. l’interface se déverrouille automatiquement.
+sur `.board-wrap::before`, la couche choisie dans la v4.4.0.  
+L’image du mur ne pouvait donc pas apparaître.
 
-Un délai de sécurité de 5 secondes empêche l’interface de rester bloquée si la connexion est lente ou indisponible.
+## Correction
 
-## Objectif
+- utilisation de la vraie couche `.rune-wall-layer`, déjà présente dans le HTML ;
+- image de pierre appliquée directement à cette couche ;
+- suppression des anciennes grandes runes CSS ;
+- Monolithe, liaisons, emplacements et Vathkül maintenus au-dessus ;
+- légère transparence du disque afin de donner l’impression que le mécanisme est encastré dans la pierre.
 
-Empêcher toute modification locale pendant que l’état initial partagé est encore en cours de chargement, afin d’éviter :
-
-- un premier déplacement écrasé par Firebase ;
-- un retour visuel à un ancien état ;
-- une instabilité au démarrage.
-
-Les règles du rituel, les liaisons et les Étincelles ne sont pas modifiées.
+Aucun changement JavaScript ou Firebase.
 
 Commit conseillé :
 
-`Project Monolith v4.3.1 — Verrouillage initialisation`
-
-Aucune modification des règles Firebase.
+`Project Monolith v4.4.1 — Correctif mur runique`
