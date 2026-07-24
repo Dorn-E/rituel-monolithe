@@ -258,6 +258,7 @@ function drop(e,i){
   placements[i]=school;
   invalidateEvaluation();
   render();
+  requestAnimationFrame(()=>playGlyphPlacementEffect(i));
 }
 
 
@@ -578,6 +579,30 @@ function cancelActiveInteractionMode(){
   if(purificationMode)closePurificationFlow();
   if(lokaugSwapMode)cancelLokaugSwap();
   updateInteractionModeUI();
+}
+
+
+function playGlyphPlacementEffect(index){
+  const slot=document.querySelector(`.slot[data-index="${index}"]`);
+  if(!slot)return;
+
+  slot.classList.remove('glyph-placement-impact');
+  void slot.offsetWidth;
+  slot.classList.add('glyph-placement-impact');
+
+  const wave=document.createElement('span');
+  wave.className='glyph-placement-wave';
+  slot.appendChild(wave);
+
+  const flash=document.createElement('span');
+  flash.className='glyph-placement-flash';
+  slot.appendChild(flash);
+
+  setTimeout(()=>{
+    wave.remove();
+    flash.remove();
+    slot.classList.remove('glyph-placement-impact');
+  },900);
 }
 
 function pulseSlotEffect(index,className,duration=850){

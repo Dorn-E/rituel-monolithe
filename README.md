@@ -1,28 +1,25 @@
-# Project Monolith — v4.5.5 — Boutons déverrouillés
+# Project Monolith — v4.6.1 — Animation de pose d’un glyphe
 
-## Cause exacte
+## Nouvel effet
 
-Pendant l’initialisation, les boutons étaient désactivés avec :
+Lorsqu’un glyphe est déposé dans un logement :
 
-`element.disabled = initializationLocked || element.disabled`
+- bref éclat doré ;
+- onde circulaire qui se propage depuis la cavité ;
+- léger impact visuel donnant l’impression que la pierre s’emboîte ;
+- animation courte, inférieure à une seconde.
 
-Quand l’initialisation se terminait, `element.disabled` était déjà `true`.
-Le bouton restait donc désactivé définitivement.
+## Inchangé
 
-Cela empêchait totalement :
-
-- le clic sur « Corrompre une gravure » ;
-- l’appel à `gmCorrupt()` ;
-- le message de Vathkül ;
-- l’animation et le halo rouge.
-
-## Correction
-
-- mémorisation de l’état initial de chaque bouton avant verrouillage ;
-- restauration exacte de cet état au déverrouillage ;
-- sécurité supplémentaire pour réactiver les contrôles MJ après synchronisation ;
-- aucun changement à la logique de corruption elle-même.
+- logique du drag & drop ;
+- positions ;
+- Firebase ;
+- synchronisation ;
+- corruption ;
+- purification ;
+- liaisons ;
+- règles du rituel.
 
 Commit conseillé :
 
-`Project Monolith v4.5.5 — Boutons déverrouillés`
+`Project Monolith v4.6.1 — Animation pose glyphe`

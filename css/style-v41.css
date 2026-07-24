@@ -2637,3 +2637,107 @@ inset 0 -5px 8px rgba(255,255,255,.03),
 0 0 0 1px rgba(20,20,20,.5),
 0 2px 6px rgba(0,0,0,.4)!important;
 }
+
+
+/* ===== v4.6.1 — Animation de pose d’un glyphe ===== */
+
+.board .slot{
+  overflow:visible !important;
+}
+
+.board .slot img.placed{
+  transition:
+    transform .28s cubic-bezier(.2,.8,.2,1),
+    filter .28s ease !important;
+}
+
+.board .slot.glyph-placement-impact img.placed{
+  animation:glyph-seat-impact .48s cubic-bezier(.2,.85,.25,1) both !important;
+}
+
+.glyph-placement-wave,
+.glyph-placement-flash{
+  position:absolute;
+  left:50%;
+  top:50%;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:6;
+  transform:translate(-50%,-50%);
+}
+
+.glyph-placement-wave{
+  width:82%;
+  height:82%;
+  border:2px solid rgba(255,210,107,.85);
+  box-shadow:
+    0 0 8px rgba(255,210,107,.64),
+    inset 0 0 8px rgba(255,210,107,.26);
+  animation:glyph-placement-wave .72s ease-out forwards;
+}
+
+.glyph-placement-flash{
+  width:72%;
+  height:72%;
+  background:
+    radial-gradient(circle,
+      rgba(255,244,190,.46) 0%,
+      rgba(255,211,105,.18) 38%,
+      rgba(255,190,58,.06) 60%,
+      transparent 74%);
+  filter:blur(1px);
+  animation:glyph-placement-flash .46s ease-out forwards;
+}
+
+@keyframes glyph-seat-impact{
+  0%{
+    transform:scale(.88);
+    filter:
+      brightness(1.65)
+      drop-shadow(0 0 10px rgba(255,214,114,.78))
+      drop-shadow(0 2px 2px rgba(0,0,0,.95));
+  }
+  55%{
+    transform:scale(1.035);
+    filter:
+      brightness(1.24)
+      drop-shadow(0 0 7px rgba(255,214,114,.52))
+      drop-shadow(0 2px 2px rgba(0,0,0,.95));
+  }
+  100%{
+    transform:scale(1);
+  }
+}
+
+@keyframes glyph-placement-wave{
+  0%{
+    opacity:.95;
+    transform:translate(-50%,-50%) scale(.68);
+  }
+  100%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(1.42);
+  }
+}
+
+@keyframes glyph-placement-flash{
+  0%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(.62);
+  }
+  24%{
+    opacity:1;
+  }
+  100%{
+    opacity:0;
+    transform:translate(-50%,-50%) scale(1.18);
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .board .slot.glyph-placement-impact img.placed,
+  .glyph-placement-wave,
+  .glyph-placement-flash{
+    animation:none !important;
+  }
+}
