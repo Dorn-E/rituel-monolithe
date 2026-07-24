@@ -1,35 +1,33 @@
-# Project Monolith — v4.6.2 — Épreuve animée
+# Project Monolith — v4.6.3 — Séquence finale
 
-## Nouvelle séquence
+## Configuration parfaite
 
-Lorsque la configuration est éprouvée :
+La réussite du puzzle déclenche désormais une montée dramatique en cinq temps :
 
-1. une Étincelle est dépensée immédiatement ;
-2. les anciennes liaisons disparaissent ;
-3. le Monolithe entre brièvement en phase d’analyse ;
-4. les liaisons correctes se dessinent progressivement ;
-5. une énergie dorée parcourt chaque nouvelle liaison ;
-6. le verdict et le nombre de glyphes bien placés apparaissent à la fin.
+1. **Silence** — 300 ms, les liaisons restent allumées.
+2. **Charge** — les gravures, les liaisons et le centre gagnent progressivement en lumière.
+3. **Pulsation** — une seule respiration lente du disque.
+4. **Flash** — bref éclat blanc et doré.
+5. **Destruction** — reprise de la fissuration et de la destruction déjà existantes.
 
-## Sécurité
+## Direction artistique
 
-Si un glyphe est déplacé pendant l’analyse :
-
-- l’animation est annulée ;
-- les liaisons sont effacées ;
-- aucun ancien verdict n’est affiché ;
-- le bouton d’épreuve redevient disponible.
+- aucun tremblement de caméra ;
+- aucune explosion excessive ;
+- aucune particule ajoutée ;
+- animation sobre, ancienne et solennelle.
 
 ## Inchangé
 
-- coût d’une Étincelle ;
-- logique du score ;
-- conditions de victoire ;
+- condition de victoire ;
 - Firebase ;
 - synchronisation ;
+- Étincelles ;
 - corruption ;
-- purification.
+- purification ;
+- sauvegardes ;
+- destruction finale existante.
 
 Commit conseillé :
 
-`Project Monolith v4.6.2 — Épreuve animée`
+`Project Monolith v4.6.3 — Séquence finale`

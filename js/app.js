@@ -813,32 +813,72 @@ function startFinalRitualSequence(){
 
   const boardWrap=document.querySelector('.board-wrap');
   const board=document.getElementById('board');
+  const core=document.getElementById('core');
+  const links=document.getElementById('links');
   const vathkulPanel=document.querySelector('.vathkul-dialogue');
   const vathkulPortrait=document.querySelector('.vathkul-portrait');
   const overlay=document.getElementById('finalRitualOverlay');
 
   boardWrap?.classList.add('abyss-closing');
   board?.classList.add('abyss-closing');
-  boardWrap?.classList.add('final-awakening');
-  board?.classList.add('final-awakening');
-  vathkulPanel?.classList.add('vathkul-fading');
-  vathkulPortrait?.classList.add('vathkul-fading');
+  boardWrap?.classList.add('final-silence');
+  board?.classList.add('final-silence');
 
-  addJournalEntry('La fresque s’illumine.','Le Monolithe');
+  addJournalEntry('La configuration parfaite est reconnue.','Le Monolithe');
+  markLocalMutation();
   update();
 
+  // Phase 1 — bref silence.
+  window.setTimeout(()=>{
+    boardWrap?.classList.remove('final-silence');
+    board?.classList.remove('final-silence');
+
+    // Phase 2 — montée d’énergie.
+    boardWrap?.classList.add('final-charge');
+    board?.classList.add('final-charge');
+    core?.classList.add('final-charge');
+    links?.classList.add('final-charge');
+    addJournalEntry('Les gravures se chargent d’une lumière ancienne.','Le Monolithe');
+    update();
+  },300);
+
+  // Phase 3 — pulsation unique du disque.
+  window.setTimeout(()=>{
+    boardWrap?.classList.add('final-pulse');
+    board?.classList.add('final-pulse');
+    core?.classList.add('final-pulse');
+  },1300);
+
+  // Phase 4 — flash bref.
   window.setTimeout(()=>{
     overlay?.classList.add('show');
     overlay?.setAttribute('aria-hidden','false');
     boardWrap?.classList.add('final-flash');
-  },1700);
+    board?.classList.add('final-flash');
+  },1850);
+
+  // Retrait du flash, puis reprise de la séquence existante.
+  window.setTimeout(()=>{
+    boardWrap?.classList.remove('final-flash','final-pulse','final-charge');
+    board?.classList.remove('final-flash','final-pulse','final-charge');
+    core?.classList.remove('final-pulse','final-charge');
+    links?.classList.remove('final-charge');
+
+    boardWrap?.classList.add('final-awakening');
+    board?.classList.add('final-awakening');
+    vathkulPanel?.classList.add('vathkul-fading');
+    vathkulPortrait?.classList.add('vathkul-fading');
+
+    addJournalEntry('La fresque s’illumine.','Le Monolithe');
+    update();
+  },2100);
 
   window.setTimeout(()=>{
     board?.classList.add('final-cracking');
     boardWrap?.classList.add('final-cracking');
     addJournalEntry('Le Monolithe se fissure.','Le Monolithe');
     update();
-  },2450);
+  },3050);
 
   window.setTimeout(()=>{
     board?.classList.add('final-destruction');
@@ -851,13 +891,13 @@ function startFinalRitualSequence(){
 
     addJournalEntry('La présence de Vathkül s’est éteinte.','Le Monolithe');
     update();
-  },3900);
+  },4500);
 
   window.setTimeout(()=>{
     overlay?.classList.add('message-visible');
     finalSequenceRunning=false;
     update();
-  },5000);
+  },5600);
 }
 
 

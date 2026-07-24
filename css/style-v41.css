@@ -3033,3 +3033,165 @@ inset 0 -5px 8px rgba(255,255,255,.03),
     animation-delay:0ms !important;
   }
 }
+
+
+/* ===== v4.6.3 — Mise en scène de la configuration parfaite ===== */
+
+/* Phase de silence : tout reste immobile, les liaisons demeurent visibles. */
+.board-wrap.final-silence .board,
+.board.final-silence{
+  animation:none !important;
+}
+
+/* Montée d’énergie du Monolithe. */
+.board-wrap.final-charge{
+  animation:final-charge-halo 1s ease-in forwards;
+}
+
+.board.final-charge{
+  animation:final-charge-board 1s ease-in forwards !important;
+}
+
+.core.final-charge{
+  animation:final-charge-core 1s ease-in forwards !important;
+}
+
+#links.final-charge .resonance-link-filament{
+  box-shadow:
+    0 0 4px rgba(255,255,235,1),
+    0 0 13px rgba(255,211,106,1),
+    0 0 25px rgba(220,151,31,.92) !important;
+  filter:brightness(1.22);
+  transition:filter .75s ease,box-shadow .75s ease;
+}
+
+#links.final-charge .resonance-link-glow{
+  opacity:1 !important;
+  filter:blur(7px) brightness(1.28) !important;
+  transition:filter .75s ease,opacity .75s ease;
+}
+
+/* Une seule pulsation lente, sans tremblement ni zoom brutal. */
+.board-wrap.final-pulse{
+  animation:final-wrap-pulse .58s ease-in-out 1 both !important;
+}
+
+.board.final-pulse{
+  animation:final-board-pulse .58s ease-in-out 1 both !important;
+}
+
+.core.final-pulse{
+  animation:final-core-pulse .58s ease-in-out 1 both !important;
+}
+
+/* Flash blanc/doré très bref. */
+.board-wrap.final-flash::after{
+  content:"";
+  display:block;
+  position:absolute;
+  inset:0;
+  z-index:60;
+  pointer-events:none;
+  border-radius:inherit;
+  background:
+    radial-gradient(circle at 50% 50%,
+      rgba(255,255,244,.98) 0%,
+      rgba(255,239,181,.88) 34%,
+      rgba(255,208,104,.42) 63%,
+      transparent 86%);
+  mix-blend-mode:screen;
+  animation:final-golden-flash .25s ease-out forwards;
+}
+
+.board.final-flash{
+  filter:brightness(1.8) saturate(.8) !important;
+}
+
+@keyframes final-charge-halo{
+  0%{
+    box-shadow:
+      inset 0 0 0 2px #050505,
+      inset 0 0 0 3px #2f2210,
+      inset 0 0 110px rgba(0,0,0,.84),
+      0 8px 26px rgba(0,0,0,.40);
+  }
+  100%{
+    box-shadow:
+      inset 0 0 0 2px #050505,
+      inset 0 0 0 3px #7a5724,
+      inset 0 0 80px rgba(255,212,118,.14),
+      0 0 34px rgba(230,172,66,.42),
+      0 8px 26px rgba(0,0,0,.40);
+  }
+}
+
+@keyframes final-charge-board{
+  0%{
+    filter:contrast(1.05) saturate(.95) brightness(1);
+  }
+  100%{
+    filter:contrast(1.10) saturate(1.05) brightness(1.22);
+  }
+}
+
+@keyframes final-charge-core{
+  0%{
+    filter:
+      drop-shadow(0 0 9px rgba(0,0,0,.92))
+      drop-shadow(0 0 18px rgba(0,0,0,.48));
+  }
+  100%{
+    filter:
+      brightness(1.12)
+      drop-shadow(0 0 10px rgba(255,218,129,.42))
+      drop-shadow(0 0 24px rgba(210,151,47,.38));
+  }
+}
+
+@keyframes final-wrap-pulse{
+  0%,100%{
+    filter:brightness(1);
+  }
+  50%{
+    filter:brightness(1.16);
+  }
+}
+
+@keyframes final-board-pulse{
+  0%,100%{
+    transform:scale(1);
+    filter:brightness(1.22);
+  }
+  50%{
+    transform:scale(1.018);
+    filter:brightness(1.42) saturate(1.08);
+  }
+}
+
+@keyframes final-core-pulse{
+  0%,100%{
+    transform:translate(-50%,-50%) scale(1);
+  }
+  50%{
+    transform:translate(-50%,-50%) scale(1.025);
+  }
+}
+
+@keyframes final-golden-flash{
+  0%{opacity:0}
+  25%{opacity:1}
+  100%{opacity:0}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .board-wrap.final-charge,
+  .board.final-charge,
+  .core.final-charge,
+  .board-wrap.final-pulse,
+  .board.final-pulse,
+  .core.final-pulse,
+  .board-wrap.final-flash::after{
+    animation-duration:.01ms !important;
+    animation-delay:0ms !important;
+  }
+}
