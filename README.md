@@ -1,38 +1,38 @@
-# Project Monolith — v4.5.1 — Correction scaling et Vathkül
+# Project Monolith — v4.5.2 — Livraison GitHub
 
-## Corrections
+## Texture du Monolithe
 
-### Cavités circulaires
+- intégration de `assets/monolith-basalt-texture.png` ;
+- conservation du ratio original de l’image ;
+- texture centrée et rognée latéralement, sans étirement ;
+- cavités et cercles visuellement ronds, jamais elliptiques.
 
-La texture source est au format 3:2.  
-La v4.5.0 l'étirait en carré avec `background-size: 100% 100%`, ce qui
-transformait les cavités rondes en ellipses.
+## Vathkül
 
-La texture conserve désormais ses proportions :
+- portrait original restauré au centre ;
+- position, taille et masque circulaire stabilisés.
 
-`background-size: auto 100%`
+## Glyphe du bouclier
 
-Elle remplit toute la hauteur du disque et ses côtés excédentaires sont
-simplement rognés.
+Le glyphe d’Abjuration est plus vertical que les autres glyphes.
 
-### Portrait central
+Il dispose désormais d’un réglage spécifique :
 
-Une règle de la v4.5.0 remplaçait le portrait de Vathkül par un fond noir.
-Le portrait original `assets/ui/vathkul-face.png` est restauré au centre,
-avec ses dimensions et son cercle d'origine.
+- largeur réduite ;
+- hauteur ajustée ;
+- pointe inférieure entièrement visible ;
+- correction appliquée dans le Monolithe et dans le plateau inférieur.
 
 ## Inchangé
 
-- image de texture ;
-- positions des 8 logements ;
-- glyphes ;
-- liaisons ;
-- drag & drop ;
 - JavaScript ;
 - Firebase ;
 - gameplay ;
-- partie inférieure.
+- positions des 8 logements ;
+- drag & drop ;
+- liaisons ;
+- partie inférieure de l’interface.
 
 Commit conseillé :
 
-`Project Monolith v4.5.1 — Correction scaling et Vathkül`
+`Project Monolith v4.5.2 — Texture et bouclier ajusté`
