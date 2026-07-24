@@ -2467,3 +2467,74 @@ body::before{
 .board .slot{
   z-index:10 !important;
 }
+
+
+/* ===== v4.5.1 — Correction du scaling et restauration de Vathkül ===== */
+
+/*
+  L'image source est au format 3:2.
+  Elle ne doit jamais être étirée en 1:1, sinon ses cavités circulaires
+  deviennent des ellipses. Sa hauteur remplit désormais le disque et
+  les côtés excédentaires sont simplement rognés.
+*/
+.board{
+  background:
+    radial-gradient(circle at 50% 50%,
+      rgba(0,0,0,.08) 0 20%,
+      rgba(0,0,0,.015) 21% 72%,
+      rgba(0,0,0,.26) 88% 100%),
+    url("../assets/monolith-basalt-texture.png")
+      center center / auto 100% no-repeat !important;
+}
+
+/*
+  Le véritable portrait du projet revient au centre.
+  Cette règle remplace le masque noir ajouté dans la v4.5.0.
+*/
+.board .core{
+  position:absolute !important;
+  left:50% !important;
+  top:50% !important;
+  width:29.5% !important;
+  height:29.5% !important;
+  aspect-ratio:1 / 1 !important;
+  transform:translate(-50%,-50%) !important;
+  border-radius:50% !important;
+  z-index:12 !important;
+  overflow:hidden !important;
+
+  border:3px solid #8e692d !important;
+  background:
+    #080808
+    url("../assets/ui/vathkul-face.png")
+    center center / cover no-repeat !important;
+
+  box-shadow:
+    0 0 0 5px rgba(10,10,9,.98),
+    0 0 0 7px rgba(91,67,28,.92),
+    inset 0 0 24px rgba(0,0,0,.62),
+    0 8px 18px rgba(0,0,0,.72) !important;
+
+  filter:
+    drop-shadow(0 0 9px rgba(0,0,0,.92))
+    drop-shadow(0 0 18px rgba(0,0,0,.48)) !important;
+}
+
+/*
+  Les zones HTML restent parfaitement circulaires.
+  Elles occupent toute leur boîte et ne peuvent plus hériter d'une
+  hauteur différente de leur largeur.
+*/
+.board .slot{
+  aspect-ratio:1 / 1 !important;
+  border-radius:50% !important;
+}
+
+/* Les éventuels éléments internes restent eux aussi circulaires. */
+.board .slot,
+.board .slot::before,
+.board .slot::after,
+.board .slot img,
+.board .slot img.placed{
+  border-radius:50% !important;
+}

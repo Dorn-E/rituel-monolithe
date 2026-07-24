@@ -1,32 +1,38 @@
-# Project Monolith — v4.5.0 — Texture du Monolithe
+# Project Monolith — v4.5.1 — Correction scaling et Vathkül
 
-## Nouvelle direction graphique
+## Corrections
 
-Le disque du Monolithe utilise désormais une véritable texture de basalte :
+### Cavités circulaires
 
-- pierre plus sombre ;
-- matière irrégulière ;
-- gravures et anneaux intégrés à la texture ;
-- huit cavités sculptées visibles sous les zones interactives ;
-- tête actuelle de Vathkül conservée au premier plan.
+La texture source est au format 3:2.  
+La v4.5.0 l'étirait en carré avec `background-size: 100% 100%`, ce qui
+transformait les cavités rondes en ellipses.
 
-## Intégration
+La texture conserve désormais ses proportions :
 
-- nouvel asset : `assets/monolith-basalt-texture.png` ;
-- les anciens anneaux CSS sont rendus transparents ;
-- les zones de drag & drop restent interactives ;
-- les cavités vides ne montrent aucun symbole ;
-- les glyphes, liaisons, animations et mécaniques sont conservés.
+`background-size: auto 100%`
+
+Elle remplit toute la hauteur du disque et ses côtés excédentaires sont
+simplement rognés.
+
+### Portrait central
+
+Une règle de la v4.5.0 remplaçait le portrait de Vathkül par un fond noir.
+Le portrait original `assets/ui/vathkul-face.png` est restauré au centre,
+avec ses dimensions et son cercle d'origine.
 
 ## Inchangé
 
+- image de texture ;
+- positions des 8 logements ;
+- glyphes ;
+- liaisons ;
+- drag & drop ;
 - JavaScript ;
 - Firebase ;
-- positions des huit logements ;
-- drag & drop ;
-- partie inférieure de l’interface ;
-- règles du rituel.
+- gameplay ;
+- partie inférieure.
 
 Commit conseillé :
 
-`Project Monolith v4.5.0 — Texture du Monolithe`
+`Project Monolith v4.5.1 — Correction scaling et Vathkül`
