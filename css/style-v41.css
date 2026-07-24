@@ -1970,3 +1970,89 @@ body::before{
     height:clamp(72px,17vw,104px) !important;
   }
 }
+
+
+/* ===== v4.4.3 — Liaisons dorées renforcées ===== */
+
+.resonance-link{
+  height:24px !important;
+}
+
+.resonance-link-glow{
+  height:15px !important;
+  background:linear-gradient(
+    90deg,
+    rgba(255,228,140,.16),
+    rgba(239,181,60,.78) 16%,
+    rgba(255,220,106,.96) 50%,
+    rgba(239,181,60,.78) 84%,
+    rgba(255,228,140,.16)
+  ) !important;
+  filter:blur(5.5px) !important;
+  opacity:1 !important;
+  animation:resonance-glow-pulse-strong 2.4s ease-in-out infinite !important;
+}
+
+.resonance-link-filament{
+  height:3.2px !important;
+  background:linear-gradient(
+    90deg,
+    rgba(255,248,212,.35),
+    #ffd36a 12%,
+    #fff3b2 50%,
+    #ffd36a 88%,
+    rgba(255,248,212,.35)
+  ) !important;
+  box-shadow:
+    0 0 3px rgba(255,255,235,1),
+    0 0 9px rgba(255,211,106,.98),
+    0 0 18px rgba(220,151,31,.78) !important;
+}
+
+.resonance-link-spark{
+  width:9px !important;
+  height:9px !important;
+  background:#fff7cf !important;
+  box-shadow:
+    0 0 4px #fff,
+    0 0 10px #ffd36a,
+    0 0 20px rgba(225,156,35,.96) !important;
+}
+
+/* Points lumineux aux extrémités des liaisons */
+.resonance-link::before,
+.resonance-link::after{
+  content:"";
+  position:absolute;
+  top:50%;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#ffe7a0;
+  box-shadow:
+    0 0 4px #fff,
+    0 0 10px #ffd36a,
+    0 0 18px rgba(220,151,31,.9);
+  transform:translate(-50%,-50%);
+  opacity:.95;
+  pointer-events:none;
+}
+
+.resonance-link::before{
+  left:0;
+}
+
+.resonance-link::after{
+  left:100%;
+}
+
+@keyframes resonance-glow-pulse-strong{
+  0%,100%{
+    opacity:.72;
+    filter:blur(5px);
+  }
+  50%{
+    opacity:1;
+    filter:blur(6.5px);
+  }
+}
