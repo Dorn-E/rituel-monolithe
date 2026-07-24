@@ -1,33 +1,40 @@
-# Project Monolith — v4.6.3 — Séquence finale
+# Project Monolith — v4.7.0 — Architecture audio
 
-## Configuration parfaite
+## Cette version ne contient pas encore les sons définitifs
 
-La réussite du puzzle déclenche désormais une montée dramatique en cinq temps :
+Elle installe toute l’architecture nécessaire :
 
-1. **Silence** — 300 ms, les liaisons restent allumées.
-2. **Charge** — les gravures, les liaisons et le centre gagnent progressivement en lumière.
-3. **Pulsation** — une seule respiration lente du disque.
-4. **Flash** — bref éclat blanc et doré.
-5. **Destruction** — reprise de la fissuration et de la destruction déjà existantes.
+- gestionnaire central `js/audio.js` ;
+- bouton activer/couper le son ;
+- réglage du volume général ;
+- mémorisation des préférences avec `localStorage` ;
+- préchargement des sons disponibles ;
+- absence de crash ou d’erreur visible si les fichiers audio manquent.
 
-## Direction artistique
+## Événements déjà câblés
 
-- aucun tremblement de caméra ;
-- aucune explosion excessive ;
-- aucune particule ajoutée ;
-- animation sobre, ancienne et solennelle.
-
-## Inchangé
-
-- condition de victoire ;
-- Firebase ;
-- synchronisation ;
-- Étincelles ;
+- pose d’un glyphe ;
+- retrait d’un glyphe ;
 - corruption ;
 - purification ;
-- sauvegardes ;
-- destruction finale existante.
+- début de l’épreuve ;
+- révélation de chaque liaison ;
+- verdict positif ou négatif ;
+- apparition d’un message de Vathkül ;
+- charge finale ;
+- pulsation finale ;
+- flash ;
+- fissuration ;
+- destruction.
+
+## Ajouter les sons
+
+Déposer les fichiers `.ogg` dans `assets/audio/` en suivant les noms indiqués dans :
+
+`assets/audio/README.md`
+
+Aucune modification du JavaScript métier ne sera nécessaire lors du remplacement des sons.
 
 Commit conseillé :
 
-`Project Monolith v4.6.3 — Séquence finale`
+`Project Monolith v4.7.0 — Architecture audio`

@@ -266,6 +266,7 @@ function drop(e,i){
   invalidateEvaluation();
   render();
   requestAnimationFrame(()=>playGlyphPlacementEffect(i));
+  window.ProjectMonolithAudio?.play('glyphPlace',{gain:.9});
 }
 
 
@@ -326,6 +327,7 @@ function renderAdjacentCorrectLinks(){
 
     link.append(glow,filament,spark);
     layer.appendChild(link);
+    window.setTimeout(()=>window.ProjectMonolithAudio?.play('linkReveal',{gain:.45}),revealedIndex*150);
 
     revealedIndex++;
   }
@@ -371,6 +373,7 @@ slot.classList.toggle('corrupted',corrupted.has(i));
       };
       img.ondblclick=()=>{
         placements[i]=null;
+        window.ProjectMonolithAudio?.play('glyphRemove',{gain:.8});
         invalidateEvaluation();
         render();
       };
@@ -542,6 +545,7 @@ function update(){
 }
 
 function speakVathkul(line){
+  window.ProjectMonolithAudio?.play('vathkulMessage',{gain:.35});
   const quoted=`« ${line} »`;
   document.getElementById('vathkulVoice').textContent=quoted;
   say(`Vathkül : ${quoted}`);
@@ -839,6 +843,7 @@ function startFinalRitualSequence(){
     core?.classList.add('final-charge');
     links?.classList.add('final-charge');
     addJournalEntry('Les gravures se chargent d’une lumière ancienne.','Le Monolithe');
+    window.ProjectMonolithAudio?.play('finalCharge',{gain:.95});
     update();
   },300);
 
@@ -847,6 +852,7 @@ function startFinalRitualSequence(){
     boardWrap?.classList.add('final-pulse');
     board?.classList.add('final-pulse');
     core?.classList.add('final-pulse');
+    window.ProjectMonolithAudio?.play('finalPulse',{gain:.9});
   },1300);
 
   // Phase 4 — flash bref.
@@ -855,6 +861,7 @@ function startFinalRitualSequence(){
     overlay?.setAttribute('aria-hidden','false');
     boardWrap?.classList.add('final-flash');
     board?.classList.add('final-flash');
+    window.ProjectMonolithAudio?.play('finalFlash',{gain:.9});
   },1850);
 
   // Retrait du flash, puis reprise de la séquence existante.
@@ -877,6 +884,7 @@ function startFinalRitualSequence(){
     board?.classList.add('final-cracking');
     boardWrap?.classList.add('final-cracking');
     addJournalEntry('Le Monolithe se fissure.','Le Monolithe');
+    window.ProjectMonolithAudio?.play('finalCrack',{gain:1});
     update();
   },3050);
 
@@ -890,6 +898,7 @@ function startFinalRitualSequence(){
     }
 
     addJournalEntry('La présence de Vathkül s’est éteinte.','Le Monolithe');
+    window.ProjectMonolithAudio?.play('finalDestruction',{gain:1});
     update();
   },4500);
 
@@ -946,6 +955,7 @@ function finishConfigurationVerdict(token,good,placedCount){
 
   if(isPerfectConfiguration()){
     markLocalMutation();
+    window.ProjectMonolithAudio?.play('configurationSuccess',{gain:.9});
     startFinalRitualSequence();
     return;
   }
@@ -983,6 +993,7 @@ function finishConfigurationVerdict(token,good,placedCount){
   }
 
   speakVathkul(`L’équilibre se refuse à vous. ${countSentence}`);
+  window.ProjectMonolithAudio?.play('configurationFailure',{gain:.7});
   document.querySelector('.board-wrap')?.classList.add('configuration-failed');
   window.setTimeout(
     ()=>document.querySelector('.board-wrap')?.classList.remove('configuration-failed'),
@@ -1004,6 +1015,7 @@ function testConfiguration(){
   }
 
   addJournalEntry('Une Étincelle est consacrée à l’épreuve de la configuration.','Le Monolithe');
+  window.ProjectMonolithAudio?.play('configurationStart',{gain:.7});
 
   configurationAnalysisToken+=1;
   const token=configurationAnalysisToken;
@@ -1416,6 +1428,7 @@ function gmCorrupt(){
 
   addJournalEntry(`Lokaug corrompt le glyphe « ${stationNames[i]} ».`,'Lokaug');
   speakVathkul('Une souillure gagne le Monolithe.');
+  window.ProjectMonolithAudio?.play('corruption',{gain:.95});
 
   markLocalMutation();
   render();
