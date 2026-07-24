@@ -1,18 +1,24 @@
-# Project Monolith — v4.4.3 — Liaisons renforcées
+# Project Monolith — v4.4.5 — Livraison B1 : relief du bronze
 
 ## Modifications visuelles
 
-Les liaisons révélées après **Éprouver la configuration** sont désormais :
+- anneaux concentriques retravaillés en bronze ancien ;
+- ajout d’un léger biseau interne ;
+- reflet métallique discret ;
+- ombres internes plus profondes ;
+- patine très légère pour casser l’aspect uniforme ;
+- logements des glyphes rendus plus métalliques et plus creusés.
 
-- environ 35 % plus épaisses ;
-- plus lumineuses ;
-- d’un or plus chaud ;
-- entourées d’un halo plus visible ;
-- dotées de points lumineux à leurs deux extrémités ;
-- toujours parcourues par une Étincelle mobile.
+## Inchangé
 
-Aucune modification de logique, JavaScript, Firebase ou gameplay.
+- positions et taille des anneaux ;
+- taille des glyphes ;
+- drag & drop ;
+- liaisons ;
+- JavaScript ;
+- Firebase ;
+- mécaniques du rituel.
 
 Commit conseillé :
 
-`Project Monolith v4.4.3 — Liaisons renforcées`
+`Project Monolith v4.4.5 — B1 Relief du bronze`
