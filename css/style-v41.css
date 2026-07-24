@@ -2196,3 +2196,29 @@ body::before{
     0 0 0 3px rgba(232,181,75,.70),
     0 0 18px rgba(225,161,41,.62) !important;
 }
+
+/* v4.4.5b pierre sculptée overrides */
+.board .ring{
+ border-color:#4e4a43!important;
+ background:linear-gradient(145deg,rgba(130,128,120,.12),rgba(35,35,35,.25))!important;
+ box-shadow:
+ inset 0 2px 4px rgba(255,255,255,.05),
+ inset 0 -4px 8px rgba(0,0,0,.65),
+ 0 0 0 1px rgba(80,75,65,.45)!important;
+ filter:none!important;
+}
+.board .ring::before,.board .ring::after{content:none!important;}
+.board .slot{
+ background:
+ radial-gradient(circle at 40% 35%,rgba(72,70,66,.98) 0 58%,rgba(28,27,25,.99) 78%),
+ linear-gradient(145deg,#5d5952,#262421)!important;
+ border-color:#59544d!important;
+ box-shadow:
+ inset 0 2px 4px rgba(255,255,255,.05),
+ inset 0 -6px 10px rgba(0,0,0,.75),
+ 0 0 0 2px rgba(62,58,52,.55)!important;
+}
+.board .slot::after{
+ border:1px solid rgba(210,178,90,.18)!important;
+ box-shadow:inset 0 1px 2px rgba(255,230,150,.05), inset 0 -2px 4px rgba(0,0,0,.6)!important;
+}
