@@ -2522,3 +2522,74 @@ pointer-events:none;z-index:2}
 0%,100%{opacity:.55;transform:scale(1)}
 50%{opacity:1;transform:scale(1.04)}
 }
+
+
+/* ===== v4.5.4 — Corruption fonctionnelle et visuelle ===== */
+
+.board .slot.corrupted{
+  border-color:rgba(239,52,52,.92) !important;
+  box-shadow:
+    inset 0 0 20px rgba(160,0,0,.58),
+    inset 0 0 0 3px rgba(95,0,0,.76),
+    0 0 0 3px rgba(226,35,35,.72),
+    0 0 18px rgba(255,32,32,.70),
+    0 0 34px rgba(145,0,0,.44) !important;
+}
+
+.board .slot.corrupted::before{
+  content:"" !important;
+  display:block !important;
+  position:absolute !important;
+  inset:-5px !important;
+  border-radius:50% !important;
+  pointer-events:none !important;
+  z-index:5 !important;
+  background:
+    conic-gradient(
+      from 15deg,
+      transparent 0 10%,
+      rgba(255,52,52,.52) 13% 18%,
+      transparent 21% 45%,
+      rgba(140,0,0,.44) 49% 57%,
+      transparent 61% 100%
+    ) !important;
+  box-shadow:
+    inset 0 0 14px rgba(255,35,35,.50),
+    0 0 15px rgba(255,25,25,.62) !important;
+  animation:corruption-ring-pulse 1.75s ease-in-out infinite !important;
+}
+
+.board .slot.corrupted::after{
+  content:"" !important;
+  display:block !important;
+  position:absolute !important;
+  inset:10% !important;
+  border-radius:50% !important;
+  pointer-events:none !important;
+  z-index:5 !important;
+  border:2px solid rgba(255,71,71,.70) !important;
+  box-shadow:
+    inset 0 0 18px rgba(165,0,0,.66),
+    0 0 8px rgba(255,40,40,.38) !important;
+}
+
+.board .slot.corrupted img.placed{
+  filter:
+    drop-shadow(0 0 7px rgba(255,38,38,.72))
+    drop-shadow(0 2px 2px rgba(0,0,0,.95)) !important;
+}
+
+.board .slot.corruption-arriving{
+  animation:corruption-impact 1.15s ease-out both !important;
+}
+
+@keyframes corruption-ring-pulse{
+  0%,100%{opacity:.58;transform:scale(.985)}
+  50%{opacity:1;transform:scale(1.035)}
+}
+
+@keyframes corruption-impact{
+  0%{filter:brightness(1);transform:translate(-50%,-50%) scale(1)}
+  28%{filter:brightness(1.55) saturate(1.7);transform:translate(-50%,-50%) scale(1.10)}
+  100%{filter:brightness(1);transform:translate(-50%,-50%) scale(1)}
+}

@@ -1,38 +1,30 @@
-# Project Monolith — v4.5.2 — Livraison GitHub
+# Project Monolith — v4.5.4 — Corruption corrigée
 
-## Texture du Monolithe
+## Audit
 
-- intégration de `assets/monolith-basalt-texture.png` ;
-- conservation du ratio original de l’image ;
-- texture centrée et rognée latéralement, sans étirement ;
-- cavités et cercles visuellement ronds, jamais elliptiques.
+Le bouton était bien présent et `gmCorrupt()` existait toujours.  
+Le problème venait de sorties anticipées silencieuses et d’un déclenchement
+trop fragile pour diagnostiquer l’état réel du rituel.
 
-## Vathkül
+## Corrections fonctionnelles
 
-- portrait original restauré au centre ;
-- position, taille et masque circulaire stabilisés.
+- bouton déclaré explicitement avec `type="button"` ;
+- liaison `click` explicite et protégée ;
+- message de Vathkül si le rituel se synchronise encore ;
+- message de Vathkül si aucun glyphe n’est posé ;
+- message si tous les glyphes posés sont déjà corrompus ;
+- état corrompu appliqué avant le rendu ;
+- modification marquée puis synchronisée une seule fois ;
+- bouton brièvement désactivé contre les doubles clics.
 
-## Glyphe du bouclier
+## Corrections visuelles
 
-Le glyphe d’Abjuration est plus vertical que les autres glyphes.
-
-Il dispose désormais d’un réglage spécifique :
-
-- largeur réduite ;
-- hauteur ajustée ;
-- pointe inférieure entièrement visible ;
-- correction appliquée dans le Monolithe et dans le plateau inférieur.
-
-## Inchangé
-
-- JavaScript ;
-- Firebase ;
-- gameplay ;
-- positions des 8 logements ;
-- drag & drop ;
-- liaisons ;
-- partie inférieure de l’interface.
+- anneau rouge permanent ;
+- halo cramoisi ;
+- pulsation ;
+- animation d’impact à l’arrivée de la corruption ;
+- glyphe toujours lisible.
 
 Commit conseillé :
 
-`Project Monolith v4.5.2 — Texture et bouclier ajusté`
+`Project Monolith v4.5.4 — Corruption corrigée`

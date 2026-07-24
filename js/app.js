@@ -1227,29 +1227,62 @@ function gmSwap(){
 }
 
 function gmCorrupt(){
-  if(initializationLocked)return;
-  markLocalMutation();
-  clearRevealedLinks();
-  cancelActiveInteractionMode();
-  const filled=[...Array(8).keys()].filter(i=>placements[i]);
-  if(!filled.length)return;
+  const corruptButton=document.getElementById('corrupt');
 
-  const candidates=filled.filter(i=>!corrupted.has(i));
-  if(!candidates.length){
-    speakVathkul('La souillure est déjà partout présente.');
+  if(initializationLocked){
+    speakVathkul('Le Monolithe achève encore sa synchronisation.');
+    addJournalEntry('La corruption est différée : le rituel se synchronise encore.','Le Monolithe');
     update();
     return;
   }
 
+  const filled=[...Array(8).keys()].filter(i=>Boolean(placements[i]));
+
+  if(!filled.length){
+    speakVathkul('Aucun glyphe ne peut encore recevoir la souillure.');
+    addJournalEntry('Lokaug ne trouve aucun glyphe posé à corrompre.','Lokaug');
+    update();
+    return;
+  }
+
+  const candidates=filled.filter(i=>!corrupted.has(i));
+
+  if(!candidates.length){
+    speakVathkul('La souillure est déjà partout présente.');
+    addJournalEntry('Tous les glyphes posés sont déjà corrompus.','Lokaug');
+    update();
+    return;
+  }
+
+  if(corruptButton)corruptButton.disabled=true;
+
+  cancelActiveInteractionMode();
+  clearRevealedLinks();
+
   const i=candidates[Math.floor(Math.random()*candidates.length)];
+
   corrupted.add(i);
   lastGM={type:'corrupt',i};
-  invalidateEvaluation();
+  evaluationVisible=false;
+  adjacencyLinksRevealed=false;
+
   addJournalEntry(`Lokaug corrompt le glyphe « ${stationNames[i]} ».`,'Lokaug');
   speakVathkul('Une souillure gagne le Monolithe.');
+
+  markLocalMutation();
   render();
-  pulseSlotEffect(i,'corruption-arriving',1000);
-  update();
+
+  requestAnimationFrame(()=>{
+    const slot=document.querySelector(`.slot[data-index="${i}"]`);
+    if(slot){
+      slot.classList.add('corrupted','corruption-arriving');
+      setTimeout(()=>slot.classList.remove('corruption-arriving'),1200);
+    }
+  });
+
+  setTimeout(()=>{
+    if(corruptButton)corruptButton.disabled=false;
+  },350);
 }
 function gmRestore(){
   if(!lastGM)return;
@@ -1452,7 +1485,15 @@ document.getElementById('muralOverlay').onclick=e=>{if(e.target.id==='muralOverl
 
 document.getElementById('core').onclick=release;
 document.getElementById('swap').onclick=gmSwap;
-document.getElementById('corrupt').onclick=gmCorrupt;
+const corruptButton=document.getElementById('corrupt');
+if(corruptButton){
+  corruptButton.onclick=null;
+  corruptButton.addEventListener('click',event=>{
+    event.preventDefault();
+    event.stopPropagation();
+    gmCorrupt();
+  });
+}
 document.getElementById('restore').onclick=gmRestore;
 
 document.getElementById('resetRitual').onclick=()=>{
