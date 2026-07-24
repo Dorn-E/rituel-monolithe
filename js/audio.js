@@ -85,7 +85,37 @@
     if (enabled) preload();
   }
 
-  function toggle() {
+  
+  function playInterfaceConfirmation() {
+    if (!enabled) return;
+
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+
+    try {
+      const context = new AudioContextClass();
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(174, context.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(220, context.currentTime + 0.12);
+
+      gain.gain.setValueAtTime(0.0001, context.currentTime);
+      gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, volume * 0.08), context.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.18);
+
+      oscillator.connect(gain);
+      gain.connect(context.destination);
+      oscillator.start();
+      oscillator.stop(context.currentTime + 0.2);
+      oscillator.addEventListener("ended", () => context.close(), { once: true });
+    } catch {
+      // L'interface reste utilisable si WebAudio n'est pas disponible.
+    }
+  }
+
+function toggle() {
     setEnabled(!enabled);
   }
 
@@ -104,6 +134,8 @@
   function updateControls() {
     const toggleButton = document.getElementById("audioToggle");
     const volumeInput = document.getElementById("audioVolume");
+    const volumeValue = document.getElementById("audioVolumeValue");
+    const memoryStatus = document.getElementById("audioMemoryStatus");
 
     if (toggleButton) {
       toggleButton.setAttribute("aria-pressed", String(enabled));
@@ -117,8 +149,17 @@
     }
 
     if (volumeInput) {
-      volumeInput.value = String(Math.round(volume * 100));
+      const percentage = Math.round(volume * 100);
+      volumeInput.value = String(percentage);
       volumeInput.disabled = !enabled;
+      if (volumeValue) volumeValue.textContent = `${percentage} %`;
+    }
+
+    if (memoryStatus) {
+      memoryStatus.textContent = enabled
+        ? `Son activé · volume ${Math.round(volume * 100)} % · préférence mémorisée`
+        : "Son coupé · préférence mémorisée";
+      memoryStatus.dataset.enabled = String(enabled);
     }
   }
 

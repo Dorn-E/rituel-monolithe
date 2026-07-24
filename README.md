@@ -1,40 +1,38 @@
-# Project Monolith — v4.7.0 — Architecture audio
+# Project Monolith — v4.7.1 — Panneau audio intégré
 
-## Cette version ne contient pas encore les sons définitifs
+## Cause du panneau absent
 
-Elle installe toute l’architecture nécessaire :
+La v4.7.0 cherchait la chaîne exacte `<body>` pour injecter les contrôles.
+La page utilise une balise `body` avec des attributs : le bloc HTML n’a donc
+jamais été créé, même si `audio.js` et le CSS existaient bien.
 
-- gestionnaire central `js/audio.js` ;
-- bouton activer/couper le son ;
-- réglage du volume général ;
-- mémorisation des préférences avec `localStorage` ;
-- préchargement des sons disponibles ;
-- absence de crash ou d’erreur visible si les fichiers audio manquent.
+## Correction
 
-## Événements déjà câblés
+Un panneau natif **Ambiance du Monolithe** est maintenant intégré dans la
+colonne de droite, sous **Actions du rituel**.
 
-- pose d’un glyphe ;
-- retrait d’un glyphe ;
-- corruption ;
-- purification ;
-- début de l’épreuve ;
-- révélation de chaque liaison ;
-- verdict positif ou négatif ;
-- apparition d’un message de Vathkül ;
-- charge finale ;
-- pulsation finale ;
-- flash ;
-- fissuration ;
-- destruction.
+Il contient :
 
-## Ajouter les sons
+- bouton Son activé / Son coupé ;
+- curseur de volume général ;
+- valeur numérique du volume ;
+- confirmation visible de la mémorisation locale.
 
-Déposer les fichiers `.ogg` dans `assets/audio/` en suivant les noms indiqués dans :
+## Persistance
 
-`assets/audio/README.md`
+Les valeurs suivantes sont conservées dans `localStorage` :
 
-Aucune modification du JavaScript métier ne sera nécessaire lors du remplacement des sons.
+- `projectMonolith.audio.enabled`
+- `projectMonolith.audio.volume`
+
+Elles sont restaurées automatiquement au rechargement de la page.
+
+## Test sans sons définitifs
+
+Lors de l’activation, un bref son de confirmation généré par WebAudio permet
+de vérifier que l’audio et le volume fonctionnent, même avant l’ajout des
+fichiers `.ogg` définitifs.
 
 Commit conseillé :
 
-`Project Monolith v4.7.0 — Architecture audio`
+`Project Monolith v4.7.1 — Panneau audio intégré`

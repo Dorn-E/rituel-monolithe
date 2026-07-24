@@ -3283,3 +3283,129 @@ inset 0 -5px 8px rgba(255,255,255,.03),
     width:64px;
   }
 }
+
+
+/* ===== v4.7.1 — Panneau audio intégré ===== */
+
+/* Neutralise définitivement l'ancien positionnement flottant. */
+#audioControls.audio-panel{
+  position:relative !important;
+  inset:auto !important;
+  z-index:auto !important;
+  display:block !important;
+  width:auto !important;
+  padding:0 !important;
+  border-radius:0 !important;
+  background-image:url("../assets/ui/actions-panel.webp") !important;
+  color:inherit !important;
+  font-size:inherit !important;
+  backdrop-filter:none !important;
+}
+
+.audio-panel-body{
+  display:grid;
+  gap:14px;
+  padding:12px;
+}
+
+.audio-panel .audio-toggle{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  width:100%;
+  min-height:42px;
+  padding:8px 12px;
+  border:1px solid rgba(126,91,36,.72);
+  border-radius:0;
+  background:rgba(7,7,7,.86);
+  color:#d6c8ae;
+  font-family:inherit;
+  font-size:.92rem;
+  font-weight:700;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease,
+    color .2s ease,
+    background .2s ease;
+}
+
+.audio-panel .audio-toggle:hover{
+  border-color:rgba(205,157,72,.88);
+  color:#f0d99f;
+  background:rgba(20,17,12,.94);
+}
+
+.audio-panel .audio-toggle.is-enabled{
+  border-color:rgba(209,160,72,.92);
+  color:#f0d99f;
+  box-shadow:
+    inset 0 0 18px rgba(151,100,25,.13),
+    0 0 10px rgba(184,125,36,.13);
+}
+
+.audio-panel .audio-toggle-icon{
+  font-size:1.05rem;
+}
+
+.audio-panel .audio-volume{
+  display:grid;
+  grid-template-columns:minmax(110px,auto) 1fr 48px;
+  align-items:center;
+  gap:10px;
+  color:#cbbb9e;
+  white-space:normal;
+}
+
+.audio-volume-label{
+  font-weight:700;
+}
+
+.audio-panel .audio-volume input{
+  width:100%;
+  min-width:100px;
+  accent-color:#b68735;
+  cursor:pointer;
+}
+
+.audio-panel .audio-volume input:disabled{
+  opacity:.34;
+  cursor:not-allowed;
+}
+
+#audioVolumeValue{
+  color:#d9c390;
+  font-variant-numeric:tabular-nums;
+  text-align:right;
+}
+
+.audio-memory-status{
+  margin:0;
+  padding-top:10px;
+  border-top:1px solid rgba(114,82,34,.42);
+  color:#8f826c;
+  font-size:.78rem;
+  line-height:1.35;
+  text-align:center;
+}
+
+.audio-memory-status[data-enabled="true"]{
+  color:#b9a57c;
+}
+
+@media (max-width:760px){
+  .audio-panel .audio-toggle-label,
+  .audio-panel .audio-volume span{
+    display:inline;
+  }
+
+  .audio-panel .audio-volume{
+    grid-template-columns:1fr;
+  }
+
+  #audioVolumeValue{
+    text-align:center;
+  }
+}
