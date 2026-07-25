@@ -3596,3 +3596,33 @@ inset 0 -5px 8px rgba(255,255,255,.03),
 .audio-test-status[data-state="warning"]{
   color:#c69b79;
 }
+
+
+/* ===== v4.8.0A-r1 — Correctif bouton Tester les sons ===== */
+
+.audio-test-section{
+  display:grid !important;
+  gap:8px;
+  width:100%;
+  margin:2px 0 0;
+  padding-top:4px;
+  visibility:visible !important;
+  opacity:1 !important;
+}
+
+.audio-test-section .audio-test-button{
+  display:block !important;
+  width:100% !important;
+  min-height:44px !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  position:relative !important;
+  z-index:2 !important;
+}
+
+.audio-test-section .audio-test-status{
+  display:block !important;
+  min-height:1.25em !important;
+  visibility:visible !important;
+  opacity:1 !important;
+}
