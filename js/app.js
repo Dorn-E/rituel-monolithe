@@ -266,7 +266,7 @@ function drop(e,i){
   invalidateEvaluation();
   render();
   requestAnimationFrame(()=>playGlyphPlacementEffect(i));
-  window.ProjectMonolithAudio?.play('glyphPlace',{gain:.9});
+  window.ProjectMonolithAudio?.play('glyphPlace',{gain:1.35});
 }
 
 
@@ -327,7 +327,7 @@ function renderAdjacentCorrectLinks(){
 
     link.append(glow,filament,spark);
     layer.appendChild(link);
-    window.setTimeout(()=>window.ProjectMonolithAudio?.play('linkReveal',{gain:.45}),revealedIndex*150);
+    window.setTimeout(()=>window.ProjectMonolithAudio?.play('linkReveal',{gain:.95,cooldown:0,maxVoices:3}),(revealedIndex*150)+80);
 
     revealedIndex++;
   }
@@ -1142,9 +1142,21 @@ function resolvePurification(success){
     corrupted.delete(i);
 lastGM=null;
     invalidateEvaluation();
+    window.ProjectMonolithAudio?.play('purification',{
+      gain:1,
+      stopGroup:true,
+      fadeOutMs:80,
+      cooldown:0
+    });
     speakVathkul('La gravure retrouve sa pureté.');
   }else{
     spendSparks(1);
+    window.ProjectMonolithAudio?.play('configurationFailure',{
+      gain:.95,
+      stopGroup:true,
+      fadeOutMs:80,
+      cooldown:0
+    });
     speakVathkul('La souillure demeure.');
   }
 

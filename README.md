@@ -1,42 +1,39 @@
-# Project Monolith — v4.8.1 — Audio intégré
+# Project Monolith — v4.8.2 — Correctif audio QA
 
-## Intégration
+## Corrections
 
-Les 14 effets sonores définitifs ont été copiés dans `assets/audio/` :
+### Pose d’un glyphe
 
-- pose et retrait d’un glyphe ;
-- corruption et purification ;
-- début de l’épreuve ;
-- révélation des liaisons ;
-- réussite et échec ;
-- signature de Vathkül ;
-- charge, pulsation, flash, fissuration et destruction finales.
+Le gain événementiel passe de `0.90` à `1.35`, soit environ 50 % de plus.
 
-## Validation
+### Révélation d’une liaison
 
-Chaque fichier a été vérifié avec `ffprobe`.
+- gain relevé de `0.45` à `0.95` ;
+- délai de 80 ms après le début de l’apparition visuelle ;
+- suppression du cooldown pendant la séquence ;
+- jusqu’à trois voix de liaison simultanées autorisées.
 
-Le rapport complet est disponible dans :
+### Purification
 
-`assets/audio/audio-manifest.json`
+Le gestionnaire n’était jamais appelé dans `resolvePurification()`.
 
-## Interface
+Désormais :
 
-La modale **Gestion du son** reste inchangée :
-
-- activation / coupure ;
-- volume général ;
-- mémorisation locale ;
-- bouton **Tester les sons**.
+- réussite : lecture de `purification.ogg` ;
+- échec : lecture de `configuration-failure.ogg` ;
+- arrêt propre du groupe sonore précédent ;
+- aucun cooldown susceptible de supprimer le retour sonore.
 
 ## Inchangé
 
+- fichiers audio ;
+- graphismes ;
 - gameplay ;
 - Firebase ;
 - synchronisation ;
-- graphismes ;
-- règles du rituel.
+- coût de la purification ;
+- logique de réussite et d’échec.
 
 Commit conseillé :
 
-`Project Monolith v4.8.1 — Audio intégré`
+`Project Monolith v4.8.2 — Correctif audio QA`
