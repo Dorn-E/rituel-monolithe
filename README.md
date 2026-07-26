@@ -1,32 +1,29 @@
-# Project Monolith — v4.8.3 — Correctif purification audio
+# Project Monolith — v4.8.4 — Correctif définitif purification
 
-## Correctif
+## Cause exacte
 
-Le son de purification est maintenant déclenché :
+`app.js` contenait plusieurs définitions de `resolvePurification(success)`.
+En JavaScript, la dernière définition remplaçait les précédentes et annulait
+les appels audio ajoutés dans les versions antérieures.
 
-1. après la fermeture de l’overlay ;
-2. après le rendu de l’interface ;
-3. avec un délai de 120 ms ;
-4. avec priorité maximale ;
-5. sans cooldown ;
-6. avec une seconde tentative automatique si la première lecture est refusée.
+## Correction
 
-## Sons utilisés
+- toutes les anciennes définitions ont été supprimées ;
+- une seule fonction `resolvePurification()` demeure ;
+- réussite : lecture de `purification.ogg` ;
+- échec : lecture de `configuration-failure.ogg` ;
+- lecture déclenchée directement après `render()` et `update()` ;
+- aucun cooldown ;
+- priorité maximale ;
+- diagnostic console conservé.
 
-- réussite : `purification.ogg`
-- échec : `configuration-failure.ogg`
+## Audit des autres fonctions
 
-## Diagnostic
+Autres noms de fonctions dupliqués détectés automatiquement :
 
-La console affiche désormais :
+Aucun autre doublon de déclaration nommé détecté.
 
-`[Monolithe][Audio] Purification`
-
-avec :
-
-- le résultat de la purification ;
-- le son demandé ;
-- la confirmation que la lecture a réellement démarré.
+Aucun autre doublon n’a été modifié automatiquement afin d’éviter une régression.
 
 ## Inchangé
 
@@ -39,4 +36,4 @@ avec :
 
 Commit conseillé :
 
-`Project Monolith v4.8.3 — Correctif purification audio`
+`Project Monolith v4.8.4 — Correctif définitif purification`

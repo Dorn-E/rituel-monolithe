@@ -1132,72 +1132,7 @@ function choosePurification(boosted){
   update();
 }
 
-function resolvePurification(success){
-  markLocalMutation();
-  clearRevealedLinks();
 
-  if(pendingPurification===null)return;
-
-  const i=pendingPurification;
-  const overlay=document.getElementById('purifyOverlay');
-
-  if(success){
-    corrupted.delete(i);
-    lastGM=null;
-    invalidateEvaluation();
-    speakVathkul('La gravure retrouve sa pureté.');
-  }else{
-    spendSparks(1);
-    speakVathkul('La souillure demeure.');
-  }
-
-  pendingPurification=null;
-  purificationBoosted=false;
-
-  overlay?.classList.remove('show');
-  overlay?.setAttribute('aria-hidden','true');
-
-  render();
-
-  // Le son est lancé après la fermeture de l’overlay et le rendu.
-  // Cela évite qu’un autre son du même groupe "ritual-major" ne le bloque.
-  window.setTimeout(()=>{
-    const soundName=success?'purification':'configurationFailure';
-    const played=window.ProjectMonolithAudio?.play(soundName,{
-      gain:success?1.35:1.15,
-      cooldown:0,
-      maxVoices:1,
-      stopGroup:true,
-      fadeOutMs:0,
-      priority:100
-    });
-
-    console.debug('[Monolithe][Audio] Purification', {
-      success,
-      soundName,
-      played:Boolean(played)
-    });
-
-    // Repli de sécurité : si le gestionnaire refuse la première lecture,
-    // une seconde tentative sans arrêt de groupe est faite juste après.
-    if(!played){
-      window.setTimeout(()=>{
-        const retry=window.ProjectMonolithAudio?.play(soundName,{
-          gain:success?1.35:1.15,
-          cooldown:0,
-          maxVoices:1,
-          priority:100
-        });
-
-        console.debug('[Monolithe][Audio] Purification retry', {
-          success,
-          soundName,
-          played:Boolean(retry)
-        });
-      },90);
-    }
-  },120);
-}
 
 
 function escapeHTML(value){
@@ -1386,40 +1321,7 @@ function chooseVathkulAid(useAid){
   setPurificationStep('roll');
 }
 
-function resolvePurification(success){
-  if(purificationTargetIndex===null)return;
 
-  if(success){
-    const purifiedIndex=purificationTargetIndex;
-
-    corrupted.delete(purifiedIndex);
-
-    const purifiedSlot=document.querySelector(`.slot[data-index="${purifiedIndex}"]`);
-    purifiedSlot?.classList.remove('corrupted');
-
-    speakVathkul('Une dissonance s’efface.');
-    addJournalEntry('Le glyphe ciblé a été purifié.');
-
-    closePurificationFlow();
-    render();
-    pulseSlotEffect(purifiedIndex,'purification-cleansed',900);
-
-    const board=document.getElementById('board');
-    board?.classList.add('purification-wave');
-    window.setTimeout(()=>board?.classList.remove('purification-wave'),900);
-
-    update();
-    return;
-  }else{
-    speakVathkul('La souillure demeure.');
-    addJournalEntry('La tentative de purification a échoué.');
-  }
-
-  previousLife=life;
-  closePurificationFlow();
-  update();
-  stateChangeHandler();
-}
 
 function gmSwap(){
   if(initializationLocked)return;
@@ -1677,6 +1579,49 @@ document.getElementById('memory').onclick=awakenMemory;
 document.getElementById('beginPurify').onclick=openPurificationFlow;
 document.getElementById('purifyNormal').onclick=()=>choosePurification(false);
 document.getElementById('purifyBoost').onclick=()=>choosePurification(true);
+function resolvePurification(success){
+  markLocalMutation();
+  clearRevealedLinks();
+
+  if(pendingPurification===null)return;
+
+  const i=pendingPurification;
+  const overlay=document.getElementById('purifyOverlay');
+
+  if(success){
+    corrupted.delete(i);
+    lastGM=null;
+    invalidateEvaluation();
+    speakVathkul('La gravure retrouve sa pureté.');
+  }else{
+    spendSparks(1);
+    speakVathkul('La souillure demeure.');
+  }
+
+  pendingPurification=null;
+  purificationBoosted=false;
+
+  overlay?.classList.remove('show');
+  overlay?.setAttribute('aria-hidden','true');
+
+  render();
+  update();
+
+  const soundName=success?'purification':'configurationFailure';
+  const played=window.ProjectMonolithAudio?.play(soundName,{
+    gain:success?1.35:1.15,
+    cooldown:0,
+    maxVoices:1,
+    priority:100
+  });
+
+  console.debug('[Monolithe][Audio] Purification definitive', {
+    success,
+    soundName,
+    played:Boolean(played)
+  });
+}
+
 document.getElementById('purifySuccess').onclick=()=>resolvePurification(true);
 document.getElementById('purifyFailure').onclick=()=>resolvePurification(false);
 document.getElementById('clear').onclick=()=>{placements.fill(null);invalidateEvaluation();render();say('Les huit glyphes retournent au bord du cercle.')};
