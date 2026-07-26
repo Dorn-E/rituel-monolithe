@@ -1,39 +1,42 @@
-# Project Monolith — v4.8.2 — Correctif audio QA
+# Project Monolith — v4.8.3 — Correctif purification audio
 
-## Corrections
+## Correctif
 
-### Pose d’un glyphe
+Le son de purification est maintenant déclenché :
 
-Le gain événementiel passe de `0.90` à `1.35`, soit environ 50 % de plus.
+1. après la fermeture de l’overlay ;
+2. après le rendu de l’interface ;
+3. avec un délai de 120 ms ;
+4. avec priorité maximale ;
+5. sans cooldown ;
+6. avec une seconde tentative automatique si la première lecture est refusée.
 
-### Révélation d’une liaison
+## Sons utilisés
 
-- gain relevé de `0.45` à `0.95` ;
-- délai de 80 ms après le début de l’apparition visuelle ;
-- suppression du cooldown pendant la séquence ;
-- jusqu’à trois voix de liaison simultanées autorisées.
+- réussite : `purification.ogg`
+- échec : `configuration-failure.ogg`
 
-### Purification
+## Diagnostic
 
-Le gestionnaire n’était jamais appelé dans `resolvePurification()`.
+La console affiche désormais :
 
-Désormais :
+`[Monolithe][Audio] Purification`
 
-- réussite : lecture de `purification.ogg` ;
-- échec : lecture de `configuration-failure.ogg` ;
-- arrêt propre du groupe sonore précédent ;
-- aucun cooldown susceptible de supprimer le retour sonore.
+avec :
+
+- le résultat de la purification ;
+- le son demandé ;
+- la confirmation que la lecture a réellement démarré.
 
 ## Inchangé
 
-- fichiers audio ;
-- graphismes ;
-- gameplay ;
+- logique de purification ;
+- coût en Étincelles ;
+- animations ;
 - Firebase ;
 - synchronisation ;
-- coût de la purification ;
-- logique de réussite et d’échec.
+- fichiers audio.
 
 Commit conseillé :
 
-`Project Monolith v4.8.2 — Correctif audio QA`
+`Project Monolith v4.8.3 — Correctif purification audio`

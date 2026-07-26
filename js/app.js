@@ -1135,35 +1135,68 @@ function choosePurification(boosted){
 function resolvePurification(success){
   markLocalMutation();
   clearRevealedLinks();
+
   if(pendingPurification===null)return;
+
   const i=pendingPurification;
+  const overlay=document.getElementById('purifyOverlay');
 
   if(success){
     corrupted.delete(i);
-lastGM=null;
+    lastGM=null;
     invalidateEvaluation();
-    window.ProjectMonolithAudio?.play('purification',{
-      gain:1,
-      stopGroup:true,
-      fadeOutMs:80,
-      cooldown:0
-    });
     speakVathkul('La gravure retrouve sa pureté.');
   }else{
     spendSparks(1);
-    window.ProjectMonolithAudio?.play('configurationFailure',{
-      gain:.95,
-      stopGroup:true,
-      fadeOutMs:80,
-      cooldown:0
-    });
     speakVathkul('La souillure demeure.');
   }
 
   pendingPurification=null;
   purificationBoosted=false;
-  document.getElementById('purifyOverlay').classList.remove('show');
+
+  overlay?.classList.remove('show');
+  overlay?.setAttribute('aria-hidden','true');
+
   render();
+
+  // Le son est lancé après la fermeture de l’overlay et le rendu.
+  // Cela évite qu’un autre son du même groupe "ritual-major" ne le bloque.
+  window.setTimeout(()=>{
+    const soundName=success?'purification':'configurationFailure';
+    const played=window.ProjectMonolithAudio?.play(soundName,{
+      gain:success?1.35:1.15,
+      cooldown:0,
+      maxVoices:1,
+      stopGroup:true,
+      fadeOutMs:0,
+      priority:100
+    });
+
+    console.debug('[Monolithe][Audio] Purification', {
+      success,
+      soundName,
+      played:Boolean(played)
+    });
+
+    // Repli de sécurité : si le gestionnaire refuse la première lecture,
+    // une seconde tentative sans arrêt de groupe est faite juste après.
+    if(!played){
+      window.setTimeout(()=>{
+        const retry=window.ProjectMonolithAudio?.play(soundName,{
+          gain:success?1.35:1.15,
+          cooldown:0,
+          maxVoices:1,
+          priority:100
+        });
+
+        console.debug('[Monolithe][Audio] Purification retry', {
+          success,
+          soundName,
+          played:Boolean(retry)
+        });
+      },90);
+    }
+  },120);
 }
 
 
