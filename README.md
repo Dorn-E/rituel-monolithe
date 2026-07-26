@@ -1,25 +1,42 @@
-# Project Monolith — v4.8.0A-r1 — Correctif bouton de test audio
+# Project Monolith — v4.8.1 — Audio intégré
 
-## Correction
+## Intégration
 
-Le bouton **Tester les sons** est maintenant injecté de manière explicite
-dans la modale audio, juste au-dessus du bouton **Fermer**.
+Les 14 effets sonores définitifs ont été copiés dans `assets/audio/` :
 
-Cette révision garantit :
+- pose et retrait d’un glyphe ;
+- corruption et purification ;
+- début de l’épreuve ;
+- révélation des liaisons ;
+- réussite et échec ;
+- signature de Vathkül ;
+- charge, pulsation, flash, fissuration et destruction finales.
 
-- présence du bouton dans le HTML final ;
-- présence de la zone de statut ;
-- largeur complète dans la modale ;
-- impossibilité pour le CSS de masquer ou réduire la section ;
-- conservation du listener `runTestSequence()`.
+## Validation
 
-## Comportement attendu sans fichiers `.ogg`
+Chaque fichier a été vérifié avec `ffprobe`.
 
-- le bouton est visible ;
-- la séquence indique les fichiers manquants ;
-- les erreurs 404 audio restent normales tant que le pack sonore n’est pas ajouté ;
-- aucune erreur JavaScript ne doit apparaître.
+Le rapport complet est disponible dans :
+
+`assets/audio/audio-manifest.json`
+
+## Interface
+
+La modale **Gestion du son** reste inchangée :
+
+- activation / coupure ;
+- volume général ;
+- mémorisation locale ;
+- bouton **Tester les sons**.
+
+## Inchangé
+
+- gameplay ;
+- Firebase ;
+- synchronisation ;
+- graphismes ;
+- règles du rituel.
 
 Commit conseillé :
 
-`Project Monolith v4.8.0A-r1 — Bouton test audio`
+`Project Monolith v4.8.1 — Audio intégré`

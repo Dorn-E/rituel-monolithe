@@ -1,62 +1,105 @@
 {
-  "version": "4.8.0A",
-  "description": "Audio event mapping and mixing parameters.",
-  "sounds": {
-    "glyphPlace": {
-      "file": "glyph-place.ogg",
-      "gain": 0.7
+  "version": "4.8.1",
+  "description": "Pack audio définitif intégré au Monolithe.",
+  "validated_with_ffprobe": true,
+  "files": {
+    "glyph-place.ogg": {
+      "codec": "vorbis",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration": 0.379,
+      "size_bytes": 13161
     },
-    "glyphRemove": {
-      "file": "glyph-remove.ogg",
-      "gain": 0.45
+    "glyph-remove.ogg": {
+      "codec": "vorbis",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration": 0.27,
+      "size_bytes": 11260
     },
-    "corruption": {
-      "file": "corruption.ogg",
-      "gain": 0.85
+    "corruption.ogg": {
+      "codec": "vorbis",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration": 1.1,
+      "size_bytes": 23486
     },
-    "purification": {
-      "file": "purification.ogg",
-      "gain": 0.65
+    "purification.ogg": {
+      "codec": "vorbis",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration": 1.5,
+      "size_bytes": 36129
     },
-    "configurationStart": {
-      "file": "configuration-start.ogg",
-      "gain": 0.42
+    "configuration-start.ogg": {
+      "codec": "vorbis",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration": 2.0,
+      "size_bytes": 39764
     },
-    "linkReveal": {
-      "file": "link-reveal.ogg",
-      "gain": 0.34
+    "link-reveal.ogg": {
+      "codec": "vorbis",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration": 0.4,
+      "size_bytes": 14370
     },
-    "configurationSuccess": {
-      "file": "configuration-success.ogg",
-      "gain": 0.72
+    "configuration-success.ogg": {
+      "codec": "vorbis",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration": 1.1,
+      "size_bytes": 26608
     },
-    "configurationFailure": {
-      "file": "configuration-failure.ogg",
-      "gain": 0.4
+    "configuration-failure.ogg": {
+      "codec": "vorbis",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration": 1.213,
+      "size_bytes": 26338
     },
-    "vathkulMessage": {
-      "file": "vathkul-message.ogg",
-      "gain": 0.18
+    "vathkul-message.ogg": {
+      "codec": "vorbis",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration": 0.344,
+      "size_bytes": 11057
     },
-    "finalCharge": {
-      "file": "final-charge.ogg",
-      "gain": 0.8
+    "final-charge.ogg": {
+      "codec": "vorbis",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration": 3.0,
+      "size_bytes": 59975
     },
-    "finalPulse": {
-      "file": "final-pulse.ogg",
-      "gain": 0.82
+    "final-pulse.ogg": {
+      "codec": "vorbis",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration": 0.587,
+      "size_bytes": 16321
     },
-    "finalFlash": {
-      "file": "final-flash.ogg",
-      "gain": 0.68
+    "final-flash.ogg": {
+      "codec": "vorbis",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration": 0.25,
+      "size_bytes": 10955
     },
-    "finalCrack": {
-      "file": "final-crack.ogg",
-      "gain": 0.88
+    "final-crack.ogg": {
+      "codec": "vorbis",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration": 1.0,
+      "size_bytes": 24042
     },
-    "finalDestruction": {
-      "file": "final-destruction.ogg",
-      "gain": 0.92
+    "final-destruction.ogg": {
+      "codec": "vorbis",
+      "sample_rate": 48000,
+      "channels": 2,
+      "duration": 2.5,
+      "size_bytes": 48053
     }
   }
 }
