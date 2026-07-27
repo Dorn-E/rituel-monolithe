@@ -170,6 +170,8 @@ let memoryLevel=Array(8).fill(0);
 let corrupted=new Set();
 let lastGM=null;
 let finalReady=false;
+let pendingPurification=null;
+let purificationBoosted=false;
 let evaluationVisible=false;
 let ritualCompleted=false;
 let lastRenderedPlacements=Array(8).fill(null);
@@ -1083,9 +1085,52 @@ function release(){
   setTimeout(()=>document.getElementById('victory').classList.add('show'),2600);
 }
 
+function beginPurification(){
+  if(selected===null){
+    say('Sélectionnez d’abord une gravure parasitée.');
+    return;
+  }
+  if(!corrupted.has(selected)){
+    speakVathkul('Cette gravure est déjà pure.');
+    return;
+  }
+  if(!spendSparks(1)){
+    say('Aucune Étincelle ne subsiste pour soutenir une purification.');
+    return;
+  }
+  pendingPurification=selected;
+  purificationBoosted=false;
 
+  document.getElementById('purifyPrompt').textContent=
+    `Vathkül engage déjà 1 Étincelle de Torm pour retenir le parasitage de la gravure « ${stationNames[selected]} ».`;
+  document.getElementById('purifyResult').textContent=
+    'Choisissez : tenter un test DD 20, ou demander à Vathkül de dépenser 1 Étincelle supplémentaire pour réduire le DD à 15.';
+  document.getElementById('purifyChoiceRow').style.display='grid';
+  document.getElementById('purifyOutcomeRow').style.display='none';
+  document.getElementById('purifyOverlay').classList.add('show');
+  update();
+}
 
+function choosePurification(boosted){
+  purificationBoosted=boosted;
 
+  if(boosted){
+    if(!spendSparks(1)){
+      document.getElementById('purifyResult').textContent=
+        'Aucune Étincelle ne subsiste pour renforcer davantage la tentative.';
+      return;
+    }
+    document.getElementById('purifyResult').textContent=
+      'Vathkül renforce votre rituel. Effectuez un test d’Intelligence (Arcanes) ou de Sagesse (Religion), DD 15.';
+  }else{
+    document.getElementById('purifyResult').textContent=
+      'Effectuez un test d’Intelligence (Arcanes) ou de Sagesse (Religion), DD 20.';
+  }
+
+  document.getElementById('purifyChoiceRow').style.display='none';
+  document.getElementById('purifyOutcomeRow').style.display='grid';
+  update();
+}
 
 
 
@@ -1111,11 +1156,15 @@ function initialSharedState(){
   return {
     schemaVersion:2,stateRevision:0,placements:Array(8).fill(null),order:[...schools],life:12,memoryLevel:Array(8).fill(0),
     corrupted:[],lastGM:null,evaluationVisible:false,ritualCompleted:false,
+    pendingPurification:null,purificationBoosted:false,
     phaseHTML:'<b>Exploration :</b> placez librement les huit glyphes. Vathkül n’intervient pas tant que vous ne l’interrogez pas.',
     feedbackText:'Chaque épreuve, chaque souvenir et chaque tentative de purification consume au moins 1 Étincelle de Torm.',
     memoryText:'Sélectionnez une gravure du cercle, puis demandez à Vathkül d’éveiller un souvenir.',
     voiceText:'« Les Étincelles que Torm m’a confiées soutiennent encore mon serment. Employez-les avec discernement. »',
-    memoryStage:'',memoryOverlayOpen:false,boardDissolving:false,victoryOpen:false,
+    memoryStage:'',memoryOverlayOpen:false,purifyOverlayOpen:false,
+    purifyPrompt:'Vathkül engage une Étincelle de Torm pour retenir la corruption.',
+    purifyResult:'Choisissez d’abord si Vathkül renforce votre tentative.',
+    purifyChoiceVisible:true,purifyOutcomeVisible:false,boardDissolving:false,victoryOpen:false,
     ritualJournal:[{id:`reset-${Date.now()}`,timestamp:Date.now(),actor:'Le Monolithe',text:'Le rituel retrouve son état originel.'}]
   };
 }
@@ -1123,11 +1172,6 @@ function resetRitualState(){
   spokenThresholds.clear();
   selected=null;
   previousLife=12;
-  purificationMode=false;
-  purificationTargetIndex=null;
-  purificationAttemptPaid=false;
-  purificationAidPaid=false;
-  document.getElementById('purificationFlowOverlay')?.classList.remove('show');
 
   const resetState=initialSharedState();
   resetState.stateRevision=Math.max(Date.now(),stateRevision+1);
@@ -1374,12 +1418,19 @@ function exportSharedState(){
     lastGM:lastGM ? {...lastGM} : null,
     evaluationVisible,
     ritualCompleted,
+    pendingPurification,
+    purificationBoosted,
     phaseHTML:document.getElementById('phase').innerHTML,
     feedbackText:document.getElementById('feedback').textContent,
     memoryText:document.getElementById('memoryText').textContent,
     voiceText:document.getElementById('vathkulVoice').textContent,
     memoryStage:document.getElementById('memoryStage').textContent,
     memoryOverlayOpen:document.getElementById('memoryOverlay').classList.contains('show'),
+    purifyOverlayOpen:document.getElementById('purifyOverlay').classList.contains('show'),
+    purifyPrompt:document.getElementById('purifyPrompt').textContent,
+    purifyResult:document.getElementById('purifyResult').textContent,
+    purifyChoiceVisible:document.getElementById('purifyChoiceRow').style.display!=='none',
+    purifyOutcomeVisible:document.getElementById('purifyOutcomeRow').style.display!=='none',
     boardDissolving:document.getElementById('board').classList.contains('dissolving'),
     victoryOpen:document.getElementById('victory').classList.contains('show'),
     ritualJournal:ritualJournal.map(entry=>({...entry}))
@@ -1408,6 +1459,10 @@ function applySharedState(sharedState,{force=false}={}){
     lastGM=sharedState.lastGM ? {...sharedState.lastGM} : null;
     evaluationVisible=Boolean(sharedState.evaluationVisible);
     ritualCompleted=Boolean(sharedState.ritualCompleted);
+    pendingPurification=Number.isInteger(sharedState.pendingPurification)
+      ? sharedState.pendingPurification
+      : null;
+    purificationBoosted=Boolean(sharedState.purificationBoosted);
     ritualJournal=Array.isArray(sharedState.ritualJournal)
       ? sharedState.ritualJournal.map(entry=>({...entry})).slice(-60)
       : [];
@@ -1427,10 +1482,23 @@ function applySharedState(sharedState,{force=false}={}){
     if(typeof sharedState.memoryStage==='string'){
       document.getElementById('memoryStage').textContent=sharedState.memoryStage;
     }
+    if(typeof sharedState.purifyPrompt==='string'){
+      document.getElementById('purifyPrompt').textContent=sharedState.purifyPrompt;
+    }
+    if(typeof sharedState.purifyResult==='string'){
+      document.getElementById('purifyResult').textContent=sharedState.purifyResult;
+    }
 
     document.getElementById('memoryOverlay').classList.toggle(
       'show',Boolean(sharedState.memoryOverlayOpen)
     );
+    document.getElementById('purifyOverlay').classList.toggle(
+      'show',Boolean(sharedState.purifyOverlayOpen)
+    );
+    document.getElementById('purifyChoiceRow').style.display=
+      sharedState.purifyChoiceVisible ? 'grid' : 'none';
+    document.getElementById('purifyOutcomeRow').style.display=
+      sharedState.purifyOutcomeVisible ? 'grid' : 'none';
     document.getElementById('board').classList.toggle(
       'dissolving',Boolean(sharedState.boardDissolving)
     );
@@ -1495,62 +1563,60 @@ window.ProjectMonolith={
 };
 
 
-
-
-function initializePurificationControls(){
-  const beginButton=document.getElementById('beginPurify');
-  const closeButton=document.getElementById('closePurificationFlow');
-  const aidYesButton=document.getElementById('purificationAidYes');
-  const aidNoButton=document.getElementById('purificationAidNo');
-  const successButton=document.getElementById('purificationSuccess');
-  const failureButton=document.getElementById('purificationFailure');
-  const overlay=document.getElementById('purificationFlowOverlay');
-
-  if(!beginButton || !closeButton || !aidYesButton || !aidNoButton ||
-     !successButton || !failureButton || !overlay){
-    console.error('[Monolithe] Interface de purification incomplète.');
-    return;
-  }
-
-  beginButton.addEventListener('click',openPurificationFlow);
-  closeButton.addEventListener('click',closePurificationFlow);
-  aidYesButton.addEventListener('click',()=>chooseVathkulAid(true));
-  aidNoButton.addEventListener('click',()=>chooseVathkulAid(false));
-  successButton.addEventListener('click',()=>resolvePurification(true));
-  failureButton.addEventListener('click',()=>resolvePurification(false));
-  overlay.addEventListener('click',event=>{
-    if(event.target===overlay)closePurificationFlow();
-  });
-
-  console.debug('[Monolithe] Flux de purification initialisé.');
-}
-
-initializePurificationControls();
+document.getElementById('closePurificationFlow')?.addEventListener('click',closePurificationFlow);
+document.getElementById('purificationAidYes')?.addEventListener('click',()=>chooseVathkulAid(true));
+document.getElementById('purificationAidNo')?.addEventListener('click',()=>chooseVathkulAid(false));
+document.getElementById('purificationSuccess')?.addEventListener('click',()=>resolvePurification(true));
+document.getElementById('purificationFailure')?.addEventListener('click',()=>resolvePurification(false));
+document.getElementById('purificationFlowOverlay')?.addEventListener('click',event=>{
+  if(event.target.id==='purificationFlowOverlay')closePurificationFlow();
+});
 
 document.getElementById('cancelInteractionMode')?.addEventListener('click',cancelActiveInteractionMode);
 document.getElementById('lokaugSwap')?.addEventListener('click',startLokaugSwap);
 document.getElementById('test').onclick=testConfiguration;
 document.getElementById('memory').onclick=awakenMemory;
+document.getElementById('beginPurify').onclick=openPurificationFlow;
+document.getElementById('purifyNormal').onclick=()=>choosePurification(false);
+document.getElementById('purifyBoost').onclick=()=>choosePurification(true);
 function resolvePurification(success){
-  if(purificationTargetIndex===null)return;
-
   markLocalMutation();
   clearRevealedLinks();
 
-  const targetIndex=purificationTargetIndex;
+  // La version moderne du flux utilise purificationTargetIndex.
+  // pendingPurification reste supporté pour l’ancien flux.
+  const isModernFlow=purificationTargetIndex!==null;
+  const i=isModernFlow ? purificationTargetIndex : pendingPurification;
+
+  if(i===null || i===undefined)return;
 
   if(success){
-    corrupted.delete(targetIndex);
+    corrupted.delete(i);
     lastGM=null;
     invalidateEvaluation();
     speakVathkul('La gravure retrouve sa pureté.');
     addJournalEntry('La gravure corrompue est purifiée.','Le Monolithe');
   }else{
+    // Dans le flux moderne, le coût a déjà été payé au moment de sélectionner
+    // la gravure. On ne dépense donc pas une seconde Étincelle ici.
+    if(!isModernFlow){
+      spendSparks(1);
+    }
     speakVathkul('La souillure demeure.');
     addJournalEntry('La tentative de purification échoue.','Le Monolithe');
   }
 
-  closePurificationFlow();
+  if(isModernFlow){
+    closePurificationFlow();
+  }else{
+    pendingPurification=null;
+    purificationBoosted=false;
+
+    const legacyOverlay=document.getElementById('purifyOverlay');
+    legacyOverlay?.classList.remove('show');
+    legacyOverlay?.setAttribute('aria-hidden','true');
+  }
+
   render();
   update();
 
@@ -1562,14 +1628,17 @@ function resolvePurification(success){
     priority:100
   });
 
-  console.debug('[Monolithe][Audio] Purification v4.9.0',{
+  console.debug('[Monolithe][Audio] Purification v4.8.5', {
     success,
     soundName,
     played:Boolean(played),
-    targetIndex
+    flow:isModernFlow?'modern':'legacy',
+    targetIndex:i
   });
 }
 
+document.getElementById('purifySuccess').onclick=()=>resolvePurification(true);
+document.getElementById('purifyFailure').onclick=()=>resolvePurification(false);
 document.getElementById('clear').onclick=()=>{placements.fill(null);invalidateEvaluation();render();say('Les huit glyphes retournent au bord du cercle.')};
 document.getElementById('shuffle').onclick=()=>{order.sort(()=>Math.random()-.5);render()};
 document.getElementById('memoryClose').onclick=()=>{

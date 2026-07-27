@@ -1,40 +1,50 @@
-# Project Monolith — v4.9.0 — Code Cleanup
+# Project Monolith — v4.8.5 — Correctif du flux de purification
 
-## Purification unifiée
+## Cause exacte
 
-L’ancien système de purification a été supprimé intégralement :
+L’interface actuelle de purification utilise :
 
-- `purifyOverlay` ;
-- `pendingPurification` ;
-- `purificationBoosted` ;
-- `beginPurification()` ;
-- `choosePurification()` ;
-- anciens boutons et anciens champs de synchronisation.
+- `purificationTargetIndex`
+- `purificationFlowOverlay`
+- `closePurificationFlow()`
 
-Un seul flux subsiste :
+Mais `resolvePurification()` utilisait encore l’ancien système :
 
-1. activation du mode de purification ;
-2. sélection d’un glyphe corrompu ;
-3. choix de l’assistance de Vathkül ;
-4. réussite ou échec ;
-5. fermeture immédiate de la fenêtre ;
-6. mise à jour du glyphe ;
-7. lecture du son ;
-8. synchronisation.
+- `pendingPurification`
+- `purifyOverlay`
 
-## Initialisation robuste
+La fonction quittait donc immédiatement avec `return`, ce qui empêchait :
 
-Les scripts sont maintenant chargés après tous les overlays. Les six contrôles de purification sont vérifiés et câblés par `initializePurificationControls()`.
+- la fermeture de la fenêtre ;
+- le changement d’état ;
+- la lecture du son.
 
-## Audio
+## Correction
 
-- réussite : `purification.ogg` ;
-- échec : `configuration-failure.ogg`.
+La fonction prend désormais en charge les deux flux :
 
-## Compatibilité
+### Flux moderne
 
-Les anciens champs de purification reçus depuis Firebase sont simplement ignorés. Les états principaux du rituel restent compatibles.
+- cible : `purificationTargetIndex`
+- fermeture : `closePurificationFlow()`
+- réussite : suppression de la corruption
+- échec : aucun second coût en Étincelles
+- son de réussite ou d’échec
+
+### Ancien flux
+
+- cible : `pendingPurification`
+- fermeture de `purifyOverlay`
+- comportement historique conservé
+
+## Diagnostic
+
+La console affiche :
+
+`[Monolithe][Audio] Purification v4.8.5`
+
+avec le flux utilisé, la cible et l’état de lecture du son.
 
 Commit conseillé :
 
-`Project Monolith v4.9.0 — Code Cleanup`
+`Project Monolith v4.8.5 — Correctif flux purification`

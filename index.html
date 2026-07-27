@@ -1,14 +1,14 @@
 <!doctype html>
-<!-- Project Monolith v4.9.0b — interface validée -->
+<!-- Project Monolith v4.8.5b — interface validée -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Le Rituel du Monolithe — v4.9.0b</title>
+<title>Le Rituel du Monolithe — v4.8.5b</title>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<link rel="stylesheet" href="css/style-v41.css?v=4.9.0">
+<link rel="stylesheet" href="css/style-v41.css?v=4.8.5">
 </head>
 <body data-build="4.1.0">
 <div class="entry-gate" id="entryGate" aria-modal="true" role="dialog">
@@ -129,6 +129,22 @@
   </main>
 </div>
 
+<div class="purify-overlay" id="purifyOverlay">
+  <div class="modal-card">
+    <h2>Purification rituelle</h2>
+    <p id="purifyPrompt">Vathkül engage une Étincelle de Torm pour retenir la corruption.</p>
+    <div class="purify-result" id="purifyResult">Choisissez d’abord si Vathkül renforce votre tentative.</div>
+    <div class="purify-row" id="purifyChoiceRow">
+      <button id="purifyNormal">Sans aide supplémentaire — DD 20</button>
+      <button id="purifyBoost">Vathkül renforce — DD 15</button>
+    </div>
+    <div class="purify-row" id="purifyOutcomeRow" style="display:none">
+      <button id="purifySuccess">Le test réussit</button>
+      <button class="danger" id="purifyFailure">Le test échoue</button>
+    </div>
+  </div>
+</div>
+
 <div class="mural-overlay" id="muralOverlay">
   <div class="mural-card">
     <button class="mural-close" id="closeMural">Fermer</button>
@@ -150,7 +166,13 @@
 
 <div class="overlay" id="victory"><div class="modal-card"><h2>Le Monolithe est détruit</h2><p>Vathkül libère le Sang de la Terre. Les huit fonctions exécutent le calcul de dissolution et l’architecture planaire du Monolithe s’effondre sur elle-même.</p><button onclick="location.reload()">Rejouer</button></div></div>
 <div class="overlay" id="end"><div class="modal-card"><h2>La dernière Étincelle s’éteint</h2><p>Son énergie est consumée. Le Monolithe conserve la dernière configuration éprouvée et le calcul planaire échappe désormais à son contrôle.</p><button onclick="location.reload()">Recommencer</button></div></div>
-<div class="overlay" id="purificationFlowOverlay" aria-hidden="true">
+
+<script src="js/vathkul-dialogues.js?v=4.8.5" defer></script>
+<script src="js/audio.js?v=4.8.5"></script>
+<script src="js/app.js?v=4.8.5" defer></script>
+<script type="module" src="js/sync.js?v=4.8.5"></script>
+
+  <div class="overlay" id="purificationFlowOverlay" aria-hidden="true">
     <div class="modal purification-flow-modal" role="dialog" aria-modal="true" aria-labelledby="purificationFlowTitle">
       <button class="modal-close" id="closePurificationFlow" aria-label="Fermer">×</button>
       <h2 id="purificationFlowTitle">Purification du glyphe</h2>
@@ -229,11 +251,6 @@
       <small>Le Monolithe sera accessible dès que l’état partagé sera prêt.</small>
     </div>
   </div>
-
-<script src="js/vathkul-dialogues.js?v=4.9.0" defer></script>
-<script src="js/audio.js?v=4.9.0"></script>
-<script src="js/app.js?v=4.9.0" defer></script>
-<script type="module" src="js/sync.js?v=4.9.0"></script>
 
 </body>
 </html>
