@@ -1,39 +1,40 @@
-# Project Monolith — v4.8.4 — Correctif définitif purification
+# Project Monolith — v4.9.0 — Code Cleanup
 
-## Cause exacte
+## Purification unifiée
 
-`app.js` contenait plusieurs définitions de `resolvePurification(success)`.
-En JavaScript, la dernière définition remplaçait les précédentes et annulait
-les appels audio ajoutés dans les versions antérieures.
+L’ancien système de purification a été supprimé intégralement :
 
-## Correction
+- `purifyOverlay` ;
+- `pendingPurification` ;
+- `purificationBoosted` ;
+- `beginPurification()` ;
+- `choosePurification()` ;
+- anciens boutons et anciens champs de synchronisation.
 
-- toutes les anciennes définitions ont été supprimées ;
-- une seule fonction `resolvePurification()` demeure ;
-- réussite : lecture de `purification.ogg` ;
-- échec : lecture de `configuration-failure.ogg` ;
-- lecture déclenchée directement après `render()` et `update()` ;
-- aucun cooldown ;
-- priorité maximale ;
-- diagnostic console conservé.
+Un seul flux subsiste :
 
-## Audit des autres fonctions
+1. activation du mode de purification ;
+2. sélection d’un glyphe corrompu ;
+3. choix de l’assistance de Vathkül ;
+4. réussite ou échec ;
+5. fermeture immédiate de la fenêtre ;
+6. mise à jour du glyphe ;
+7. lecture du son ;
+8. synchronisation.
 
-Autres noms de fonctions dupliqués détectés automatiquement :
+## Initialisation robuste
 
-Aucun autre doublon de déclaration nommé détecté.
+Les scripts sont maintenant chargés après tous les overlays. Les six contrôles de purification sont vérifiés et câblés par `initializePurificationControls()`.
 
-Aucun autre doublon n’a été modifié automatiquement afin d’éviter une régression.
+## Audio
 
-## Inchangé
+- réussite : `purification.ogg` ;
+- échec : `configuration-failure.ogg`.
 
-- logique de purification ;
-- coût en Étincelles ;
-- animations ;
-- Firebase ;
-- synchronisation ;
-- fichiers audio.
+## Compatibilité
+
+Les anciens champs de purification reçus depuis Firebase sont simplement ignorés. Les états principaux du rituel restent compatibles.
 
 Commit conseillé :
 
-`Project Monolith v4.8.4 — Correctif définitif purification`
+`Project Monolith v4.9.0 — Code Cleanup`
