@@ -178,6 +178,7 @@ let lastRenderedPlacements=Array(8).fill(null);
 let hasCompletedInitialRender=false;
 let entravesTranslationRevealed=false;
 let entravesArcanaInterpreted=false;
+let entravesRevelationShown=false;
 
 function invalidateEvaluation(){
   configurationAnalysisToken+=1;
@@ -849,7 +850,7 @@ function revealEntravesTranslation(){
   );
 
   speakVathkul('Les mots se laissent traduire… mais leur intention demeure cachée.');
-  markLocalMutation();
+  if(!entravesRevelationShown){entravesRevelationShown=true;document.getElementById('entravesRevelation')?.classList.add('show');window.setTimeout(()=>speakVathkul('Je crois comprendre… Quelque chose m’échappait depuis tout ce temps.'),300);window.setTimeout(()=>speakVathkul('Nous pensions que ces inscriptions décrivaient un rituel destiné à détruire cette Brèche.'),2600);window.setTimeout(()=>speakVathkul('Mais elles décrivent son ouverture. Vous devez parcourir son chemin dans le sens contraire.'),6200);}markLocalMutation();
   update();
 }
 

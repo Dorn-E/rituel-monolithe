@@ -27,3 +27,6 @@ Construite sur la v4.9.0B validée.
 Commit conseillé :
 
 `Project Monolith v4.9.0C — Interprétation des runes`
+
+
+v4.9.0D: révélation de Vathkül après l'interprétation Arcane.
