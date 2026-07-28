@@ -53,7 +53,7 @@ function setInitializationLocked(locked){
   }
 
   document.querySelectorAll(
-    '.tile, .slot, #test, #openMural, #memory, #beginPurify, #lokaugSwap, #swap, #corrupt, #restore, #clear, #shuffle'
+    '.tile, .slot, #test, #openMural, #beginPurify, #lokaugSwap, #swap, #corrupt, #restore, #clear, #shuffle'
   ).forEach(element=>{
     if('disabled' in element){
       if(initializationLocked){
@@ -165,7 +165,7 @@ const memories=[
 let placements=Array(8).fill(null);
 let order=[...schools];
 let selected=null;
-let life=12;
+let life=8;
 let memoryLevel=Array(8).fill(0);
 let corrupted=new Set();
 let lastGM=null;
@@ -1146,17 +1146,7 @@ function testConfiguration(){
 }
 
 function awakenMemory(){
-  if(initializationLocked)return;
-  markLocalMutation();
-  if(selected===null){say('Sélectionnez d’abord une gravure.');return;}
-  if(memoryLevel[selected]>=2){say('Vathkül ne possède plus aucun autre souvenir concernant cette gravure.');return;}
-  if(!spendSparks(1)){say('Aucune Étincelle ne subsiste pour raviver un nouveau souvenir.');return;}
-  const text=memories[selected][memoryLevel[selected]];
-  memoryLevel[selected]++;
-  document.getElementById('memoryText').textContent=text;
-  document.getElementById('memoryStage').textContent=
-    'Vathkül ferme les yeux. Une lumière pâle traverse les fissures du Monolithe.\n\n« '+text+' »';
-  document.getElementById('memoryOverlay').classList.add('show');
+  speakVathkul('Les Huit Entraves contiennent désormais tout ce qu’il vous faut comprendre.');
   update();
 }
 
@@ -1243,7 +1233,7 @@ function addJournalEntry(text,actor=participantName||'Le Monolithe'){
 }
 function initialSharedState(){
   return {
-    schemaVersion:2,stateRevision:0,placements:Array(8).fill(null),order:[...schools],life:12,memoryLevel:Array(8).fill(0),
+    schemaVersion:2,stateRevision:0,placements:Array(8).fill(null),order:[...schools],life:8,memoryLevel:Array(8).fill(0),
     corrupted:[],lastGM:null,evaluationVisible:false,ritualCompleted:false,
     pendingPurification:null,purificationBoosted:false,
     phaseHTML:'<b>Exploration :</b> placez librement les huit glyphes. Vathkül n’intervient pas tant que vous ne l’interrogez pas.',
@@ -1664,7 +1654,7 @@ document.getElementById('purificationFlowOverlay')?.addEventListener('click',eve
 document.getElementById('cancelInteractionMode')?.addEventListener('click',cancelActiveInteractionMode);
 document.getElementById('lokaugSwap')?.addEventListener('click',startLokaugSwap);
 document.getElementById('test').onclick=testConfiguration;
-document.getElementById('memory').onclick=awakenMemory;
+
 document.getElementById('beginPurify').onclick=openPurificationFlow;
 document.getElementById('purifyNormal').onclick=()=>choosePurification(false);
 document.getElementById('purifyBoost').onclick=()=>choosePurification(true);

@@ -1,14 +1,14 @@
 <!doctype html>
-<!-- Project Monolith v4.9.0Db — interface validée -->
+<!-- Project Monolith v4.9.1b — interface validée -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Le Rituel du Monolithe — v4.9.0Db</title>
+<title>Le Rituel du Monolithe — v4.9.1b</title>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<link rel="stylesheet" href="css/style-v41.css?v=4.9.0D">
+<link rel="stylesheet" href="css/style-v41.css?v=4.9.1">
 </head>
 <body data-build="4.1.0">
 <div class="entry-gate" id="entryGate" aria-modal="true" role="dialog">
@@ -83,7 +83,7 @@
         <div class="controls">
           <button id="test">Éprouver la configuration</button>
           <button id="openMural">Examiner les Huit Entraves</button>
-          <button id="memory">Éveiller un souvenir</button>
+          
           <button id="beginPurify">Purifier une gravure</button>
           <button id="openAudioSettings" type="button">Gestion du son</button>
           <button class="utility-hidden" id="clear">Retirer tous les glyphes</button>
@@ -191,7 +191,7 @@
   </div>
 </div>
 
-<div class="memory-overlay" id="memoryOverlay">
+<div class="memory-overlay" id="memoryOverlay" hidden aria-hidden="true">
   <div class="modal-card memory-card">
     <h2>Un souvenir de Vathkül</h2>
     <div class="memory-stage" id="memoryStage"></div>
@@ -203,10 +203,10 @@
 <div class="overlay" id="victory"><div class="modal-card"><h2>Le Monolithe est détruit</h2><p>Vathkül libère le Sang de la Terre. Les huit fonctions exécutent le calcul de dissolution et l’architecture planaire du Monolithe s’effondre sur elle-même.</p><button onclick="location.reload()">Rejouer</button></div></div>
 <div class="overlay" id="end"><div class="modal-card"><h2>La dernière Étincelle s’éteint</h2><p>Son énergie est consumée. Le Monolithe conserve la dernière configuration éprouvée et le calcul planaire échappe désormais à son contrôle.</p><button onclick="location.reload()">Recommencer</button></div></div>
 
-<script src="js/vathkul-dialogues.js?v=4.9.0D" defer></script>
-<script src="js/audio.js?v=4.9.0D"></script>
-<script src="js/app.js?v=4.9.0D" defer></script>
-<script type="module" src="js/sync.js?v=4.9.0D"></script>
+<script src="js/vathkul-dialogues.js?v=4.9.1" defer></script>
+<script src="js/audio.js?v=4.9.1"></script>
+<script src="js/app.js?v=4.9.1" defer></script>
+<script type="module" src="js/sync.js?v=4.9.1"></script>
 
   <div class="overlay" id="purificationFlowOverlay" aria-hidden="true">
     <div class="modal purification-flow-modal" role="dialog" aria-modal="true" aria-labelledby="purificationFlowTitle">

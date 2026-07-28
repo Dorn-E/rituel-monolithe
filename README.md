@@ -1,32 +1,36 @@
-# Project Monolith — v4.9.0C — Interprétation des runes
+# Project Monolith — v4.9.1 — Élagage
 
 ## Base
 
-Construite sur la v4.9.0B validée.
+Construite sur la v4.9.0D validée.
 
-## Ajouts
+## Étincelles
 
-- bouton `Interpréter les runes (Arcane)` ;
-- visible uniquement après Compréhension des langues ;
-- huit interprétations progressives ;
-- aucune mention des écoles de magie ;
-- formulations prudentes et hypothétiques ;
-- conclusion :
-  `Vous pensez désormais comprendre l’ordre dans lequel ce rituel devait être accompli...`
+Le total initial et le total après réinitialisation passent de 12 à 8.
+
+## « Éveiller un souvenir »
+
+La fonctionnalité n’est plus proposée aux joueurs :
+
+- bouton supprimé ;
+- ancienne fenêtre conservée uniquement comme compatibilité technique,
+  mais masquée et inaccessible ;
+- ancien appel neutralisé.
+
+Les Huit Entraves, Compréhension des langues, Arcane et la révélation de
+Vathkül remplacent désormais cette ancienne aide.
 
 ## Inchangé
 
-- moteur du Monolithe ;
+- ordre de la solution ;
 - purification ;
+- corruption ;
+- audio ;
 - Firebase ;
 - synchronisation ;
-- audio existant ;
-- fragments de mémoire ;
-- révélation finale de Vathkül.
+- destruction finale ;
+- révélation de Vathkül.
 
 Commit conseillé :
 
-`Project Monolith v4.9.0C — Interprétation des runes`
-
-
-v4.9.0D: révélation de Vathkül après l'interprétation Arcane.
+`Project Monolith v4.9.1 — Élagage et 8 Étincelles`
