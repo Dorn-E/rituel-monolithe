@@ -1,0 +1,62 @@
+{
+  "monolith-ambience.ogg": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "vorbis",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "72.200000",
+      "size": "1222293"
+    }
+  },
+  "stone-open.ogg": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "vorbis",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "4.000000",
+      "size": "72410"
+    }
+  },
+  "vathkul-riser.ogg": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "vorbis",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "13.500000",
+      "size": "161397"
+    }
+  },
+  "blackhole-impact.ogg": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "vorbis",
+        "sample_rate": "48000",
+        "channels": 2
+      }
+    ],
+    "format": {
+      "duration": "4.800000",
+      "size": "86121"
+    }
+  }
+}

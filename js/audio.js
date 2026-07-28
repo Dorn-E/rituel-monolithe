@@ -9,6 +9,35 @@
   const DEFAULT_VOLUME = 0.55;
 
   const SOUND_LIBRARY = {
+    monolithAmbience: {
+      src: "assets/audio/monolith-ambience.ogg",
+      gain: 0.22,
+      group: "ambience",
+      priority: 5,
+      cooldown: 0,
+      loop: true
+    },
+    stoneOpen: {
+      src: "assets/audio/stone-open.ogg",
+      gain: 0.68,
+      group: "stone",
+      priority: 70,
+      cooldown: 900
+    },
+    vathkulRiser: {
+      src: "assets/audio/vathkul-riser.ogg",
+      gain: 0.48,
+      group: "cinematic",
+      priority: 95,
+      cooldown: 7000
+    },
+    blackholeImpact: {
+      src: "assets/audio/blackhole-impact.ogg",
+      gain: 0.88,
+      group: "final-impact",
+      priority: 110,
+      cooldown: 5000
+    },
     glyphPlace: {
       src: "assets/audio/glyph-place.ogg",
       gain: 0.70,
@@ -114,6 +143,7 @@
   const availability = new Map();
   const activeByGroup = new Map();
   const lastPlayedAt = new Map();
+  const persistentLoops = new Map();
 
   let enabled = localStorage.getItem(STORAGE_KEYS.enabled) === "true";
   let volume = Number.parseFloat(localStorage.getItem(STORAGE_KEYS.volume));
@@ -274,14 +304,94 @@
     return audio;
   }
 
+  function startLoop(soundName, options = {}) {
+    if (!enabled) return null;
+
+    const existing = persistentLoops.get(soundName);
+    if (existing && !existing.paused) return existing;
+
+    const definition = getDefinition(soundName);
+    if (!definition) return null;
+
+    const source = buffers.get(soundName) || createAudio(soundName);
+    if (!source || source.dataset.unavailable === "true") return null;
+    if (!buffers.has(soundName)) buffers.set(soundName, source);
+
+    const audio = source.cloneNode(true);
+    audio.loop = true;
+    audio.dataset.priority = String(definition.priority || 0);
+
+    const eventGain = Number.isFinite(options.gain) ? options.gain : 1;
+    const targetVolume = Math.min(1, Math.max(0, volume * definition.gain * eventGain));
+    const fadeInMs = Number.isFinite(options.fadeInMs) ? options.fadeInMs : 0;
+    audio.volume = fadeInMs > 0 ? 0 : targetVolume;
+
+    persistentLoops.set(soundName, audio);
+
+    const playPromise = audio.play();
+    if (playPromise) {
+      playPromise.catch(() => {
+        persistentLoops.delete(soundName);
+      });
+    }
+
+    if (fadeInMs > 0) {
+      const startedAt = performance.now();
+      function fadeFrame(now) {
+        if (audio.paused) return;
+        const ratio = Math.min(1, (now - startedAt) / fadeInMs);
+        audio.volume = targetVolume * ratio;
+        if (ratio < 1) requestAnimationFrame(fadeFrame);
+      }
+      requestAnimationFrame(fadeFrame);
+    }
+
+    return audio;
+  }
+
+  function stopLoop(soundName, fadeOutMs = 0) {
+    const audio = persistentLoops.get(soundName);
+    if (!audio) return;
+
+    if (fadeOutMs <= 0) {
+      audio.pause();
+      audio.currentTime = 0;
+      persistentLoops.delete(soundName);
+      return;
+    }
+
+    const startVolume = audio.volume;
+    const startedAt = performance.now();
+
+    function fadeFrame(now) {
+      const ratio = Math.min(1, (now - startedAt) / fadeOutMs);
+      audio.volume = startVolume * (1 - ratio);
+      if (ratio < 1 && !audio.paused) {
+        requestAnimationFrame(fadeFrame);
+      } else {
+        audio.pause();
+        audio.currentTime = 0;
+        persistentLoops.delete(soundName);
+      }
+    }
+
+    requestAnimationFrame(fadeFrame);
+  }
+
+  function startMonolithAmbience() {
+    return startLoop("monolithAmbience", { fadeInMs: 2000 });
+  }
+
   function setEnabled(nextEnabled) {
     enabled = Boolean(nextEnabled);
     localStorage.setItem(STORAGE_KEYS.enabled, String(enabled));
 
     if (enabled) {
       preload();
+      startMonolithAmbience();
     } else {
       activeByGroup.forEach((_, groupName) => stopGroup(groupName, 80));
+      [...persistentLoops.keys()].forEach(soundName => stopLoop(soundName, 180));
     }
 
     updateControls();
@@ -290,6 +400,10 @@
   function setVolume(nextVolume) {
     volume = Math.min(1, Math.max(0, Number(nextVolume)));
     localStorage.setItem(STORAGE_KEYS.volume, String(volume));
+    persistentLoops.forEach((audio, soundName) => {
+      const definition = getDefinition(soundName);
+      if (definition) audio.volume = Math.min(1, volume * definition.gain);
+    });
     updateControls();
   }
 
@@ -503,13 +617,22 @@
     });
 
     updateControls();
-    if (enabled) preload();
+    if (enabled) {
+      preload();
+      startMonolithAmbience();
+      document.addEventListener("pointerdown", () => {
+        startMonolithAmbience();
+      }, { once: true });
+    }
   }
 
   window.ProjectMonolithAudio = {
     play,
     preload,
     stopGroup,
+    startLoop,
+    stopLoop,
+    startMonolithAmbience,
     toggle,
     setEnabled,
     isEnabled: () => enabled,

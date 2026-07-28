@@ -181,6 +181,7 @@ let entravesArcanaInterpreted=false;
 let entravesArcanaBestResult=null;
 let entravesArcanaInsightLevel=0;
 let entravesRevelationShown=false;
+let entravesRevelationSpoken=false;
 
 function invalidateEvaluation(){
   configurationAnalysisToken+=1;
@@ -765,6 +766,7 @@ function analyzeGlyphConfiguration(){
 }
 
 function inspectInnerEngravings(){
+  window.ProjectMonolithAudio?.play('stoneOpen',{gain:.9,cooldown:0,stopGroup:true,fadeOutMs:80});
   const dialogues=window.VATHKUL_DIALOGUES?.inspect || {};
   const analysis=analyzeGlyphConfiguration();
   let line='Le Monolithe demeure silencieux.';
@@ -840,8 +842,19 @@ function revealEntravesTranslation(){
   );
 
   speakVathkul('Les mots se laissent traduire… mais leur intention demeure cachée.');
-  if(!entravesRevelationShown){entravesRevelationShown=true;document.getElementById('entravesRevelation')?.classList.add('show');window.setTimeout(()=>speakVathkul('Je crois comprendre… Quelque chose m’échappait depuis tout ce temps.'),300);window.setTimeout(()=>speakVathkul('Nous pensions que ces inscriptions décrivaient un rituel destiné à détruire cette Brèche.'),2600);window.setTimeout(()=>speakVathkul('Mais elles décrivent son ouverture. Vous devez parcourir son chemin dans le sens contraire.'),6200);}markLocalMutation();
+  if(!entravesRevelationShown){entravesRevelationShown=true;document.getElementById('entravesRevelation')?.classList.add('show');window.ProjectMonolithAudio?.play('vathkulRiser',{gain:.9,cooldown:0,stopGroup:true,fadeOutMs:120});window.setTimeout(()=>speakVathkul('Je crois comprendre… Quelque chose m’échappait depuis tout ce temps.'),300);window.setTimeout(()=>speakVathkul('Nous pensions que ces inscriptions décrivaient un rituel destiné à détruire cette Brèche.'),2600);window.setTimeout(()=>speakVathkul('Mais elles décrivent son ouverture. Vous devez parcourir son chemin dans le sens contraire.'),6200);}markLocalMutation();
   update();
+}
+
+function speakEntravesRevelation(){
+  if(entravesRevelationShown)return;
+  entravesRevelationShown=true;
+  entravesRevelationSpoken=true;
+  document.getElementById('entravesRevelation')?.classList.add('show');
+  window.ProjectMonolithAudio?.play('vathkulRiser',{gain:.9,cooldown:0,stopGroup:true,fadeOutMs:120});
+  window.setTimeout(()=>speakVathkul('Je crois comprendre… Quelque chose m’échappait depuis tout ce temps.'),300);
+  window.setTimeout(()=>speakVathkul('Nous pensions que ces inscriptions décrivaient un rituel destiné à détruire cette Brèche.'),2600);
+  window.setTimeout(()=>speakVathkul('Mais elles décrivent son ouverture. Vous devez parcourir son chemin dans le sens contraire.'),6200);
 }
 
 function interpretEntravesArcana(){
@@ -990,7 +1003,15 @@ function startFinalRitualSequence(){
     }
 
     addJournalEntry('La présence de Vathkül s’est éteinte.','Le Monolithe');
-    window.ProjectMonolithAudio?.play('finalDestruction',{gain:1});
+    window.ProjectMonolithAudio?.stopLoop('monolithAmbience',1800);
+    window.ProjectMonolithAudio?.play('blackholeImpact',{
+      gain:1,
+      cooldown:0,
+      stopGroup:true,
+      fadeOutMs:80,
+      priority:110
+    });
+    window.ProjectMonolithAudio?.play('finalDestruction',{gain:.72});
     update();
   },4500);
 
