@@ -178,6 +178,8 @@ let lastRenderedPlacements=Array(8).fill(null);
 let hasCompletedInitialRender=false;
 let entravesTranslationRevealed=false;
 let entravesArcanaInterpreted=false;
+let entravesArcanaBestResult=null;
+let entravesArcanaInsightLevel=0;
 let entravesRevelationShown=false;
 
 function invalidateEvaluation(){
@@ -797,39 +799,27 @@ function updateEntravesTranslationUI(){
   const interpretButton=document.getElementById('interpretEntraves');
   const arcanaIntro=document.getElementById('entravesArcanaIntro');
   const status=document.getElementById('entravesStatus');
-
   overlay?.classList.toggle('entraves-translated',entravesTranslationRevealed);
-  overlay?.classList.toggle('entraves-interpreted',entravesArcanaInterpreted);
-
-  if(translateButton){
-    translateButton.disabled=entravesTranslationRevealed;
-    translateButton.innerHTML=entravesTranslationRevealed
-      ? '✓ Le texte a été traduit'
-      : 'Lancer <em>Compréhension des langues</em>';
-  }
-
-  if(interpretButton){
-    interpretButton.hidden=!entravesTranslationRevealed;
-    interpretButton.disabled=!entravesTranslationRevealed || entravesArcanaInterpreted;
-    interpretButton.textContent=entravesArcanaInterpreted
-      ? '✓ Les runes ont été interprétées'
-      : 'Interpréter les runes (Arcane)';
-  }
-
-  if(arcanaIntro){
-    arcanaIntro.classList.toggle('show',entravesTranslationRevealed && !entravesArcanaInterpreted);
-  }
-
+  overlay?.classList.toggle('entraves-interpreted',entravesArcanaInsightLevel>=2);
+  overlay?.classList.toggle('entraves-partial',entravesArcanaInsightLevel===1);
+  overlay?.classList.toggle('entraves-deep-insight',entravesArcanaInsightLevel>=3);
+  overlay?.classList.toggle('entraves-opening-warning',entravesArcanaInsightLevel>=4);
+  document.querySelectorAll('.entrave-interpretation').forEach((element,index)=>{
+    const reveal=entravesArcanaInsightLevel>=2||(entravesArcanaInsightLevel===1&&[0,1,5,6].includes(index));
+    element.classList.toggle('arcana-revealed',reveal);
+    element.classList.toggle('arcana-obscured',entravesArcanaInsightLevel===1&&!reveal);
+  });
+  if(translateButton){translateButton.disabled=entravesTranslationRevealed;translateButton.innerHTML=entravesTranslationRevealed?'✓ Le texte a été traduit':'Lancer <em>Compréhension des langues</em>';}
+  if(interpretButton){interpretButton.hidden=!entravesTranslationRevealed;interpretButton.disabled=!entravesTranslationRevealed;interpretButton.textContent=entravesArcanaBestResult===null?'Interpréter les runes (Arcane)':entravesArcanaInsightLevel>=4?'✓ Analyse arcanique approfondie':'Approfondir l’analyse (Arcane)';}
+  if(arcanaIntro)arcanaIntro.classList.toggle('show',entravesTranslationRevealed&&entravesArcanaInsightLevel===0&&entravesArcanaBestResult===null);
   if(status){
-    if(entravesArcanaInterpreted){
-      status.textContent=
-        'Vous pensez désormais comprendre l’ordre dans lequel ce rituel devait être accompli...';
-    }else if(entravesTranslationRevealed){
-      status.textContent=
-        'Les mots sont désormais lisibles, mais leur véritable sens vous échappe encore.';
-    }else{
-      status.textContent='Sans magie, aucun caractère ne se laisse comprendre.';
-    }
+    if(entravesArcanaInsightLevel>=4)status.textContent='Un détail vous trouble : aucun verset n’évoque une fermeture, un scellement ou une destruction. Tous décrivent une progression vers une ouverture.';
+    else if(entravesArcanaInsightLevel>=3)status.textContent='Une intuition s’impose : ces huit passages semblent former les étapes successives d’un même rituel.';
+    else if(entravesArcanaInsightLevel>=2)status.textContent='Vous pensez désormais comprendre l’ordre dans lequel ce rituel devait être accompli...';
+    else if(entravesArcanaInsightLevel===1)status.textContent='Vous établissez quelques rapprochements, mais plusieurs passages vous échappent encore.';
+    else if(entravesArcanaBestResult!==null)status.textContent='La terminologie demeure trop ancienne et contradictoire pour que vous puissiez l’interpréter.';
+    else if(entravesTranslationRevealed)status.textContent='Les mots sont désormais lisibles, mais leur véritable sens vous échappe encore.';
+    else status.textContent='Sans magie, aucun caractère ne se laisse comprendre.';
   }
 }
 
@@ -855,25 +845,38 @@ function revealEntravesTranslation(){
 }
 
 function interpretEntravesArcana(){
-  if(!entravesTranslationRevealed || entravesArcanaInterpreted)return;
+  if(!entravesTranslationRevealed)return;
+  const overlay=document.getElementById('arcanaResultOverlay');
+  const input=document.getElementById('arcanaResultInput');
+  const error=document.getElementById('arcanaResultError');
+  if(error)error.textContent='';
+  if(input)input.value=entravesArcanaBestResult===null?'':String(entravesArcanaBestResult);
+  overlay?.classList.add('show');overlay?.setAttribute('aria-hidden','false');
+  window.setTimeout(()=>input?.focus(),60);
+}
 
-  entravesArcanaInterpreted=true;
-  updateEntravesTranslationUI();
-
-  window.ProjectMonolithAudio?.play('linkReveal',{
-    gain:.95,
-    cooldown:0,
-    maxVoices:3
-  });
-
-  addJournalEntry(
-    'Les huit formulations rituelles sont interprétées grâce aux connaissances arcaniques du personnage.',
-    'Le Monolithe'
-  );
-
-  speakVathkul('Vous établissez plusieurs rapprochements… sans encore saisir l’intention véritable du rituel.');
-  markLocalMutation();
-  update();
+function getArcanaInsightLevel(result){if(result>=25)return 4;if(result>=20)return 3;if(result>=15)return 2;if(result>=10)return 1;return 0;}
+function closeArcanaResultDialog(){const overlay=document.getElementById('arcanaResultOverlay');overlay?.classList.remove('show');overlay?.setAttribute('aria-hidden','true');}
+function applyArcanaResult(result){
+  const normalized=Math.max(0,Math.min(40,Math.trunc(result)));
+  const previousLevel=entravesArcanaInsightLevel;
+  if(entravesArcanaBestResult===null||normalized>entravesArcanaBestResult)entravesArcanaBestResult=normalized;
+  entravesArcanaInsightLevel=Math.max(entravesArcanaInsightLevel,getArcanaInsightLevel(normalized));
+  entravesArcanaInterpreted=entravesArcanaInsightLevel>=2;
+  updateEntravesTranslationUI();closeArcanaResultDialog();
+  if(entravesArcanaInsightLevel>previousLevel)window.ProjectMonolithAudio?.play('linkReveal',{gain:.95,cooldown:0,maxVoices:3});
+  const journal=[
+    'L’étude arcanique des Huit Entraves ne livre aucune conclusion fiable.',
+    'Quelques concepts des Huit Entraves sont interprétés, mais l’ensemble demeure incomplet.',
+    'Les huit formulations rituelles sont interprétées comme les étapes d’un ordre cohérent.',
+    'L’analyse révèle que les huit passages forment les étapes successives d’un même rituel.',
+    'L’analyse révèle que les inscriptions décrivent une ouverture et n’évoquent jamais un scellement.'
+  ];
+  addJournalEntry(journal[entravesArcanaInsightLevel],'Le Monolithe');
+  if(entravesArcanaInsightLevel>=2&&!entravesRevelationSpoken)speakEntravesRevelation();
+  else if(entravesArcanaInsightLevel===1)speakVathkul('Quelques correspondances apparaissent… mais le dessein d’ensemble vous échappe encore.');
+  else if(entravesArcanaInsightLevel===0)speakVathkul('Ces mots appartiennent à une pensée magique trop ancienne pour se laisser saisir si aisément.');
+  markLocalMutation();update();
 }
 
 function setRitualLocked(locked){
@@ -1730,6 +1733,9 @@ document.getElementById('openMural').onclick=()=>{
 };
 document.getElementById('translateEntraves')?.addEventListener('click',revealEntravesTranslation);
 document.getElementById('interpretEntraves')?.addEventListener('click',interpretEntravesArcana);
+document.getElementById('arcanaResultForm')?.addEventListener('submit',event=>{event.preventDefault();const input=document.getElementById('arcanaResultInput');const error=document.getElementById('arcanaResultError');const value=Number(input?.value);if(!Number.isFinite(value)||value<0||value>40){if(error)error.textContent='Saisissez un résultat entier compris entre 0 et 40.';input?.focus();return;}applyArcanaResult(value);});
+document.getElementById('cancelArcanaResult')?.addEventListener('click',closeArcanaResultDialog);
+document.getElementById('arcanaResultOverlay')?.addEventListener('click',event=>{if(event.target.id==='arcanaResultOverlay')closeArcanaResultDialog();});
 document.getElementById('closeMural').onclick=()=>document.getElementById('muralOverlay').classList.remove('show');
 document.getElementById('muralOverlay').onclick=e=>{if(e.target.id==='muralOverlay')document.getElementById('muralOverlay').classList.remove('show');};
 

@@ -3738,3 +3738,15 @@ inset 0 -5px 8px rgba(255,255,255,.03),
 
 .entraves-revelation{max-height:0;overflow:hidden;opacity:0;transition:all .8s ease;margin:0 auto;color:#d7bb87;font-family:Georgia,serif;font-style:italic;text-align:center}
 .entraves-revelation.show{max-height:420px;opacity:1;margin:18px auto;padding:12px 20px;border-left:2px solid #7b4a3a}
+
+/* v4.9.2 — Runes dorées et paliers d’Arcane */
+.infernal-title{color:#d5ad57!important;text-shadow:0 0 4px rgba(255,210,105,.55),0 0 11px rgba(151,95,21,.34),0 2px 1px #000!important}
+.entrave-runes{color:#cfa650!important;text-shadow:0 0 4px rgba(255,213,114,.46),0 0 10px rgba(148,92,18,.28),0 1px 0 #000!important}
+.entrave-line:nth-child(3n+1) .entrave-runes{color:#dfb963!important}.entrave-line:nth-child(4n) .entrave-runes{color:#bd9345!important}
+.entraves-translated .infernal-title,.entraves-translated .entrave-runes{opacity:.46!important;filter:none!important}
+.arcana-result-overlay{position:fixed;inset:0;z-index:10020;display:none;place-items:center;padding:18px;background:rgba(0,0,0,.82);backdrop-filter:blur(3px)}.arcana-result-overlay.show{display:grid}
+.arcana-result-card{width:min(480px,94vw);padding:28px;border:1px solid rgba(198,157,76,.56);background:radial-gradient(circle at 50% 0,rgba(170,116,33,.12),transparent 42%),linear-gradient(145deg,#17140f,#080807);box-shadow:0 25px 80px rgba(0,0,0,.82),inset 0 0 40px rgba(0,0,0,.55)}
+.arcana-result-card h2{margin:0 0 12px;color:#d5b36d}.arcana-result-card p{color:#aa9b80;line-height:1.55}.arcana-result-card label{display:block;margin:18px 0 7px;color:#c7b289}.arcana-result-card input{width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid rgba(194,151,72,.48);background:#080806;color:#e5d2a5;font-size:1.15rem}.arcana-result-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.arcana-result-error{min-height:1.25em;margin:8px 0 0!important;color:#d68d7d!important;font-size:.88rem}
+.entrave-interpretation{display:none}.entrave-interpretation.arcana-revealed{display:block}.entrave-interpretation.arcana-obscured{display:block;max-height:120px!important;margin:12px 0 2px!important;padding-top:10px!important;opacity:.68!important;transform:none!important;color:#766f63!important;font-style:italic;font-size:0!important}.entrave-interpretation.arcana-obscured::after{content:'Le sens de ce passage vous échappe encore.';font-size:.91rem}
+.entraves-partial .entrave-interpretation.arcana-revealed,.entraves-interpreted .entrave-interpretation.arcana-revealed{max-height:180px;margin:12px 0 2px;padding-top:10px;opacity:1;transform:none}.entraves-deep-insight .entrave-line{border-color:rgba(173,132,59,.46)}.entraves-opening-warning .entraves-status{color:#d2a56f;text-shadow:0 0 8px rgba(166,80,30,.25)}
+@media(max-width:560px){.arcana-result-actions{flex-direction:column-reverse}.arcana-result-actions button{width:100%}}
