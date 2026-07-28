@@ -3654,3 +3654,84 @@ inset 0 -5px 8px rgba(255,255,255,.03),
 .entraves-controls button{min-width:min(330px,90%)}
 .entraves-controls button:disabled{cursor:default;opacity:.72}
 @media(prefers-reduced-motion:reduce){.entraves-translated-title,.entrave-translation,.infernal-title,.entrave-runes{transition:none!important}}
+
+
+/* =========================================================
+   v4.9.0C — Interprétation des runes (Arcane)
+   ========================================================= */
+
+.entraves-controls{
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.entraves-controls [hidden]{
+  display:none!important;
+}
+
+.entraves-arcana-intro{
+  max-height:0;
+  margin:0 auto;
+  overflow:hidden;
+  opacity:0;
+  transform:translateY(8px);
+  max-width:760px;
+  color:#9d8c6b;
+  font-family:Georgia,"Times New Roman",serif;
+  font-style:italic;
+  text-align:center;
+  line-height:1.55;
+  transition:
+    opacity .65s ease,
+    transform .65s ease,
+    max-height .65s ease,
+    margin .65s ease;
+}
+
+.entraves-arcana-intro.show{
+  max-height:120px;
+  margin:14px auto 0;
+  opacity:1;
+  transform:none;
+}
+
+.entrave-interpretation{
+  max-height:0;
+  margin:0;
+  overflow:hidden;
+  opacity:0;
+  transform:translateY(8px);
+  color:#b09c76;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:.91rem;
+  line-height:1.55;
+  border-top:1px solid rgba(149,108,63,.24);
+  transition:
+    opacity .7s ease calc((var(--interpretation-index) * 330ms) + 220ms),
+    transform .7s ease calc((var(--interpretation-index) * 330ms) + 220ms),
+    max-height .7s ease calc((var(--interpretation-index) * 330ms) + 160ms),
+    margin .7s ease calc((var(--interpretation-index) * 330ms) + 160ms),
+    padding .7s ease calc((var(--interpretation-index) * 330ms) + 160ms);
+}
+
+.entraves-interpreted .entrave-interpretation{
+  max-height:170px;
+  margin:12px 0 2px;
+  padding-top:10px;
+  opacity:1;
+  transform:none;
+}
+
+.entraves-interpreted .entraves-arcana-intro{
+  max-height:0;
+  margin:0 auto;
+  opacity:0;
+  transform:translateY(-4px);
+}
+
+@media(prefers-reduced-motion:reduce){
+  .entrave-interpretation,
+  .entraves-arcana-intro{
+    transition:none!important;
+  }
+}

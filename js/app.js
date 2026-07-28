@@ -177,6 +177,7 @@ let ritualCompleted=false;
 let lastRenderedPlacements=Array(8).fill(null);
 let hasCompletedInitialRender=false;
 let entravesTranslationRevealed=false;
+let entravesArcanaInterpreted=false;
 
 function invalidateEvaluation(){
   configurationAnalysisToken+=1;
@@ -791,22 +792,43 @@ function inspectInnerEngravings(){
 
 function updateEntravesTranslationUI(){
   const overlay=document.getElementById('muralOverlay');
-  const button=document.getElementById('translateEntraves');
+  const translateButton=document.getElementById('translateEntraves');
+  const interpretButton=document.getElementById('interpretEntraves');
+  const arcanaIntro=document.getElementById('entravesArcanaIntro');
   const status=document.getElementById('entravesStatus');
 
   overlay?.classList.toggle('entraves-translated',entravesTranslationRevealed);
+  overlay?.classList.toggle('entraves-interpreted',entravesArcanaInterpreted);
 
-  if(button){
-    button.disabled=entravesTranslationRevealed;
-    button.innerHTML=entravesTranslationRevealed
+  if(translateButton){
+    translateButton.disabled=entravesTranslationRevealed;
+    translateButton.innerHTML=entravesTranslationRevealed
       ? '✓ Le texte a été traduit'
       : 'Lancer <em>Compréhension des langues</em>';
   }
 
+  if(interpretButton){
+    interpretButton.hidden=!entravesTranslationRevealed;
+    interpretButton.disabled=!entravesTranslationRevealed || entravesArcanaInterpreted;
+    interpretButton.textContent=entravesArcanaInterpreted
+      ? '✓ Les runes ont été interprétées'
+      : 'Interpréter les runes (Arcane)';
+  }
+
+  if(arcanaIntro){
+    arcanaIntro.classList.toggle('show',entravesTranslationRevealed && !entravesArcanaInterpreted);
+  }
+
   if(status){
-    status.textContent=entravesTranslationRevealed
-      ? 'Les mots sont désormais lisibles, mais leur véritable sens vous échappe encore.'
-      : 'Sans magie, aucun caractère ne se laisse comprendre.';
+    if(entravesArcanaInterpreted){
+      status.textContent=
+        'Vous pensez désormais comprendre l’ordre dans lequel ce rituel devait être accompli...';
+    }else if(entravesTranslationRevealed){
+      status.textContent=
+        'Les mots sont désormais lisibles, mais leur véritable sens vous échappe encore.';
+    }else{
+      status.textContent='Sans magie, aucun caractère ne se laisse comprendre.';
+    }
   }
 }
 
@@ -827,6 +849,28 @@ function revealEntravesTranslation(){
   );
 
   speakVathkul('Les mots se laissent traduire… mais leur intention demeure cachée.');
+  markLocalMutation();
+  update();
+}
+
+function interpretEntravesArcana(){
+  if(!entravesTranslationRevealed || entravesArcanaInterpreted)return;
+
+  entravesArcanaInterpreted=true;
+  updateEntravesTranslationUI();
+
+  window.ProjectMonolithAudio?.play('linkReveal',{
+    gain:.95,
+    cooldown:0,
+    maxVoices:3
+  });
+
+  addJournalEntry(
+    'Les huit formulations rituelles sont interprétées grâce aux connaissances arcaniques du personnage.',
+    'Le Monolithe'
+  );
+
+  speakVathkul('Vous établissez plusieurs rapprochements… sans encore saisir l’intention véritable du rituel.');
   markLocalMutation();
   update();
 }
@@ -1694,6 +1738,7 @@ document.getElementById('openMural').onclick=()=>{
   updateEntravesTranslationUI();
 };
 document.getElementById('translateEntraves')?.addEventListener('click',revealEntravesTranslation);
+document.getElementById('interpretEntraves')?.addEventListener('click',interpretEntravesArcana);
 document.getElementById('closeMural').onclick=()=>document.getElementById('muralOverlay').classList.remove('show');
 document.getElementById('muralOverlay').onclick=e=>{if(e.target.id==='muralOverlay')document.getElementById('muralOverlay').classList.remove('show');};
 

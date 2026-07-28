@@ -1,20 +1,29 @@
-# Project Monolith — v4.9.0B — Compréhension des langues
+# Project Monolith — v4.9.0C — Interprétation des runes
 
-Construite sur la v4.9.0A validée.
+## Base
 
-Ajouts :
-- bouton `Lancer Compréhension des langues` ;
-- traduction progressive du titre ;
-- traduction progressive des huit lignes ;
-- runes conservées et estompées ;
-- son discret lors de la révélation ;
-- état final `Le texte a été traduit`.
+Construite sur la v4.9.0B validée.
 
-Non inclus :
-- aucune interprétation par Arcane ;
-- aucune mention directe des écoles ;
-- aucun nouveau fragment de mémoire ;
-- aucun changement du moteur.
+## Ajouts
+
+- bouton `Interpréter les runes (Arcane)` ;
+- visible uniquement après Compréhension des langues ;
+- huit interprétations progressives ;
+- aucune mention des écoles de magie ;
+- formulations prudentes et hypothétiques ;
+- conclusion :
+  `Vous pensez désormais comprendre l’ordre dans lequel ce rituel devait être accompli...`
+
+## Inchangé
+
+- moteur du Monolithe ;
+- purification ;
+- Firebase ;
+- synchronisation ;
+- audio existant ;
+- fragments de mémoire ;
+- révélation finale de Vathkül.
 
 Commit conseillé :
-`Project Monolith v4.9.0B — Compréhension des langues`
+
+`Project Monolith v4.9.0C — Interprétation des runes`
