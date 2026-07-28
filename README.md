@@ -1,14 +1,20 @@
-# Project Monolith — v4.9.0A — Les Huit Entraves
+# Project Monolith — v4.9.0B — Compréhension des langues
 
-Interface uniquement :
-- ancienne image supprimée ;
-- titre en runes infernales ;
-- huit lignes runiques ;
-- aucune traduction ;
+Construite sur la v4.9.0A validée.
+
+Ajouts :
+- bouton `Lancer Compréhension des langues` ;
+- traduction progressive du titre ;
+- traduction progressive des huit lignes ;
+- runes conservées et estompées ;
+- son discret lors de la révélation ;
+- état final `Le texte a été traduit`.
+
+Non inclus :
 - aucune interprétation par Arcane ;
+- aucune mention directe des écoles ;
+- aucun nouveau fragment de mémoire ;
 - aucun changement du moteur.
 
-Base : v4.8.5 stable.
-
 Commit conseillé :
-`Project Monolith v4.9.0A — Les Huit Entraves UI`
+`Project Monolith v4.9.0B — Compréhension des langues`

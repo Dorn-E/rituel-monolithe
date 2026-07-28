@@ -176,6 +176,7 @@ let evaluationVisible=false;
 let ritualCompleted=false;
 let lastRenderedPlacements=Array(8).fill(null);
 let hasCompletedInitialRender=false;
+let entravesTranslationRevealed=false;
 
 function invalidateEvaluation(){
   configurationAnalysisToken+=1;
@@ -786,6 +787,49 @@ function inspectInnerEngravings(){
   document.getElementById('muralOverlay').classList.add('show');
 }
 
+
+
+function updateEntravesTranslationUI(){
+  const overlay=document.getElementById('muralOverlay');
+  const button=document.getElementById('translateEntraves');
+  const status=document.getElementById('entravesStatus');
+
+  overlay?.classList.toggle('entraves-translated',entravesTranslationRevealed);
+
+  if(button){
+    button.disabled=entravesTranslationRevealed;
+    button.innerHTML=entravesTranslationRevealed
+      ? '✓ Le texte a été traduit'
+      : 'Lancer <em>Compréhension des langues</em>';
+  }
+
+  if(status){
+    status.textContent=entravesTranslationRevealed
+      ? 'Les mots sont désormais lisibles, mais leur véritable sens vous échappe encore.'
+      : 'Sans magie, aucun caractère ne se laisse comprendre.';
+  }
+}
+
+function revealEntravesTranslation(){
+  if(entravesTranslationRevealed)return;
+
+  entravesTranslationRevealed=true;
+  updateEntravesTranslationUI();
+
+  window.ProjectMonolithAudio?.play('configurationStart',{
+    gain:.48,
+    cooldown:0
+  });
+
+  addJournalEntry(
+    'Compréhension des langues révèle le sens littéral des Huit Entraves.',
+    'Le Monolithe'
+  );
+
+  speakVathkul('Les mots se laissent traduire… mais leur intention demeure cachée.');
+  markLocalMutation();
+  update();
+}
 
 function setRitualLocked(locked){
   document.body.classList.toggle('ritual-locked',locked);
@@ -1645,7 +1689,11 @@ document.getElementById('memoryClose').onclick=()=>{
   document.getElementById('memoryOverlay').classList.remove('show');
   stateChangeHandler();
 };
-document.getElementById('openMural').onclick=inspectInnerEngravings;
+document.getElementById('openMural').onclick=()=>{
+  inspectInnerEngravings();
+  updateEntravesTranslationUI();
+};
+document.getElementById('translateEntraves')?.addEventListener('click',revealEntravesTranslation);
 document.getElementById('closeMural').onclick=()=>document.getElementById('muralOverlay').classList.remove('show');
 document.getElementById('muralOverlay').onclick=e=>{if(e.target.id==='muralOverlay')document.getElementById('muralOverlay').classList.remove('show');};
 

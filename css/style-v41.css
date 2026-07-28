@@ -3639,3 +3639,18 @@ inset 0 -5px 8px rgba(255,255,255,.03),
 .entrave-runes{color:#963d31;font-family:Georgia,"Times New Roman",serif;font-size:clamp(.93rem,1.75vw,1.18rem);letter-spacing:.13em;line-height:1.55;text-shadow:0 0 5px rgba(125,30,23,.38),0 1px 0 #000;word-break:break-word}
 .entraves-status{margin:17px 0 0;color:#82745f;text-align:center;font-size:.87rem;font-style:italic}
 @media(max-width:680px){.entraves-card{padding:35px 14px 24px}.entraves-header{padding:8px 30px 20px}.entrave-line{padding-left:52px}.entrave-runes{letter-spacing:.09em}}
+
+
+/* =========================================================
+   v4.9.0B — Compréhension des langues
+   ========================================================= */
+.entraves-translated-title{max-height:0;margin:0;overflow:hidden;opacity:0;transform:translateY(8px);color:#d8bd82;font-family:Georgia,"Times New Roman",serif;font-size:clamp(1.35rem,2.8vw,2.2rem);letter-spacing:.05em;transition:opacity .9s ease .25s,transform .9s ease .25s,max-height .9s ease .15s,margin .9s ease .15s}
+.entrave-translation{max-height:0;margin:0;overflow:hidden;opacity:0;transform:translateY(8px);color:#d0c1a4;font-family:Georgia,"Times New Roman",serif;line-height:1.58;transition:opacity .75s ease calc((var(--translation-index) * 380ms) + 1050ms),transform .75s ease calc((var(--translation-index) * 380ms) + 1050ms),max-height .75s ease calc((var(--translation-index) * 380ms) + 980ms),margin .75s ease calc((var(--translation-index) * 380ms) + 980ms)}
+.entraves-translated .infernal-title{opacity:.34;filter:blur(.35px);transition:opacity .75s ease,filter .75s ease}
+.entraves-translated .entraves-translated-title{max-height:100px;margin:10px 0 0;opacity:1;transform:none}
+.entraves-translated .entrave-runes{opacity:.28;filter:blur(.35px);transition:opacity .75s ease,filter .75s ease}
+.entraves-translated .entrave-translation{max-height:170px;margin:8px 0 2px;opacity:1;transform:none}
+.entraves-controls{display:flex;justify-content:center;margin:20px 0 0}
+.entraves-controls button{min-width:min(330px,90%)}
+.entraves-controls button:disabled{cursor:default;opacity:.72}
+@media(prefers-reduced-motion:reduce){.entraves-translated-title,.entrave-translation,.infernal-title,.entrave-runes{transition:none!important}}
