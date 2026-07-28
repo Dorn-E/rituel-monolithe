@@ -3626,3 +3626,16 @@ inset 0 -5px 8px rgba(255,255,255,.03),
   visibility:visible !important;
   opacity:1 !important;
 }
+
+/* v4.9.0A — Les Huit Entraves */
+.entraves-overlay{background:radial-gradient(circle at 50% 32%,rgba(91,18,12,.18),transparent 45%),rgba(0,0,0,.90);overflow:auto;padding:28px 16px}
+.entraves-card{width:min(980px,95vw);max-height:none;margin:auto;padding:42px 34px 30px;overflow:visible;background:radial-gradient(circle at 50% 12%,rgba(94,30,18,.10),transparent 38%),linear-gradient(145deg,#17130f 0%,#0a0908 50%,#050505 100%);border:1px solid rgba(113,70,40,.64);box-shadow:0 30px 90px rgba(0,0,0,.88),inset 0 0 75px rgba(0,0,0,.74)}
+.entraves-header{padding:8px 52px 24px;text-align:center}
+.infernal-title{color:#8c392f;font-family:Georgia,"Times New Roman",serif;font-size:clamp(1.08rem,2.25vw,1.8rem);letter-spacing:.21em;line-height:1.65;text-shadow:0 0 5px rgba(148,42,28,.44),0 2px 1px #000}
+.entraves-intro{max-width:700px;margin:16px auto 0;color:#998a71;font-family:Georgia,"Times New Roman",serif;line-height:1.65;font-style:italic}
+.entraves-lines{display:grid;grid-template-columns:1fr;gap:10px;margin:4px 0 20px}
+.entrave-line{position:relative;min-height:72px;padding:15px 20px 15px 60px;display:flex;align-items:center;overflow:hidden;background:linear-gradient(90deg,rgba(106,33,24,.08),transparent 28%),rgba(8,7,6,.78);border:1px solid rgba(102,66,41,.36);box-shadow:inset 0 0 24px rgba(0,0,0,.54)}
+.entrave-number{position:absolute;left:19px;color:#6f593b;font-family:Georgia,"Times New Roman",serif;font-size:.84rem}
+.entrave-runes{color:#963d31;font-family:Georgia,"Times New Roman",serif;font-size:clamp(.93rem,1.75vw,1.18rem);letter-spacing:.13em;line-height:1.55;text-shadow:0 0 5px rgba(125,30,23,.38),0 1px 0 #000;word-break:break-word}
+.entraves-status{margin:17px 0 0;color:#82745f;text-align:center;font-size:.87rem;font-style:italic}
+@media(max-width:680px){.entraves-card{padding:35px 14px 24px}.entraves-header{padding:8px 30px 20px}.entrave-line{padding-left:52px}.entrave-runes{letter-spacing:.09em}}
